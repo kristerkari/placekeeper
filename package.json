@@ -19,6 +19,7 @@
   "homepage": "https://github.com/kristerkari/js-placeholder-polyfill",
   "devDependencies": {
     "gulp": "^3.8.11",
+    "gulp-eslint": "^0.5.0",
     "gulp-jscs": "^1.4.0"
   }
 }
