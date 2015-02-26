@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "./node_modules/karma/bin/karma run config/karma.sauce.conf.js"
+    "test": "./node_modules/karma/bin/karma start config/karma.sauce.conf.js"
   },
   "repository": {
     "type": "git",
