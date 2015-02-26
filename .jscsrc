@@ -27,6 +27,21 @@
     "validateParameterSeparator": ", ",
     "disallowMultipleVarDecl": true,
     "requirePaddingNewLinesInObjects": true,
+    "disallowSpacesInCallExpression": true,
+    "requireSpaceBeforeObjectValues": true,
+    "disallowOperatorBeforeLineBreak": ["."],
+    "requireSpaceBetweenArguments": true,
+    "requireLineBreakAfterVariableAssignment": true,
+    "requireSpacesInForStatement": true,
+    "disallowSpacesInsideBrackets": true,
+    "requireSpaceBeforeKeywords": [
+        "else",
+        "while",
+        "catch"
+    ],
+    "requireSpaceAfterLineComment": {
+        "allExcept": ["#", "="]
+    },
     "disallowSpacesInFunctionExpression": {
         "beforeOpeningRoundBrace": true
     },
