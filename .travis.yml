@@ -9,7 +9,7 @@ env:
 
 script:
   - npm test
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm run-script sauce'
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm run-script sauce || false'
 
 after_success:
 - npm run-script coveralls
