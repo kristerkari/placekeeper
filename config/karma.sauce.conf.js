@@ -30,6 +30,7 @@ module.exports = function(config) {
         frameworks: ["jasmine"],
         captureTimeout: 120000,
         files: [
+            "../src/**/*.js",
             "../test/**/*_spec.js"
         ],
         sauceLabs: {
