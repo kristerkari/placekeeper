@@ -1,9 +1,10 @@
 "use strict";
 
+var path = require("path");
 var gulp = require("gulp");
 var jscs = require("gulp-jscs");
 var eslint = require("gulp-eslint");
-var karma = require("gulp-karma");
+var karma = require("karma").server;
 
 gulp.task("default", function() {
     return gulp.src("*.js")
@@ -15,13 +16,9 @@ gulp.task("default", function() {
                .pipe(jscs());
 });
 
-gulp.task("test", function() {
-    return gulp.src("test/**/*_spec.js")
-    .pipe(karma({
-        configFile: "config/karma.conf.js",
-        action: "run"
-    }))
-    .on("error", function(err) {
-        throw err;
-    });
+gulp.task("test", function(done) {
+    karma.start({
+        configFile: path.join(__dirname, "/config/karma.conf.js"),
+        singleRun: true
+    }, done);
 });
