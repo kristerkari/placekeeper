@@ -9,4 +9,7 @@ env:
 
 script:
   - npm test
-  - npm sauce
+  - npm run-script sauce
+
+after_success:
+- npm run-script coveralls
