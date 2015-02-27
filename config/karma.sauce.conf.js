@@ -29,6 +29,7 @@ module.exports = function(config) {
         basePath: "",
         frameworks: ["jasmine"],
         captureTimeout: 120000,
+        browserNoActivityTimeout: 60000,
         files: [
             "../src/**/*.js",
             "../test/**/*_spec.js"
