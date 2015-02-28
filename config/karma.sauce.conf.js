@@ -26,6 +26,18 @@ module.exports = function(config) {
             base: "SauceLabs",
             browserName: "firefox",
             version: "3.6"
+        },
+        opera11: {
+            base: "SauceLabs",
+            browserName: "opera",
+            platform: "Windows XP",
+            version: "11"
+        },
+        safari5: {
+            base: "SauceLabs",
+            browserName: "safari",
+            platform: "OS X 10.6",
+            version: "5"
         }
     };
 
