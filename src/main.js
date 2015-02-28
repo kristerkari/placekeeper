@@ -47,6 +47,7 @@
     function init() {
         if (!support.hasNativePlaceholderSupport()) {
             // main loop
+            placekeeperLoop();
             loopInterval = setInterval(placekeeperLoop, 100);
         }
     }

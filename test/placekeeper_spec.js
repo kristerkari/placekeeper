@@ -35,7 +35,7 @@ describe("placekeeper", function() {
         describe("when called and there is on input with placeholder attribute", function() {
             var element;
 
-            beforeEach(function(done) {
+            beforeEach(function() {
                 element = document.createElement("input");
                 element.type = "text";
                 element.placeholder = "Test";
@@ -44,7 +44,6 @@ describe("placekeeper", function() {
                     return false;
                 });
                 placekeeper.enable();
-                setTimeout(done, 110);
             });
 
             afterEach(function() {
