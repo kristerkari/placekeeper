@@ -34,6 +34,7 @@
     "requireLineBreakAfterVariableAssignment": true,
     "requireSpacesInForStatement": true,
     "disallowSpacesInsideBrackets": true,
+    "maximumLineLength": 140,
     "requireSpaceBeforeKeywords": [
         "else",
         "while",
