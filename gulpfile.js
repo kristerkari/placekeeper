@@ -22,3 +22,11 @@ gulp.task("test", function(done) {
         singleRun: true
     }, done);
 });
+
+gulp.task("tdd", function(done) {
+    karma.start({
+        configFile: path.join(__dirname, "/config/karma.conf.js"),
+        singleRun: false,
+        autoWatch: true
+    }, done);
+});
