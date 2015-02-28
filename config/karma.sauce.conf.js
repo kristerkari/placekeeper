@@ -1,6 +1,5 @@
-"use strict";
-
 module.exports = function(config) {
+    "use strict";
 
     var customLaunchers = {
         iOSSafari: {
@@ -36,7 +35,8 @@ module.exports = function(config) {
         captureTimeout: 120000,
         browserNoActivityTimeout: 60000,
         files: [
-            "../src/**/*.js",
+            "../src/support.js",
+            "../src/main.js",
             "../test/**/*_spec.js"
         ],
         sauceLabs: {
