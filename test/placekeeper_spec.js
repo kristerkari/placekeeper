@@ -3,6 +3,172 @@ describe("placekeeper", function() {
 
     var placekeeper = window.placekeeper;
 
+    describe("plugin options", function() {
+
+        describe("element data attributes", function() {
+
+            describe("root element data attributes", function() {
+
+                describe("data-placeholder-live attribute", function() {
+
+                    describe("when set to false in html element", function() {
+
+                        beforeEach(function() {
+                            document.documentElement.setAttribute("data-placeholder-live", "false");
+                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
+                                return false;
+                            });
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.documentElement.removeAttribute("data-placeholder-live");
+                        });
+
+                        describe("and when an element with placeholder is added", function() {
+                            var element;
+
+                            beforeEach(function() {
+                                element = document.createElement("input");
+                                element.type = "text";
+                                element.placeholder = "Test";
+                                document.body.appendChild(element);
+                            });
+
+                            afterEach(function() {
+                                element.parentNode.removeChild(element);
+                                placekeeper.disable();
+                            });
+
+                            it("should have placekeeper disabled", function() {
+                                expect(placekeeper.isEnabled()).toEqual(false);
+                            });
+
+                        });
+
+                    });
+
+                    describe("when set to true in html element", function() {
+
+                        beforeEach(function() {
+                            document.documentElement.setAttribute("data-placeholder-live", "true");
+                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
+                                return false;
+                            });
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.documentElement.removeAttribute("data-placeholder-live");
+                        });
+
+                        describe("and when an element with placeholder is added", function() {
+                            var element;
+
+                            beforeEach(function(done) {
+                                element = document.createElement("input");
+                                element.type = "text";
+                                element.placeholder = "Test";
+                                document.body.appendChild(element);
+                                setTimeout(done, 110);
+                            });
+
+                            afterEach(function() {
+                                element.parentNode.removeChild(element);
+                                placekeeper.disable();
+                            });
+
+                            it("should have placekeeper enabled", function() {
+                                expect(placekeeper.isEnabled()).toEqual(true);
+                            });
+
+                        });
+
+                    });
+
+                    describe("when set to false in body element", function() {
+
+                        beforeEach(function() {
+                            document.body.setAttribute("data-placeholder-live", "false");
+                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
+                                return false;
+                            });
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.body.removeAttribute("data-placeholder-live");
+                        });
+
+                        describe("and when an element with placeholder is added", function() {
+                            var element;
+
+                            beforeEach(function() {
+                                element = document.createElement("input");
+                                element.type = "text";
+                                element.placeholder = "Test";
+                                document.body.appendChild(element);
+                            });
+
+                            afterEach(function() {
+                                element.parentNode.removeChild(element);
+                                placekeeper.disable();
+                            });
+
+                            it("should have placekeeper disabled", function() {
+                                expect(placekeeper.isEnabled()).toEqual(false);
+                            });
+
+                        });
+
+                    });
+
+                    describe("when set to true in body element", function() {
+
+                        beforeEach(function() {
+                            document.body.setAttribute("data-placeholder-live", "true");
+                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
+                                return false;
+                            });
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.body.removeAttribute("data-placeholder-live");
+                        });
+
+                        describe("and when an element with placeholder is added", function() {
+                            var element;
+
+                            beforeEach(function(done) {
+                                element = document.createElement("input");
+                                element.type = "text";
+                                element.placeholder = "Test";
+                                document.body.appendChild(element);
+                                setTimeout(done, 110);
+                            });
+
+                            afterEach(function() {
+                                element.parentNode.removeChild(element);
+                                placekeeper.disable();
+                            });
+
+                            it("should have placekeeper enabled", function() {
+                                expect(placekeeper.isEnabled()).toEqual(true);
+                            });
+
+                        });
+
+                    });
+
+                });
+
+            });
+
+        });
+
+    });
+
     describe("enable public method", function() {
 
         afterEach(function() {
@@ -16,6 +182,7 @@ describe("placekeeper", function() {
         describe("when called and there are no inputs or textareas on the page", function() {
 
             beforeEach(function() {
+                placekeeper.init();
                 spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
                     return false;
                 });
@@ -40,6 +207,7 @@ describe("placekeeper", function() {
                 element.type = "text";
                 element.placeholder = "Test";
                 document.body.appendChild(element);
+                placekeeper.init();
                 spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
                     return false;
                 });
@@ -97,11 +265,10 @@ describe("placekeeper", function() {
             describe("when HTML5 placeholder is supported for both inputs and textareas", function() {
 
                 beforeEach(function() {
-                    placekeeper.disable();
                     spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
                         return true;
                     });
-                    placekeeper.enable();
+                    placekeeper.init();
                 });
 
                 it("should have placekeeper disabled because of native support", function() {
@@ -138,11 +305,10 @@ describe("placekeeper", function() {
             describe("when HTML5 placeholder is not supported for both inputs and textareas", function() {
 
                 beforeEach(function() {
-                    placekeeper.disable();
                     spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
                         return false;
                     });
-                    placekeeper.enable();
+                    placekeeper.init();
                 });
 
                 it("should have placekeeper disabled since there are no inputs or textareas", function() {

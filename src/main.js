@@ -44,11 +44,23 @@
 
     }
 
+    function hasLiveUpdatesAttrSetToFalse(element) {
+        return element.getAttribute("data-placeholder-live") === "false";
+    }
+
+    function hasDisabledLiveUpdates() {
+        return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
+               hasLiveUpdatesAttrSetToFalse(document.body);
+    }
+
     function init() {
         if (!support.hasNativePlaceholderSupport()) {
-            // main loop
+            clearInterval(loopInterval);
             placekeeperLoop();
-            loopInterval = setInterval(placekeeperLoop, 100);
+            if (!hasDisabledLiveUpdates()) {
+                // main loop
+                loopInterval = setInterval(placekeeperLoop, 100);
+            }
         }
     }
 
@@ -57,9 +69,8 @@
         clearInterval(loopInterval);
     }
 
-    init();
-
     // Expose public methods
+    global.placekeeper.init = init;
     global.placekeeper.isEnabled = isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
