@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "coveralls": "cat ./coverage/*/lcov.info | COVERALLS_SERVICE_NAME=\"travis-ci\" ./node_modules/.bin/coveralls",
+    "codeclimate": "cat ./coverage/*/lcov.info | ./node_modules/.bin/codeclimate",
     "test": "./node_modules/karma/bin/karma start config/karma.conf.js",
     "sauce": "./node_modules/karma/bin/karma start config/karma.sauce.conf.js"
   },
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/kristerkari/js-placeholder-polyfill",
   "devDependencies": {
+    "codeclimate-test-reporter": "0.0.4",
     "coveralls": "^2.11.2",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.5.0",

@@ -10,5 +10,10 @@ env:
 
 script: ./travis.sh
 
+addons:
+  code_climate:
+    repo_token: adc415e391574e88bb6fa3d50034c2118a3a2c8bfd38aee9e18ec1c32fd0438as
+
 after_success:
 - npm run-script coveralls
+- npm run-script codeclimate
