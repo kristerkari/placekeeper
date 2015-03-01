@@ -3,6 +3,23 @@ describe("placekeeper", function() {
 
     var placekeeper = window.placekeeper;
 
+    function spyOnNativeSupportAndReturn(bool) {
+        spyOn(placekeeper.support, "hasNativePlaceholderSupport")
+        .and.callFake(function() {
+            return bool;
+        });
+    }
+
+    function createInputElement(hasPlaceholder) {
+        var element = document.createElement("input");
+        element.type = "text";
+        if (hasPlaceholder) {
+            element.placeholder = "Test";
+        }
+        document.body.appendChild(element);
+        return element;
+    }
+
     describe("plugin options", function() {
 
         describe("element data attributes", function() {
@@ -15,9 +32,7 @@ describe("placekeeper", function() {
 
                         beforeEach(function() {
                             document.documentElement.setAttribute("data-placeholder-live", "false");
-                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                                return false;
-                            });
+                            spyOnNativeSupportAndReturn(false);
                             placekeeper.init();
                         });
 
@@ -29,10 +44,7 @@ describe("placekeeper", function() {
                             var element;
 
                             beforeEach(function() {
-                                element = document.createElement("input");
-                                element.type = "text";
-                                element.placeholder = "Test";
-                                document.body.appendChild(element);
+                                element = createInputElement(true);
                             });
 
                             afterEach(function() {
@@ -52,9 +64,7 @@ describe("placekeeper", function() {
 
                         beforeEach(function() {
                             document.documentElement.setAttribute("data-placeholder-live", "true");
-                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                                return false;
-                            });
+                            spyOnNativeSupportAndReturn(false);
                             placekeeper.init();
                         });
 
@@ -66,10 +76,7 @@ describe("placekeeper", function() {
                             var element;
 
                             beforeEach(function(done) {
-                                element = document.createElement("input");
-                                element.type = "text";
-                                element.placeholder = "Test";
-                                document.body.appendChild(element);
+                                element = createInputElement(true);
                                 setTimeout(done, 110);
                             });
 
@@ -90,9 +97,7 @@ describe("placekeeper", function() {
 
                         beforeEach(function() {
                             document.body.setAttribute("data-placeholder-live", "false");
-                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                                return false;
-                            });
+                            spyOnNativeSupportAndReturn(false);
                             placekeeper.init();
                         });
 
@@ -104,10 +109,7 @@ describe("placekeeper", function() {
                             var element;
 
                             beforeEach(function() {
-                                element = document.createElement("input");
-                                element.type = "text";
-                                element.placeholder = "Test";
-                                document.body.appendChild(element);
+                                element = createInputElement(true);
                             });
 
                             afterEach(function() {
@@ -127,9 +129,7 @@ describe("placekeeper", function() {
 
                         beforeEach(function() {
                             document.body.setAttribute("data-placeholder-live", "true");
-                            spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                                return false;
-                            });
+                            spyOnNativeSupportAndReturn(false);
                             placekeeper.init();
                         });
 
@@ -141,10 +141,7 @@ describe("placekeeper", function() {
                             var element;
 
                             beforeEach(function(done) {
-                                element = document.createElement("input");
-                                element.type = "text";
-                                element.placeholder = "Test";
-                                document.body.appendChild(element);
+                                element = createInputElement(true);
                                 setTimeout(done, 110);
                             });
 
@@ -183,9 +180,7 @@ describe("placekeeper", function() {
 
             beforeEach(function() {
                 placekeeper.init();
-                spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                    return false;
-                });
+                spyOnNativeSupportAndReturn(false);
                 placekeeper.enable();
             });
 
@@ -203,14 +198,9 @@ describe("placekeeper", function() {
             var element;
 
             beforeEach(function() {
-                element = document.createElement("input");
-                element.type = "text";
-                element.placeholder = "Test";
-                document.body.appendChild(element);
+                element = createInputElement(true);
                 placekeeper.init();
-                spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                    return false;
-                });
+                spyOnNativeSupportAndReturn(false);
                 placekeeper.enable();
             });
 
@@ -265,9 +255,7 @@ describe("placekeeper", function() {
             describe("when HTML5 placeholder is supported for both inputs and textareas", function() {
 
                 beforeEach(function() {
-                    spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                        return true;
-                    });
+                    spyOnNativeSupportAndReturn(true);
                     placekeeper.init();
                 });
 
@@ -279,10 +267,7 @@ describe("placekeeper", function() {
                     var element;
 
                     beforeEach(function(done) {
-                        element = document.createElement("input");
-                        element.type = "text";
-                        element.placeholder = "Test";
-                        document.body.appendChild(element);
+                        element = createInputElement(true);
                         setTimeout(done, 110);
                     });
 
@@ -305,9 +290,7 @@ describe("placekeeper", function() {
             describe("when HTML5 placeholder is not supported for both inputs and textareas", function() {
 
                 beforeEach(function() {
-                    spyOn(placekeeper.support, "hasNativePlaceholderSupport").and.callFake(function() {
-                        return false;
-                    });
+                    spyOnNativeSupportAndReturn(false);
                     placekeeper.init();
                 });
 
@@ -319,9 +302,7 @@ describe("placekeeper", function() {
                     var element;
 
                     beforeEach(function(done) {
-                        element = document.createElement("input");
-                        element.type = "text";
-                        document.body.appendChild(element);
+                        element = createInputElement(false);
                         setTimeout(done, 110);
                     });
 
@@ -343,10 +324,7 @@ describe("placekeeper", function() {
                     var element;
 
                     beforeEach(function(done) {
-                        element = document.createElement("input");
-                        element.type = "text";
-                        element.placeholder = "Test";
-                        document.body.appendChild(element);
+                        element = createInputElement(true);
                         setTimeout(done, 110);
                     });
 
