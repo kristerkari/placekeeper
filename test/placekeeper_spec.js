@@ -26,6 +26,45 @@ describe("placekeeper", function() {
 
             describe("root element data attributes", function() {
 
+                describe("data-placeholder-focus attribute", function() {
+
+                    describe("when set to false in html element", function() {
+
+                        beforeEach(function() {
+                            document.documentElement.setAttribute("data-placeholder-focus", "false");
+                            spyOnNativeSupportAndReturn(false);
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.documentElement.removeAttribute("data-placeholder-focus");
+                        });
+
+                        it("should have focus mode disabled", function() {
+                            expect(placekeeper.isFocusEnabled()).toEqual(false);
+                        });
+
+                    });
+
+                    describe("when set to false in body element", function() {
+
+                        beforeEach(function() {
+                            document.body.setAttribute("data-placeholder-focus", "false");
+                            spyOnNativeSupportAndReturn(false);
+                            placekeeper.init();
+                        });
+
+                        afterEach(function() {
+                            document.body.removeAttribute("data-placeholder-focus");
+                        });
+
+                        it("should have focus mode disabled", function() {
+                            expect(placekeeper.isFocusEnabled()).toEqual(false);
+                        });
+
+                    });
+                });
+
                 describe("data-placeholder-live attribute", function() {
 
                     describe("when set to false in html element", function() {

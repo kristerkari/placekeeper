@@ -6,9 +6,14 @@
     var support = global.placekeeper.support;
     var isEnabled = false;
     var loopInterval = null;
+    var isFocusEnabled = true;
 
     function isPlacekeeperEnabled() {
         return isEnabled;
+    }
+
+    function isPlacekeeperFocusEnabled() {
+        return isFocusEnabled;
     }
 
     function hasPlaceholderAttrSet(element) {
@@ -35,22 +40,35 @@
         return needsPlaceholder;
     }
 
+    function hasLiveUpdatesAttrSetToFalse(element) {
+        return element.getAttribute("data-placeholder-live") === "false";
+    }
+
+    function hasFocusAttrSetToFalse(element) {
+        return element.getAttribute("data-placeholder-focus") === "false";
+    }
+
+    function hasDisabledLiveUpdates() {
+        return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
+               hasLiveUpdatesAttrSetToFalse(document.body);
+    }
+
+    function hasFocusDisabled() {
+        return hasFocusAttrSetToFalse(document.documentElement) ||
+               hasFocusAttrSetToFalse(document.body);
+    }
+
     function placekeeperLoop() {
+        if (hasFocusDisabled()) {
+            isFocusEnabled = false;
+        }
+
         isEnabled = needsToSetPlaceholder();
 
         if (!isEnabled) {
             return;
         }
 
-    }
-
-    function hasLiveUpdatesAttrSetToFalse(element) {
-        return element.getAttribute("data-placeholder-live") === "false";
-    }
-
-    function hasDisabledLiveUpdates() {
-        return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-               hasLiveUpdatesAttrSetToFalse(document.body);
     }
 
     function init() {
@@ -74,5 +92,6 @@
     global.placekeeper.isEnabled = isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
+    global.placekeeper.isFocusEnabled = isPlacekeeperFocusEnabled;
 
 }(this));
