@@ -32,7 +32,7 @@ describe("placekeeper", function() {
 
         });
 
-        describe("when called and there is on input with placeholder attribute", function() {
+        describe("when called and there is one input with placeholder attribute", function() {
             var element;
 
             beforeEach(function() {
