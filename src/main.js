@@ -4,9 +4,12 @@
     global.placekeeper = global.placekeeper || {};
 
     var support = global.placekeeper.support;
+    var utils = global.placekeeper.utils;
     var isEnabled = false;
     var loopInterval = null;
     var isFocusEnabled = true;
+    var inputElements = null;
+    var textareaElements = null;
 
     function isPlacekeeperEnabled() {
         return isEnabled;
@@ -20,23 +23,28 @@
         return "placeholder" in element && element.placeholder !== "";
     }
 
-    function hasElementsThatNeedPlaceholder(elementType) {
-        var elements = document.getElementsByTagName(elementType);
+    function hasElementsThatNeedPlaceholder(elements) {
+
+        if (!elements) {
+            return false;
+        }
 
         for (var i = 0; i < elements.length; i++) {
             if (hasPlaceholderAttrSet(elements[i])) {
                 return true;
             }
         }
+
         return false;
     }
 
     function needsToSetPlaceholder() {
-        var needsPlaceholder = hasElementsThatNeedPlaceholder("input");
+        var needsPlaceholder = hasElementsThatNeedPlaceholder(inputElements);
 
         if (needsPlaceholder === false) {
-            needsPlaceholder = hasElementsThatNeedPlaceholder("textarea");
+            needsPlaceholder = hasElementsThatNeedPlaceholder(textareaElements);
         }
+
         return needsPlaceholder;
     }
 
@@ -87,11 +95,30 @@
         clearInterval(loopInterval);
     }
 
+    function getElements() {
+        // Get references to all the input and textarea elements currently in the DOM
+        // (live NodeList objects to we only need to do this once)
+        if (!support.isInputSupported()) {
+            inputElements = utils.getElementsByTagName("input");
+        }
+        if (!support.isTextareaSupported()) {
+            textareaElements = utils.getElementsByTagName("textarea");
+        }
+    }
+
+    getElements();
+
     // Expose public methods
     global.placekeeper.init = init;
     global.placekeeper.isEnabled = isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
     global.placekeeper.isFocusEnabled = isPlacekeeperFocusEnabled;
+
+    // Exposed private methods
+    global.placekeeper.priv = {
+        __getElements: getElements,
+        __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
+    };
 
 }(this));

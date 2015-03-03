@@ -3,6 +3,18 @@ describe("placekeeper", function() {
 
     var placekeeper = window.placekeeper;
 
+    function initialSetup() {
+        spyOn(placekeeper.support, "isInputSupported")
+        .and.callFake(function() {
+            return false;
+        });
+        spyOn(placekeeper.support, "isTextareaSupported")
+        .and.callFake(function() {
+            return false;
+        });
+        placekeeper.priv.__getElements();
+    }
+
     function spyOnNativeSupportAndReturn(bool) {
         spyOn(placekeeper.support, "hasNativePlaceholderSupport")
         .and.callFake(function() {
@@ -19,6 +31,8 @@ describe("placekeeper", function() {
         document.body.appendChild(element);
         return element;
     }
+
+    beforeEach(initialSetup);
 
     describe("plugin options", function() {
 
@@ -195,6 +209,167 @@ describe("placekeeper", function() {
 
                         });
 
+                    });
+
+                });
+
+            });
+
+        });
+
+    });
+
+    describe("private methods", function() {
+
+        describe("__hasElementsThatNeedPlaceholder", function() {
+
+            it("should return false when called without parameters", function() {
+                expect(placekeeper.priv.__hasElementsThatNeedPlaceholder()).toEqual(false);
+            });
+
+            it("should return false when called with null", function() {
+                expect(placekeeper.priv.__hasElementsThatNeedPlaceholder(null)).toEqual(false);
+            });
+
+            describe("when called and there is an element that has placeholder attribute set", function() {
+                var element;
+                var elements;
+
+                beforeEach(function() {
+                    element = createInputElement(true);
+                    elements = document.getElementsByTagName("input");
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return true", function() {
+                    expect(placekeeper.priv.__hasElementsThatNeedPlaceholder(elements)).toEqual(true);
+                });
+
+            });
+
+            describe("when called and there is an element that does not have placeholder attribute set", function() {
+                var element;
+                var elements;
+
+                beforeEach(function() {
+                    element = createInputElement(false);
+                    elements = document.getElementsByTagName("input");
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return false", function() {
+                    expect(placekeeper.priv.__hasElementsThatNeedPlaceholder(elements)).toEqual(false);
+                });
+
+            });
+
+        });
+
+        describe("__getElements", function() {
+
+            describe("when inputs are supported and textareas are not", function() {
+
+                beforeEach(function() {
+                    spyOn(placekeeper.utils, "getElementsByTagName");
+                    placekeeper.support.isInputSupported.and.returnValue(true);
+                    placekeeper.support.isTextareaSupported.and.returnValue(false);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__getElements();
+                    });
+
+                    it("should have gotten elements for textarea", function() {
+                        expect(placekeeper.utils.getElementsByTagName).toHaveBeenCalledWith("textarea");
+                    });
+
+                    it("should not have gotten elements for inputs", function() {
+                        expect(placekeeper.utils.getElementsByTagName).not.toHaveBeenCalledWith("input");
+                    });
+
+                });
+
+            });
+
+            describe("when textareas are supported and inputs are not", function() {
+
+                beforeEach(function() {
+                    spyOn(placekeeper.utils, "getElementsByTagName");
+                    placekeeper.support.isInputSupported.and.returnValue(false);
+                    placekeeper.support.isTextareaSupported.and.returnValue(true);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__getElements();
+                    });
+
+                    it("should not have gotten elements for textarea", function() {
+                        expect(placekeeper.utils.getElementsByTagName).not.toHaveBeenCalledWith("textarea");
+                    });
+
+                    it("should have gotten elements for inputs", function() {
+                        expect(placekeeper.utils.getElementsByTagName).toHaveBeenCalledWith("input");
+                    });
+
+                });
+            });
+
+            describe("when both inputs and textareas are supported", function() {
+
+                beforeEach(function() {
+                    spyOn(placekeeper.utils, "getElementsByTagName");
+                    placekeeper.support.isInputSupported.and.returnValue(true);
+                    placekeeper.support.isTextareaSupported.and.returnValue(true);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__getElements();
+                    });
+
+                    it("should not have gotten elements for textarea", function() {
+                        expect(placekeeper.utils.getElementsByTagName).not.toHaveBeenCalledWith("textarea");
+                    });
+
+                    it("should not have gotten elements for inputs", function() {
+                        expect(placekeeper.utils.getElementsByTagName).not.toHaveBeenCalledWith("input");
+                    });
+
+                });
+
+            });
+
+            describe("when both inputs and textareas are missing support", function() {
+
+                beforeEach(function() {
+                    spyOn(placekeeper.utils, "getElementsByTagName");
+                    placekeeper.support.isInputSupported.and.returnValue(false);
+                    placekeeper.support.isTextareaSupported.and.returnValue(false);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__getElements();
+                    });
+
+                    it("should have gotten elements for textarea", function() {
+                        expect(placekeeper.utils.getElementsByTagName).toHaveBeenCalledWith("textarea");
+                    });
+
+                    it("should have gotten elements for inputs", function() {
+                        expect(placekeeper.utils.getElementsByTagName).toHaveBeenCalledWith("input");
                     });
 
                 });
