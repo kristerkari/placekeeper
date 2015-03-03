@@ -4,7 +4,8 @@
     global.placekeeper = global.placekeeper || {};
 
     // wrap `document.getElementsByTagName`
-    // so that unit test can spy on it in all browsers
+    // so that unit tests can correctly spy
+    // on it in all browsers
     function getElementsByTagName(type) {
         return document.getElementsByTagName(type);
     }
