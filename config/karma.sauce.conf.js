@@ -48,6 +48,7 @@ module.exports = function(config) {
         browserNoActivityTimeout: 60000,
         files: [
             "../src/support.js",
+            "../src/utils.js",
             "../src/main.js",
             "../test/**/*_spec.js"
         ],
