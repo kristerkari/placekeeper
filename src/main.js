@@ -107,9 +107,9 @@
     }
 
     getElements();
+    init();
 
     // Expose public methods
-    global.placekeeper.init = init;
     global.placekeeper.isEnabled = isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
@@ -117,6 +117,7 @@
 
     // Exposed private methods
     global.placekeeper.priv = {
+        __init: init,
         __getElements: getElements,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
