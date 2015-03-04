@@ -11,6 +11,17 @@
     var inputElements = null;
     var textareaElements = null;
 
+    var supportedElementTypes = [
+        "text",
+        "search",
+        "url",
+        "tel",
+        "email",
+        "password",
+        "number",
+        "textarea"
+    ];
+
     function isPlacekeeperEnabled() {
         return isEnabled;
     }
@@ -23,6 +34,10 @@
         return "placeholder" in element && element.placeholder !== "";
     }
 
+    function isSupportedType(element) {
+        return utils.inArray(supportedElementTypes, element.type);
+    }
+
     function hasElementsThatNeedPlaceholder(elements) {
 
         if (!elements) {
@@ -30,7 +45,7 @@
         }
 
         for (var i = 0; i < elements.length; i++) {
-            if (hasPlaceholderAttrSet(elements[i])) {
+            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(elements[i])) {
                 return true;
             }
         }

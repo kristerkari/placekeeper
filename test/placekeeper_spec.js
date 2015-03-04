@@ -22,9 +22,9 @@ describe("placekeeper", function() {
         });
     }
 
-    function createInputElement(hasPlaceholder) {
+    function createInputElement(hasPlaceholder, type) {
         var element = document.createElement("input");
-        element.type = "text";
+        element.type = type || "text";
         if (hasPlaceholder) {
             element.placeholder = "Test";
         }
@@ -229,6 +229,25 @@ describe("placekeeper", function() {
 
             it("should return false when called with null", function() {
                 expect(placekeeper.priv.__hasElementsThatNeedPlaceholder(null)).toEqual(false);
+            });
+
+            describe("when called and there is an element that has placeholder attribute set but the type is not supported", function() {
+                var element;
+                var elements;
+
+                beforeEach(function() {
+                    element = createInputElement(true, "range");
+                    elements = document.getElementsByTagName("input");
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return false", function() {
+                    expect(placekeeper.priv.__hasElementsThatNeedPlaceholder(elements)).toEqual(false);
+                });
+
             });
 
             describe("when called and there is an element that has placeholder attribute set", function() {
