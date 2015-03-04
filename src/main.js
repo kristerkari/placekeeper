@@ -34,8 +34,8 @@
         return "placeholder" in element && element.placeholder !== "";
     }
 
-    function isSupportedType(element) {
-        return utils.inArray(supportedElementTypes, element.type);
+    function isSupportedType(elementType) {
+        return utils.inArray(supportedElementTypes, elementType);
     }
 
     function hasElementsThatNeedPlaceholder(elements) {
@@ -45,7 +45,7 @@
         }
 
         for (var i = 0; i < elements.length; i++) {
-            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(elements[i])) {
+            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(elements[i].type)) {
                 return true;
             }
         }
