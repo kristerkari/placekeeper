@@ -135,13 +135,14 @@
     }
 
     function init() {
-        if (!support.hasNativePlaceholderSupport()) {
-            clearInterval(loopInterval);
-            placekeeperLoop();
-            if (!hasDisabledLiveUpdates()) {
-                // main loop
-                loopInterval = setInterval(placekeeperLoop, 100);
-            }
+        if (support.hasNativePlaceholderSupport()) {
+            return;
+        }
+        clearInterval(loopInterval);
+        placekeeperLoop();
+        if (!hasDisabledLiveUpdates()) {
+            // main loop
+            loopInterval = setInterval(placekeeperLoop, 100);
         }
     }
 
