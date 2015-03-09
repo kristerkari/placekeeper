@@ -23,13 +23,23 @@ describe("placekeeper", function() {
     }
 
     function createInputElement(hasPlaceholder, type) {
-        var element = document.createElement("input");
-        element.type = type || "text";
+        var element = "<input type=\"" + (type || "text") + "\" id=\"elem\"";
         if (hasPlaceholder) {
-            element.placeholder = "Test";
+            element += " placeholder=\"Test\"";
         }
-        document.body.appendChild(element);
-        return element;
+        element += ">";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
+    function createTextareaElement(hasPlaceholder) {
+        var element = "<textarea id=\"elem\"";
+        if (hasPlaceholder) {
+            element += " placeholder=\"Test\"";
+        }
+        element += "></textarea>";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
     }
 
     beforeEach(initialSetup);
@@ -577,9 +587,7 @@ describe("placekeeper", function() {
                     var element;
 
                     beforeEach(function(done) {
-                        element = document.createElement("textarea");
-                        element.placeholder = "Test";
-                        document.body.appendChild(element);
+                        element = createTextareaElement(true);
                         setTimeout(done, 110);
                     });
 
