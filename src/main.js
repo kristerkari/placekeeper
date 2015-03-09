@@ -8,8 +8,8 @@
     var isEnabled = false;
     var loopInterval = null;
     var isFocusEnabled = true;
-    var inputElements = null;
-    var textareaElements = null;
+    var inputElements = [];
+    var textareaElements = [];
 
     var supportedElementTypes = [
         "text",
@@ -97,6 +97,25 @@
                hasFocusAttrSetToFalse(document.body);
     }
 
+    function setupElement(element, placeholderValue) {
+        element.setAttribute("data-placeholder-value", placeholderValue);
+    }
+
+    function checkForPlaceholder(element) {
+        var placeholder = getPlaceholderValue(element);
+        if (placeholder && isSupportedType(getElementType(element))) {
+            setupElement(element, placeholder);
+        }
+    }
+
+    function setupPlaceholders() {
+        var length = inputElements.length + textareaElements.length;
+        for (var i = 0; i < length; i++) {
+            var element = i < inputElements.length ? inputElements[i] : textareaElements[i - inputElements.length];
+            checkForPlaceholder(element);
+        }
+    }
+
     function placekeeperLoop() {
         if (hasFocusDisabled()) {
             isFocusEnabled = false;
@@ -108,6 +127,7 @@
             return;
         }
 
+        setupPlaceholders();
     }
 
     function init() {
@@ -151,6 +171,7 @@
         __init: init,
         __getElements: getElements,
         __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
+        __setupPlaceholders: setupPlaceholders,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
 

@@ -271,6 +271,96 @@ describe("placekeeper", function() {
 
         });
 
+        describe("__setupPlaceholders", function() {
+
+            describe("when there is a text input without a placeholder value set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElement(false);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__setupPlaceholders();
+                    });
+
+                    it("should have one input in DOM", function() {
+                        expect(document.getElementsByTagName("input").length).toEqual(1);
+                    });
+
+                    it("should not have added data-placeholder-value to the element", function() {
+                        expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+                    });
+
+                });
+
+            });
+
+            describe("when there is a text input with a placeholder value set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElement(true);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__setupPlaceholders();
+                    });
+
+                    it("should have one input in DOM", function() {
+                        expect(document.getElementsByTagName("input").length).toEqual(1);
+                    });
+
+                    it("should have added data-placeholder-value to the element", function() {
+                        expect(element.getAttribute("data-placeholder-value")).toEqual("Test");
+                    });
+
+                });
+
+            });
+
+            describe("when there is a date input with a placeholder value set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElement(true, "date");
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                describe("and when called", function() {
+
+                    beforeEach(function() {
+                        placekeeper.priv.__setupPlaceholders();
+                    });
+
+                    it("should not have added data-placeholder-value to the element", function() {
+                        expect(element.getAttribute("data-placeholder-value")).not.toEqual("Test");
+                    });
+
+                });
+
+            });
+
+        });
+
         describe("__hasElementsThatNeedPlaceholder", function() {
 
             it("should return false when called without parameters", function() {
