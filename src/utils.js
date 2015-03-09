@@ -3,6 +3,15 @@
 
     global.placekeeper = global.placekeeper || {};
 
+    function addEventListener(elem, event, fn) {
+        if (elem.addEventListener) {
+            return elem.addEventListener(event, fn, false);
+        }
+        if (elem.attachEvent) {
+            return elem.attachEvent("on" + event, fn);
+        }
+    }
+
     // wrap `document.getElementsByTagName`
     // so that unit tests can correctly spy
     // on it in all browsers
@@ -26,6 +35,7 @@
 
     // Expose public methods
     global.placekeeper.utils = {
+        addEventListener: addEventListener,
         getElementsByTagName: getElementsByTagName,
         inArray: inArray
     };
