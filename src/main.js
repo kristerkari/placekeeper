@@ -79,12 +79,16 @@
         return needsPlaceholder;
     }
 
+    function hasAttrSetToFalse(element, attr) {
+        return element.getAttribute(attr) === "false";
+    }
+
     function hasLiveUpdatesAttrSetToFalse(element) {
-        return element.getAttribute("data-placeholder-live") === "false";
+        return hasAttrSetToFalse(element, "data-placeholder-live");
     }
 
     function hasFocusAttrSetToFalse(element) {
-        return element.getAttribute("data-placeholder-focus") === "false";
+        return hasAttrSetToFalse(element, "data-placeholder-focus");
     }
 
     function hasDisabledLiveUpdates() {
