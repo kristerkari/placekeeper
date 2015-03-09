@@ -31,7 +31,10 @@
     }
 
     function hasPlaceholderAttrSet(element) {
-        return "placeholder" in element && element.placeholder !== "";
+        return Boolean("placeholder" in element &&
+               element.placeholder !== "" ||
+               element.attributes.placeholder &&
+               element.attributes.placeholder.nodeValue !== "");
     }
 
     function isSupportedType(elementType) {
@@ -134,6 +137,7 @@
     global.placekeeper.priv = {
         __init: init,
         __getElements: getElements,
+        __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
 

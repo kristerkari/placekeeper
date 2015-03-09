@@ -231,6 +231,46 @@ describe("placekeeper", function() {
 
     describe("private methods", function() {
 
+        describe("__hasPlaceholderAttrSet", function() {
+
+            describe("when called with an element that has placeholder attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElement(true);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return true", function() {
+                    expect(placekeeper.priv.__hasPlaceholderAttrSet(element)).toEqual(true);
+                });
+
+            });
+
+            describe("when called with an element that does not have have placeholder attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElement(false);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return false", function() {
+                    expect(placekeeper.priv.__hasPlaceholderAttrSet(element)).toEqual(false);
+                });
+
+            });
+
+        });
+
         describe("__hasElementsThatNeedPlaceholder", function() {
 
             it("should return false when called without parameters", function() {
