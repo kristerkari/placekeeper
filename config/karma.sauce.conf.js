@@ -25,6 +25,7 @@ module.exports = function(config) {
         ff3dot6: {
             base: "SauceLabs",
             browserName: "firefox",
+            platform: "Windows XP",
             version: "3.6"
         },
         opera11: {
