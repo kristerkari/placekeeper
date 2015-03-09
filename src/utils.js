@@ -12,6 +12,33 @@
         }
     }
 
+    function removeEventListener(elem, event, fn) {
+        if (elem.removeEventListener) {
+            return elem.removeEventListener(event, fn, false);
+        }
+        if (elem.detachEvent) {
+            return elem.detachEvent("on" + event, fn);
+        }
+    }
+
+    function trim(str) {
+        return str.replace(/^\s+|\s+$/g, "");
+    }
+
+    function hasClass(elem, className) {
+        return (" " + elem.className + " ").indexOf(" " + className + " ") !== -1;
+    }
+
+    function addClass(elem, className) {
+        if (!hasClass(elem, className)) {
+            elem.className = elem.className === "" ? className : elem.className + " " + className;
+        }
+    }
+
+    function removeClass(elem, className) {
+        elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
+    }
+
     // wrap `document.getElementsByTagName`
     // so that unit tests can correctly spy
     // on it in all browsers
@@ -36,6 +63,10 @@
     // Expose public methods
     global.placekeeper.utils = {
         addEventListener: addEventListener,
+        removeEventListener: removeEventListener,
+        addClass: addClass,
+        removeClass: removeClass,
+        hasClass: hasClass,
         getElementsByTagName: getElementsByTagName,
         inArray: inArray
     };
