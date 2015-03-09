@@ -37,6 +37,13 @@
                element.attributes.placeholder.nodeValue !== "");
     }
 
+    function getElementType(element) {
+        if (element.type === "textarea") {
+            return element.type;
+        }
+        return element.getAttribute("type");
+    }
+
     function isSupportedType(elementType) {
         return utils.inArray(supportedElementTypes, elementType);
     }
@@ -48,7 +55,7 @@
         }
 
         for (var i = 0; i < elements.length; i++) {
-            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(elements[i].type)) {
+            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(getElementType(elements[i]))) {
                 return true;
             }
         }
