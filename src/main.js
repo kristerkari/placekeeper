@@ -30,11 +30,17 @@
         return isFocusEnabled;
     }
 
-    function hasPlaceholderAttrSet(element) {
-        return Boolean("placeholder" in element &&
-               element.placeholder !== "" ||
+    function getPlaceholderValue(element) {
+        return "placeholder" in element &&
+               element.placeholder ||
+               // IE10 emulating IE7 fails with getAttribute, hence the use of the attributes node
+               // IE returns an empty object instead of undefined if the attribute is not present
                element.attributes.placeholder &&
-               element.attributes.placeholder.nodeValue !== "");
+               element.attributes.placeholder.nodeValue;
+    }
+
+    function hasPlaceholderAttrSet(element) {
+        return Boolean(getPlaceholderValue(element));
     }
 
     function getElementType(element) {
