@@ -22,6 +22,19 @@ describe("placekeeper", function() {
         });
     }
 
+    function createInputElementWithMaxLength(maxLength, maxLengthAttr) {
+        var element = "<input type=\"text\" id=\"elem\"";
+        if (maxLength) {
+            element += " maxlength=\"" + maxLength + "\"";
+        }
+        if (maxLengthAttr) {
+            element += " data-placeholder-maxlength=\"" + maxLengthAttr + "\"";
+        }
+        element += ">";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
     function createInputElement(hasPlaceholder, type) {
         var element = "<input type=\"" + (type || "text") + "\" id=\"elem\"";
         if (hasPlaceholder) {
@@ -41,6 +54,22 @@ describe("placekeeper", function() {
         document.body.innerHTML = element;
         return document.getElementById("elem");
     }
+
+    beforeEach(function() {
+        jasmine.addMatchers({
+            toEqualNullOr2147483647: function() {
+                return {
+                    compare: function(actual) {
+                        return {
+                            // IE7 has a default value of 2147483647 for maxLength attribute
+                            message: "Expected " + actual + " to be either 2147483647 or null",
+                            pass: actual === null || actual === 2147483647
+                        };
+                    }
+                };
+            }
+        });
+    });
 
     beforeEach(initialSetup);
 
@@ -230,6 +259,102 @@ describe("placekeeper", function() {
     });
 
     describe("private methods", function() {
+
+        describe("__storeMaxlength", function() {
+
+            describe("when called with an element that has maxLength attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElementWithMaxLength(10);
+                    placekeeper.priv.__storeMaxlength(element);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should have added data-placeholder-maxlength attribute to the element", function() {
+                    expect(parseInt(element.getAttribute("data-placeholder-maxlength"), 10)).toEqual(10);
+                });
+
+                it("should have removed maxLength attribute", function() {
+                    expect(element.getAttribute("maxlength")).toEqualNullOr2147483647();
+                });
+
+            });
+
+            describe("when called with an element that does not have maxLength attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElementWithMaxLength();
+                    placekeeper.priv.__storeMaxlength(element);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should not have added data-placeholder-maxlength attribute to the element", function() {
+                    expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+                });
+
+            });
+
+        });
+
+        describe("__restoreMaxlength", function() {
+
+            describe("when called with an element that has maxLength data attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElementWithMaxLength(false, 10);
+                    placekeeper.priv.__restoreMaxlength(element);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should not have added data-placeholder-maxlength attribute to the element", function() {
+                    expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+                });
+
+                it("should have added maxLength attribute back", function() {
+                    expect(parseInt(element.getAttribute("maxlength"), 10)).toEqual(10);
+                });
+
+            });
+
+            describe("when called with an element that does not have maxLength data attribute set", function() {
+                var element;
+
+                beforeEach(function(done) {
+                    element = createInputElementWithMaxLength();
+                    placekeeper.priv.__restoreMaxlength(element);
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should not have added data-placeholder-maxlength attribute to the element", function() {
+                    expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+                });
+
+                it("should not have added maxLength attribute", function() {
+                    expect(element.getAttribute("maxlength")).toEqualNullOr2147483647();
+                });
+
+            });
+
+        });
 
         describe("__hasPlaceholderAttrSet", function() {
 
