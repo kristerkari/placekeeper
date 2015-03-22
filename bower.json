@@ -1,0 +1,20 @@
+{
+  "name": "placekeeper",
+  "version": "1.0.0-alpha",
+  "homepage": "https://github.com/kristerkari/placekeeper",
+  "authors": [
+    "Krister Kari <krister@krister.fi>"
+  ],
+  "main": "index.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
