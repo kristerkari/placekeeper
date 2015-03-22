@@ -71,6 +71,17 @@ describe("placekeeper", function() {
 
     beforeEach(function() {
         jasmine.addMatchers({
+            toHavePlaceholderClass: function() {
+                return {
+                    compare: function(actual) {
+                        var pass = actual.className.search("placeholder") > -1;
+                        return {
+                            message: "Expected element" + (pass ? " not" : "") + " to have \"placeholder\" class",
+                            pass: pass
+                        };
+                    }
+                };
+            },
             toEqualNullOr2147483647: function() {
                 return {
                     compare: function(actual) {
@@ -114,6 +125,10 @@ describe("placekeeper", function() {
                 expect(element.getAttribute("data-placeholder-active")).toEqual("true");
             });
 
+            it("should have added placeholder class", function() {
+                expect(element).toHavePlaceholderClass();
+            });
+
             describe("and when element is focused", function() {
 
                 beforeEach(function() {
@@ -132,6 +147,10 @@ describe("placekeeper", function() {
 
                 it("should have removed data-placeholder-active", function() {
                     expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+                });
+
+                it("should have removed placeholder class", function() {
+                    expect(element).not.toHavePlaceholderClass();
                 });
 
                 describe("and when a value is given to the element", function() {
@@ -160,6 +179,10 @@ describe("placekeeper", function() {
                             expect(element.getAttribute("data-placeholder-active")).toEqual(null);
                         });
 
+                        it("should have removed placeholder class", function() {
+                            expect(element).not.toHavePlaceholderClass();
+                        });
+
                     });
 
                 });
@@ -182,6 +205,10 @@ describe("placekeeper", function() {
 
                     it("should have set data-placeholder-active to true", function() {
                         expect(element.getAttribute("data-placeholder-active")).toEqual("true");
+                    });
+
+                    it("should have added placeholder class", function() {
+                        expect(element).toHavePlaceholderClass();
                     });
 
                 });
