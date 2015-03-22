@@ -5,6 +5,7 @@
 
     var support = global.placekeeper.support;
     var utils = global.placekeeper.utils;
+    var polyfill = global.placekeeper.polyfill;
     var isEnabled = false;
     var loopInterval = null;
     var isFocusEnabled = true;
@@ -114,6 +115,10 @@
         return hasAttrSetToFalse(element, "data-placeholder-focus");
     }
 
+    function hasEventsAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-has-events") === "true";
+    }
+
     function hasDisabledLiveUpdates() {
         return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
                hasLiveUpdatesAttrSetToFalse(document.body);
@@ -124,13 +129,28 @@
                hasFocusAttrSetToFalse(document.body);
     }
 
+    function setupEvents(element) {
+        utils.addEventListener(element, "focus", function() {
+            polyfill.__hidePlaceholder(element);
+        });
+
+        utils.addEventListener(element, "blur", function() {
+            polyfill.__showPlaceholder(element);
+        });
+    }
+
     function setupElement(element, placeholderValue) {
         element.setAttribute("data-placeholder-value", placeholderValue);
+        element.setAttribute("data-placeholder-has-events", "true");
+        setupEvents(element);
+        polyfill.__showPlaceholder(element);
     }
 
     function checkForPlaceholder(element) {
         var placeholder = getPlaceholderValue(element);
-        if (placeholder && isSupportedType(getElementType(element))) {
+        if (placeholder &&
+            isSupportedType(getElementType(element)) &&
+            !hasEventsAttrSetToTrue(element)) {
             setupElement(element, placeholder);
         }
     }

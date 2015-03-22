@@ -50,6 +50,7 @@ module.exports = function(config) {
         files: [
             "../src/support.js",
             "../src/utils.js",
+            "../src/polyfill.js",
             "../src/main.js",
             "../test/**/*_spec.js"
         ],

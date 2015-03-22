@@ -3,6 +3,20 @@ describe("placekeeper", function() {
 
     var placekeeper = window.placekeeper;
 
+    function trigger(target, event) {
+        var evt;
+        if (document.createEvent) {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true);
+            target.dispatchEvent(evt);
+        } else if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            target.fireEvent("on" + event, evt);
+        }
+    }
+
     function initialSetup() {
         spyOn(placekeeper.support, "isInputSupported")
         .and.callFake(function() {
@@ -72,6 +86,111 @@ describe("placekeeper", function() {
     });
 
     beforeEach(initialSetup);
+
+    describe("focusing and blurring an element with placeholder", function() {
+
+        describe("when there is an input with placeholder value set", function() {
+            var element;
+
+            beforeEach(function(done) {
+                element = createInputElement(true);
+                setTimeout(done, 110);
+                placekeeper.priv.__setupPlaceholders();
+            });
+
+            afterEach(function() {
+                element.parentNode.removeChild(element);
+            });
+
+            it("should have added data-placeholder-events attribute to the element", function() {
+                expect(element.getAttribute("data-placeholder-has-events")).toEqual("true");
+            });
+
+            it("should have set element's value to placeholder value (Test)", function() {
+                expect(element.value).toEqual("Test");
+            });
+
+            it("should have set data-placeholder-active to true", function() {
+                expect(element.getAttribute("data-placeholder-active")).toEqual("true");
+            });
+
+            describe("and when element is focused", function() {
+
+                beforeEach(function() {
+                    spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+                    trigger(element, "focus");
+                });
+
+                it("should have called polyfill's __hidePlaceholder method", function() {
+                    expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
+                    expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+                });
+
+                it("should have remove element's value", function() {
+                    expect(element.value).toEqual("");
+                });
+
+                it("should have removed data-placeholder-active", function() {
+                    expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+                });
+
+                describe("and when a value is given to the element", function() {
+
+                    beforeEach(function() {
+                        element.value = "MyValue";
+                    });
+
+                    describe("and when element is blurred after that", function() {
+
+                        beforeEach(function() {
+                            spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+                            trigger(element, "blur");
+                        });
+
+                        it("should have called polyfill's __showPlaceholder method", function() {
+                            expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                            expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                        });
+
+                        it("should have set element's value to Test", function() {
+                            expect(element.value).toEqual("MyValue");
+                        });
+
+                        it("should have set data-placeholder-active to true", function() {
+                            expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+                        });
+
+                    });
+
+                });
+
+                describe("and when element is blurred after that", function() {
+
+                    beforeEach(function() {
+                        spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+                        trigger(element, "blur");
+                    });
+
+                    it("should have called polyfill's __showPlaceholder method", function() {
+                        expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                    });
+
+                    it("should have set element's value to Test", function() {
+                        expect(element.value).toEqual("Test");
+                    });
+
+                    it("should have set data-placeholder-active to true", function() {
+                        expect(element.getAttribute("data-placeholder-active")).toEqual("true");
+                    });
+
+                });
+
+            });
+
+        });
+
+    });
 
     describe("plugin options", function() {
 
