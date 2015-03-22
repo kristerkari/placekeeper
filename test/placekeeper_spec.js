@@ -71,12 +71,12 @@ describe("placekeeper", function() {
 
     beforeEach(function() {
         jasmine.addMatchers({
-            toHavePlaceholderClass: function() {
+            toHaveClass: function() {
                 return {
-                    compare: function(actual) {
-                        var pass = actual.className.search("placeholder") > -1;
+                    compare: function(actual, expected) {
+                        var pass = actual.className.search(expected) > -1;
                         return {
-                            message: "Expected element" + (pass ? " not" : "") + " to have \"placeholder\" class",
+                            message: "Expected element" + (pass ? " not" : "") + " to have \"" + expected + "\" class",
                             pass: pass
                         };
                     }
@@ -126,7 +126,7 @@ describe("placekeeper", function() {
             });
 
             it("should have added placeholder class", function() {
-                expect(element).toHavePlaceholderClass();
+                expect(element).toHaveClass("placeholder");
             });
 
             describe("and when element is focused", function() {
@@ -150,7 +150,7 @@ describe("placekeeper", function() {
                 });
 
                 it("should have removed placeholder class", function() {
-                    expect(element).not.toHavePlaceholderClass();
+                    expect(element).not.toHaveClass("placeholder");
                 });
 
                 describe("and when a value is given to the element", function() {
@@ -180,7 +180,7 @@ describe("placekeeper", function() {
                         });
 
                         it("should have removed placeholder class", function() {
-                            expect(element).not.toHavePlaceholderClass();
+                            expect(element).not.toHaveClass("placeholder");
                         });
 
                     });
@@ -208,7 +208,7 @@ describe("placekeeper", function() {
                     });
 
                     it("should have added placeholder class", function() {
-                        expect(element).toHavePlaceholderClass();
+                        expect(element).toHaveClass("placeholder");
                     });
 
                 });
