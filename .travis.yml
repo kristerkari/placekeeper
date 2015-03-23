@@ -12,7 +12,7 @@ script: ./travis.sh
 
 addons:
   code_climate:
-    repo_token: adc415e391574e88bb6fa3d50034c2118a3a2c8bfd38aee9e18ec1c32fd0438a
+    repo_token: 8693ee93157c5b7c5232a9f74a43a8a836d8e0393d7218a779b569f20c28474c
 
 after_success:
 - npm run-script coveralls
