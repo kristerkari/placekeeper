@@ -126,6 +126,7 @@ describe("placekeeper", function() {
             var element;
 
             beforeEach(function(done) {
+                spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                 element = createInputElement(true);
                 setTimeout(done, 110);
                 placekeeper.priv.__setupPlaceholders();
@@ -149,6 +150,11 @@ describe("placekeeper", function() {
 
             it("should have added placeholder class", function() {
                 expect(element).toHaveClass("placeholder");
+            });
+
+            it("should have called polyfill's __showPlaceholder method", function() {
+                expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
             });
 
             describe("and when element is focused", function() {
@@ -184,13 +190,12 @@ describe("placekeeper", function() {
                     describe("and when element is blurred after that", function() {
 
                         beforeEach(function() {
-                            spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                             trigger(element, "blur");
                         });
 
                         it("should have called polyfill's __showPlaceholder method", function() {
                             expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-                            expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                            expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(2);
                         });
 
                         it("should have set element's value to Test", function() {
@@ -212,13 +217,12 @@ describe("placekeeper", function() {
                 describe("and when element is blurred after that", function() {
 
                     beforeEach(function() {
-                        spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                         trigger(element, "blur");
                     });
 
                     it("should have called polyfill's __showPlaceholder method", function() {
                         expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-                        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(2);
                     });
 
                     it("should have set element's value to Test", function() {
