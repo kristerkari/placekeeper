@@ -44,29 +44,6 @@
         return Boolean(getPlaceholderValue(element));
     }
 
-    function hasMaxLength(element) {
-        return element.attributes.maxLength && element.attributes.maxLength.specified;
-    }
-
-    function restoreMaxlength(element) {
-        var maxLength = element.getAttribute("data-placeholder-maxlength");
-        if (!maxLength) {
-            return;
-        }
-        element.setAttribute("maxLength", maxLength);
-        element.removeAttribute("data-placeholder-maxlength");
-    }
-
-    function storeMaxlength(element) {
-        if (!hasMaxLength(element)) {
-            return;
-        }
-        element.setAttribute("data-placeholder-maxlength", element.maxLength);
-        // Removing maxLength will not work in IE7,
-        // where a default value of 2147483647 is used instead.
-        element.removeAttribute("maxLength");
-    }
-
     function getElementType(element) {
         if (element.type === "textarea") {
             return element.type;
@@ -232,8 +209,6 @@
         __init: init,
         __getElements: getElements,
         __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
-        __storeMaxlength: storeMaxlength,
-        __restoreMaxlength: restoreMaxlength,
         __setupPlaceholders: setupPlaceholders,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };

@@ -50,7 +50,8 @@ describe("placekeeper", function() {
     }
 
     function createInputElement(hasPlaceholder, type) {
-        var element = "<input type=\"" + (type || "text") + "\" id=\"elem\"";
+        var element = "<input type=\"" + (type || "text") +
+                      "\" id=\"elem\" maxlength=\"12\"";
         if (hasPlaceholder) {
             element += " placeholder=\"Test\"";
         }
@@ -157,6 +158,14 @@ describe("placekeeper", function() {
                 expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
             });
 
+            it("should have set data-placeholder-maxlength to 12", function() {
+                expect(parseInt(element.getAttribute("data-placeholder-maxlength"), 10)).toEqual(12);
+            });
+
+            it("should have removed maxlength attribute", function() {
+                expect(element.getAttribute("maxLength")).toEqualNullOr2147483647();
+            });
+
             describe("and when element is focused", function() {
 
                 beforeEach(function() {
@@ -179,6 +188,14 @@ describe("placekeeper", function() {
 
                 it("should have removed placeholder class", function() {
                     expect(element).not.toHaveClass("placeholder");
+                });
+
+                it("should have removed data-placeholder-maxlength", function() {
+                    expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+                });
+
+                it("should have restored maxlength attribute", function() {
+                    expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
                 });
 
                 describe("and when a value is given to the element", function() {
@@ -439,7 +456,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength(10);
-                    placekeeper.priv.__storeMaxlength(element);
+                    placekeeper.polyfill.__storeMaxlength(element);
                     setTimeout(done, 110);
                 });
 
@@ -462,7 +479,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength();
-                    placekeeper.priv.__storeMaxlength(element);
+                    placekeeper.polyfill.__storeMaxlength(element);
                     setTimeout(done, 110);
                 });
 
@@ -485,7 +502,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength(false, 10);
-                    placekeeper.priv.__restoreMaxlength(element);
+                    placekeeper.polyfill.__restoreMaxlength(element);
                     setTimeout(done, 110);
                 });
 
@@ -508,7 +525,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength();
-                    placekeeper.priv.__restoreMaxlength(element);
+                    placekeeper.polyfill.__restoreMaxlength(element);
                     setTimeout(done, 110);
                 });
 
