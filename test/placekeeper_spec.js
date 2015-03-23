@@ -100,6 +100,28 @@ describe("placekeeper", function() {
 
     describe("focusing and blurring an element with placeholder", function() {
 
+        describe("when there is an input that is already focused", function() {
+            var element;
+
+            beforeEach(function(done) {
+                spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+                element = createInputElement(true);
+                element.focus();
+                setTimeout(done, 110);
+                placekeeper.priv.__setupPlaceholders();
+            });
+
+            afterEach(function() {
+                element.parentNode.removeChild(element);
+            });
+
+            it("should not have called polyfill's __showPlaceholder method", function() {
+                expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+            });
+
+        });
+
         describe("when there is an input with placeholder value set", function() {
             var element;
 
