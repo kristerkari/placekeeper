@@ -7,8 +7,8 @@
     var eslint = require("gulp-eslint");
     var karma = require("karma").server;
 
-    gulp.task("default", function() {
-        return gulp.src("*.js")
+    gulp.task("lint", function() {
+        return gulp.src("src/*.js")
                    .pipe(eslint({
                        useEslintrc: true
                    }))
@@ -16,6 +16,8 @@
                    .pipe(eslint.failAfterError())
                    .pipe(jscs());
     });
+
+    gulp.task("default", ["lint"]);
 
     gulp.task("test", function(done) {
         karma.start({
