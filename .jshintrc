@@ -1,11 +1,11 @@
 {
   "browser": true,
+  "node": true,
   "jasmine": true,
   "es3": true,
   "maxlen": 140,
   "latedef": true,
   "bitwise": true,
-  "futurehostile": true,
   "eqeqeq": true,
   "eqnull": true,
   "undef": true,
