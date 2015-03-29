@@ -997,11 +997,22 @@ describe("placekeeper", function() {
             describe("when placekeeper is disabled", function() {
 
                 beforeEach(function() {
+                    spyOn(placekeeper.utils, "removeEventListener");
                     placekeeper.disable();
                 });
 
                 it("should have placekeeper disabled", function() {
                     expect(placekeeper.isEnabled()).toEqual(false);
+                });
+
+                it("should have called utils.removeEventListener for focus handler", function() {
+                    expect(placekeeper.utils.removeEventListener)
+                    .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.hide);
+                });
+
+                it("should have called utils.removeEventListener for blur handler", function() {
+                    expect(placekeeper.utils.removeEventListener)
+                    .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.show);
                 });
 
             });

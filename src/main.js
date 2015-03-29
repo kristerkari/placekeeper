@@ -8,6 +8,7 @@
     var polyfill = global.placekeeper.polyfill;
     var isEnabled = false;
     var hasUnloadEventListener = false;
+    var handlers = {};
     var loopInterval = null;
     var isFocusEnabled = true;
     var inputElements = [];
@@ -122,20 +123,34 @@
         } catch (ex) {}
     }
 
-    function setupEvents(element) {
-        utils.addEventListener(element, "focus", function() {
+    function createHideEventHandler(element) {
+        return function() {
             polyfill.__hidePlaceholder(element);
-        });
+        };
+    }
 
-        utils.addEventListener(element, "blur", function() {
+    function createShowEventHandler(element) {
+        return function() {
             polyfill.__showPlaceholder(element);
-        });
+        };
+    }
+
+    function addEventListeners(element) {
+        handlers.show = createShowEventHandler(element);
+        handlers.hide = createHideEventHandler(element);
+        utils.addEventListener(element, "focus", handlers.hide);
+        utils.addEventListener(element, "blur", handlers.show);
+    }
+
+    function removeEventListeners(element) {
+        utils.removeEventListener(element, "focus", handlers.hide);
+        utils.removeEventListener(element, "blur", handlers.show);
     }
 
     function setupElement(element, placeholderValue) {
         element.setAttribute("data-placeholder-value", placeholderValue);
         element.setAttribute("data-placeholder-has-events", "true");
-        setupEvents(element);
+        addEventListeners(element);
         if (element !== safeActiveElement()) {
             polyfill.__showPlaceholder(element);
         }
@@ -163,6 +178,13 @@
             return;
         }
         polyfill.__hidePlaceholder(element);
+    }
+
+    function removeEvents(element) {
+        if (!hasEventsAttrSetToTrue(element)) {
+            return;
+        }
+        removeEventListeners(element);
     }
 
     function clearPlaceholders() {
@@ -211,6 +233,7 @@
     function disablePlacekeeper() {
         isEnabled = false;
         clearInterval(loopInterval);
+        forEachElement(removeEvents);
     }
 
     function getElements() {
@@ -240,6 +263,7 @@
         __getElements: getElements,
         __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         __setupPlaceholders: setupPlaceholders,
+        __handlers: handlers,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
 
