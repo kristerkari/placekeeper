@@ -168,7 +168,9 @@
     function forEachElement(callback) {
         var length = inputElements.length + textareaElements.length;
         for (var i = 0; i < length; i++) {
-            var element = i < inputElements.length ? inputElements[i] : textareaElements[i - inputElements.length];
+            var element = i < inputElements.length ?
+            inputElements[i] :
+            textareaElements[i - inputElements.length];
             callback(element);
         }
     }
