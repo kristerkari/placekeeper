@@ -7,6 +7,7 @@
     var utils = global.placekeeper.utils;
     var polyfill = global.placekeeper.polyfill;
     var isEnabled = false;
+    var hasUnloadEventListener = false;
     var loopInterval = null;
     var isFocusEnabled = true;
     var inputElements = [];
@@ -96,6 +97,10 @@
         return element.getAttribute("data-placeholder-has-events") === "true";
     }
 
+    function hasActiveAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-active") === "true";
+    }
+
     function hasDisabledLiveUpdates() {
         return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
                hasLiveUpdatesAttrSetToFalse(document.body);
@@ -145,12 +150,36 @@
         }
     }
 
-    function setupPlaceholders() {
+    function forEachElement(callback) {
         var length = inputElements.length + textareaElements.length;
         for (var i = 0; i < length; i++) {
             var element = i < inputElements.length ? inputElements[i] : textareaElements[i - inputElements.length];
-            checkForPlaceholder(element);
+            callback(element);
         }
+    }
+
+    function hidePlaceholder(element) {
+        if (!hasActiveAttrSetToTrue(element)) {
+            return;
+        }
+        polyfill.__hidePlaceholder(element);
+    }
+
+    function clearPlaceholders() {
+        forEachElement(hidePlaceholder);
+    }
+
+    function setupPlaceholders() {
+        forEachElement(checkForPlaceholder);
+
+        if (hasUnloadEventListener) {
+            utils.removeEventListener(global, "beforeunload", clearPlaceholders);
+        }
+
+        // Disabling placeholders before unloading the page prevents flash of
+        // unstyled placeholders on load if the page was refreshed.
+        utils.addEventListener(global, "beforeunload", clearPlaceholders);
+        hasUnloadEventListener = true;
     }
 
     function placekeeperLoop() {
@@ -206,6 +235,7 @@
 
     // Exposed private methods
     global.placekeeper.priv = {
+        __global: global,
         __init: init,
         __getElements: getElements,
         __hasPlaceholderAttrSet: hasPlaceholderAttrSet,

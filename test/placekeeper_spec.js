@@ -3,6 +3,22 @@ describe("placekeeper", function() {
 
     var placekeeper = window.placekeeper;
 
+    var fakeWindow = {
+        events: {},
+        dispatchEvent: function(event) {
+            this.events[event.type].call();
+        },
+        fireEvent: function(event) {
+            this.events[event.slice(2)].call();
+        }
+    };
+
+    var fakeUtils = {
+        addEventListener: function(elem, event, fn) {
+            fakeWindow.events[event] = fn;
+        }
+    };
+
     function trigger(target, event) {
         var evt;
         if (document.createEvent) {
@@ -34,6 +50,21 @@ describe("placekeeper", function() {
         .and.callFake(function() {
             return bool;
         });
+    }
+
+    function triggerFakePageReload() {
+        trigger(fakeWindow, "beforeunload");
+    }
+
+    function setupFakeWindow() {
+        spyOn(placekeeper.utils, "addEventListener")
+        .and.callFake(fakeUtils.addEventListener);
+        placekeeper.priv.__global = fakeWindow;
+        placekeeper.priv.__setupPlaceholders();
+    }
+
+    function restoreRealWindow() {
+        placekeeper.priv.__global = window;
     }
 
     function createInputElementWithMaxLength(maxLength, maxLengthAttr) {
@@ -256,6 +287,68 @@ describe("placekeeper", function() {
 
                 });
 
+            });
+
+        });
+
+    });
+
+    describe("when there is an element with placeholder on the page", function() {
+        var element;
+
+        beforeEach(function(done) {
+            element = createInputElement(true);
+            setTimeout(done, 110);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        describe("when page is reloaded", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.polyfill, "__hidePlaceholder");
+                setupFakeWindow();
+                triggerFakePageReload();
+            });
+
+            afterEach(restoreRealWindow);
+
+            it("should have called polyfill's __hidePlaceholder method", function() {
+                expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
+                expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+            });
+
+        });
+
+    });
+
+    describe("when there is an element without placeholder on the page", function() {
+        var element;
+
+        beforeEach(function(done) {
+            element = createInputElement(false);
+            setTimeout(done, 110);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        describe("when page is reloaded", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.polyfill, "__hidePlaceholder");
+                setupFakeWindow();
+                triggerFakePageReload();
+            });
+
+            afterEach(restoreRealWindow);
+
+            it("should not have called polyfill's __hidePlaceholder method", function() {
+                expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
             });
 
         });
