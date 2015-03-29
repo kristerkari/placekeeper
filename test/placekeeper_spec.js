@@ -91,6 +91,17 @@ describe("placekeeper", function() {
         return document.getElementById("elem");
     }
 
+    function createInputElementWithForm(hasPlaceholder, type) {
+        var element = "<form method=get action=javascript:void(0);><input type=\"" + (type || "text") +
+                      "\" id=\"elem\" maxlength=\"12\"";
+        if (hasPlaceholder) {
+            element += " placeholder=\"Test\"";
+        }
+        element += "></form>";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
     function createTextareaElement(hasPlaceholder) {
         var element = "<textarea id=\"elem\"";
         if (hasPlaceholder) {
@@ -287,6 +298,115 @@ describe("placekeeper", function() {
 
                 });
 
+            });
+
+        });
+
+    });
+
+    describe("when there is an element without placeholder inside a form on the page", function() {
+        var element;
+        var form;
+
+        beforeEach(function(done) {
+            element = createInputElementWithForm(false);
+            form = document.getElementsByTagName("form")[0];
+            placekeeper.priv.__setupPlaceholders();
+            setTimeout(done, 110);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        describe("and when that form is submitted", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.polyfill, "__hidePlaceholder");
+                spyOn(placekeeper.polyfill, "__showPlaceholder");
+                trigger(form, "submit");
+            });
+
+            it("should not have added data-placeholder-submit to the form", function() {
+                expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
+            });
+
+            it("should not have called polyfill's __hidePlaceholder method", function() {
+                expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+            });
+
+            it("should not have called polyfill's __showPlaceholder method", function() {
+                expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+            });
+
+        });
+
+    });
+
+    describe("when there is an element with placeholder inside a form on the page", function() {
+        var element;
+        var form;
+
+        beforeEach(function(done) {
+            element = createInputElementWithForm(true);
+            form = document.getElementsByTagName("form")[0];
+            placekeeper.priv.__setupPlaceholders();
+            setTimeout(done, 110);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        describe("and when that form is submitted", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.polyfill, "__hidePlaceholder");
+                spyOn(placekeeper.polyfill, "__showPlaceholder");
+                trigger(form, "submit");
+            });
+
+            it("should have added data-placeholder-submit to the form", function() {
+                expect(form.getAttribute("data-placeholder-submit")).toEqual("true");
+            });
+
+            it("should have called polyfill's __hidePlaceholder method", function() {
+                expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
+                expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+            });
+
+            it("should not have called polyfill's __showPlaceholder method", function() {
+                expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+            });
+
+            describe("and after 10ms (when form is submitted)", function() {
+
+                beforeEach(function(done) {
+                    setTimeout(done, 10);
+                });
+
+                it("should have called polyfill's __showPlaceholder method", function() {
+                    expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                    expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                });
+
+            });
+
+        });
+
+        describe("and when disable method is called", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.utils, "removeEventListener");
+                placekeeper.disable();
+            });
+
+            it("should have called utils.removeEventListener for submit handler", function() {
+                expect(placekeeper.utils.removeEventListener)
+                .toHaveBeenCalledWith(form, "submit", placekeeper.priv.__handlers.submit);
             });
 
         });

@@ -102,6 +102,10 @@
         return element.getAttribute("data-placeholder-active") === "true";
     }
 
+    function hasSubmitAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-submit") === "true";
+    }
+
     function hasDisabledLiveUpdates() {
         return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
                hasLiveUpdatesAttrSetToFalse(document.body);
@@ -135,6 +139,54 @@
         };
     }
 
+    function loopElements(inputs, textareas, callback) {
+        var length = inputs.length + textareas.length;
+        for (var i = 0; i < length; i++) {
+            var element = i < inputs.length ?
+            inputs[i] :
+            textareas[i - inputs.length];
+            callback(element);
+        }
+    }
+
+    function forEachChildInput(element, callback) {
+        var inputs = element.getElementsByTagName("input");
+        var textareas = element.getElementsByTagName("textarea");
+        loopElements(inputs, textareas, callback);
+    }
+
+    function forEachForm(callback) {
+        var forms = document.getElementsByTagName("form");
+        var length = forms.length;
+        for (var i = 0; i < length; i++) {
+            callback(forms[i]);
+        }
+    }
+
+    function hidePlaceholderOnSubmit(element) {
+        if (!hasActiveAttrSetToTrue(element)) {
+            return;
+        }
+        polyfill.__hidePlaceholder(element);
+    }
+
+    function showPlaceholderAfterSubmit(element) {
+        if (hasPlaceholderAttrSet(element) &&
+            isSupportedType(getElementType(element))) {
+            polyfill.__showPlaceholder(element);
+        }
+    }
+
+    function createSubmitHandler(form) {
+        return function() {
+            // Clear the placeholder values so they don't get submitted
+            forEachChildInput(form, hidePlaceholderOnSubmit);
+            setTimeout(function() {
+                forEachChildInput(form, showPlaceholderAfterSubmit);
+            }, 10);
+        };
+    }
+
     function addEventListeners(element) {
         handlers.show = createShowEventHandler(element);
         handlers.hide = createHideEventHandler(element);
@@ -147,9 +199,36 @@
         utils.removeEventListener(element, "blur", handlers.show);
     }
 
+    function addSubmitListener(form) {
+        handlers.submit = createSubmitHandler(form);
+        utils.addEventListener(form, "submit", handlers.submit);
+    }
+
+    function removeSubmitListener(form) {
+        utils.removeEventListener(form, "submit", handlers.submit);
+    }
+
+    function addSubmitEvent(form) {
+        if (form == null || hasSubmitAttrSetToTrue(form)) {
+            return;
+        }
+        addSubmitListener(form);
+        // Set a flag on the form so we know it's been handled
+        // (forms can contain multiple inputs).
+        form.setAttribute("data-placeholder-submit", "true");
+    }
+
+    function removeSubmitEvent(form) {
+        if (!hasSubmitAttrSetToTrue(form)) {
+            return;
+        }
+        removeSubmitListener(form);
+    }
+
     function setupElement(element, placeholderValue) {
         element.setAttribute("data-placeholder-value", placeholderValue);
         element.setAttribute("data-placeholder-has-events", "true");
+        addSubmitEvent(element.form);
         addEventListeners(element);
         if (element !== safeActiveElement()) {
             polyfill.__showPlaceholder(element);
@@ -166,13 +245,7 @@
     }
 
     function forEachElement(callback) {
-        var length = inputElements.length + textareaElements.length;
-        for (var i = 0; i < length; i++) {
-            var element = i < inputElements.length ?
-            inputElements[i] :
-            textareaElements[i - inputElements.length];
-            callback(element);
-        }
+        loopElements(inputElements, textareaElements, callback);
     }
 
     function hidePlaceholder(element) {
@@ -235,6 +308,7 @@
     function disablePlacekeeper() {
         isEnabled = false;
         clearInterval(loopInterval);
+        forEachForm(removeSubmitEvent);
         forEachElement(removeEvents);
     }
 
