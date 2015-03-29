@@ -1127,12 +1127,12 @@ describe("placekeeper", function() {
 
                 it("should have called utils.removeEventListener for focus handler", function() {
                     expect(placekeeper.utils.removeEventListener)
-                    .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.hide);
+                    .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.focus);
                 });
 
                 it("should have called utils.removeEventListener for blur handler", function() {
                     expect(placekeeper.utils.removeEventListener)
-                    .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.show);
+                    .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
                 });
 
             });

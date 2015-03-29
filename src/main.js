@@ -127,13 +127,13 @@
         } catch (ex) {}
     }
 
-    function createHideEventHandler(element) {
+    function createFocusHandler(element) {
         return function() {
             polyfill.__hidePlaceholder(element);
         };
     }
 
-    function createShowEventHandler(element) {
+    function createBlurHandler(element) {
         return function() {
             polyfill.__showPlaceholder(element);
         };
@@ -188,15 +188,15 @@
     }
 
     function addEventListeners(element) {
-        handlers.show = createShowEventHandler(element);
-        handlers.hide = createHideEventHandler(element);
-        utils.addEventListener(element, "focus", handlers.hide);
-        utils.addEventListener(element, "blur", handlers.show);
+        handlers.blur = createBlurHandler(element);
+        handlers.focus = createFocusHandler(element);
+        utils.addEventListener(element, "focus", handlers.focus);
+        utils.addEventListener(element, "blur", handlers.blur);
     }
 
     function removeEventListeners(element) {
-        utils.removeEventListener(element, "focus", handlers.hide);
-        utils.removeEventListener(element, "blur", handlers.show);
+        utils.removeEventListener(element, "focus", handlers.focus);
+        utils.removeEventListener(element, "blur", handlers.blur);
     }
 
     function addSubmitListener(form) {
