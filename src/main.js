@@ -202,8 +202,13 @@
     }
 
     function removeEventListeners(element) {
-        utils.removeEventListener(element, "focus", handlers.focus);
         utils.removeEventListener(element, "blur", handlers.blur);
+        // TODO: refactor clone/event handling.
+        if (isPasswordInputThatNeedsToBeCloned(element)) {
+            polyfill.__removeClone(element);
+        } else {
+            utils.removeEventListener(element, "focus", handlers.focus);
+        }
     }
 
     function removeDataAttrs(element) {

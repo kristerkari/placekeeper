@@ -652,6 +652,140 @@ describe("placekeeper", function() {
 
     });
 
+    describe("disable method", function() {
+
+        describe("when there is a password input on the page and input type can not be changed", function() {
+            var element;
+            var clone;
+
+            beforeEach(function(done) {
+                spyOnCanChangeToTypeAndReturn(false);
+                element = createInputElement(true, "password");
+                placekeeper.priv.__setupPlaceholders();
+                setTimeout(function() {
+                    clone = document.getElementById("elem");
+                    done();
+                }, loopTimeForTests);
+            });
+
+            afterEach(function() {
+                element.parentNode.removeChild(element);
+            });
+
+            it("should have two inputs on the page", function() {
+                expect(document.getElementsByTagName("input").length).toEqual(2);
+            });
+
+            describe("and when disable is called", function() {
+
+                beforeEach(function(done) {
+                    spyOn(placekeeper.utils, "removeEventListener");
+                    placekeeper.disable();
+                    setTimeout(function() {
+                        element = document.getElementById("elem");
+                        done();
+                    }, loopTimeForTests);
+                });
+
+                it("should have one input on the page", function() {
+                    expect(document.getElementsByTagName("input").length).toEqual(1);
+                });
+
+                it("should have changed element type back to password", function() {
+                    expect(element.getAttribute("type")).toEqual("password");
+                });
+
+                it("should have elem id back to element", function() {
+                    expect(element.id).toEqual("elem");
+                });
+
+                it("should not have element display attribute set to anything", function() {
+                    expect(element.style.display).toEqual("");
+                });
+
+                it("should not have data-placeholder-has-events attribute", function() {
+                    expect(element.getAttribute("data-placeholder-has-events")).toEqual(null);
+                });
+
+                it("should not have data-placeholder-value attribute", function() {
+                    expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+                });
+
+                // In IE7 element is `null`
+                // for some reason.
+                // TODO: find out why
+                if (clone != null) {
+                    it("should have called utils.removeEventListener for focus handler", function() {
+                        expect(placekeeper.utils.removeEventListener)
+                        .toHaveBeenCalledWith(clone, "focus", placekeeper.polyfill.__handlers.focus);
+                    });
+                }
+
+                // In IE7 element is `null`
+                // for some reason.
+                // TODO: find out why
+                if (element != null) {
+                    it("should have called utils.removeEventListener for blur handler", function() {
+                        expect(placekeeper.utils.removeEventListener)
+                        .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
+                    });
+                }
+
+            });
+
+        });
+
+        describe("when there is a password input on the page and input type can be changed", function() {
+            var element;
+
+            if (canActuallyChangeType) {
+
+                beforeEach(function(done) {
+                    spyOnCanChangeToTypeAndReturn(true);
+                    element = createInputElement(true, "password");
+                    placekeeper.priv.__setupPlaceholders();
+                    setTimeout(done, loopTimeForTests);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should have one on the page", function() {
+                    expect(document.getElementsByTagName("input").length).toEqual(1);
+                });
+
+                describe("and when disable is called", function() {
+
+                    beforeEach(function() {
+                        spyOn(placekeeper.utils, "removeEventListener");
+                        placekeeper.disable();
+                    });
+
+                    it("should not have data-placeholder-has-events attribute", function() {
+                        expect(element.getAttribute("data-placeholder-has-events")).toEqual(null);
+                    });
+
+                    it("should not have data-placeholder-value attribute", function() {
+                        expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+                    });
+
+                    it("should have called utils.removeEventListener for focus handler", function() {
+                        expect(placekeeper.utils.removeEventListener)
+                        .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.focus);
+                    });
+
+                    it("should have called utils.removeEventListener for blur handler", function() {
+                        expect(placekeeper.utils.removeEventListener)
+                        .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
+                    });
+
+                });
+            }
+        });
+
+    });
+
     describe("when there is an element without placeholder inside a form on the page", function() {
         var element;
         var form;

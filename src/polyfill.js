@@ -4,6 +4,7 @@
     global.placekeeper = global.placekeeper || {};
     var support = global.placekeeper.support;
     var utils = global.placekeeper.utils;
+    var handlers = {};
 
     function hasMaxLength(element) {
         return element.attributes.maxLength && element.attributes.maxLength.specified;
@@ -28,7 +29,7 @@
         element.removeAttribute("maxLength");
     }
 
-    // TODO: get rid of this duplicate code.
+    // TODO: refactor clone/event handling.
     function createFocusHandler(element) {
         return function() {
             global.placekeeper.polyfill.__hidePlaceholder(element);
@@ -40,8 +41,8 @@
         utils.setAttributes(clone, utils.getAttributes(element));
         clone.type = "text";
         clone.removeAttribute("name");
-        var focusHandler = createFocusHandler(clone);
-        utils.addEventListener(clone, "focus", focusHandler);
+        handlers.focus = createFocusHandler(clone);
+        utils.addEventListener(clone, "focus", handlers.focus);
         clone.setAttribute("data-placeholder-clone", "true");
         return clone;
     }
@@ -69,6 +70,22 @@
 
     function isPasswordInput(element) {
         return element.getAttribute("data-placeholder-type") === "password";
+    }
+
+    // TODO: refactor clone/event handling.
+    function removeEventListeners(element) {
+        utils.removeEventListener(element, "focus", handlers.focus);
+    }
+
+    // TODO: refactor clone/event handling.
+    function removeClone(element) {
+        var clone = element.previousSibling;
+        if (isClonedPasswordInput(clone)) {
+            removeEventListeners(clone);
+            swapElements(clone, element);
+            element.style.display = "";
+            clone.parentNode.removeChild(clone);
+        }
     }
 
     function showPlaceholder(element) {
@@ -127,6 +144,8 @@
 
     // Expose public methods
     global.placekeeper.polyfill = {
+        __handlers: handlers,
+        __removeClone: removeClone,
         __storeMaxlength: storeMaxlength,
         __restoreMaxlength: restoreMaxlength,
         __showPlaceholder: showPlaceholder,
