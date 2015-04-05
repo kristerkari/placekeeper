@@ -2,7 +2,7 @@ describe("placekeeper", function() {
     "use strict";
 
     var placekeeper = window.placekeeper;
-    var loopTimeForTests = 14;
+    var loopDurationForTests = 14;
 
     var fakeWindow = {
         events: {},
@@ -51,7 +51,7 @@ describe("placekeeper", function() {
         .and.callFake(function() {
             return false;
         });
-        placekeeper.priv.__settings.defaultLoopTime = 6;
+        placekeeper.priv.__settings.defaultLoopDuration = 6;
         placekeeper.priv.__getElements();
     }
 
@@ -178,7 +178,7 @@ describe("placekeeper", function() {
                     spyOnCanChangeToTypeAndReturn(true);
                     element = createInputElement(true, "password");
                     placekeeper.priv.__setupPlaceholders();
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -194,7 +194,7 @@ describe("placekeeper", function() {
                     beforeEach(function(done) {
                         spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
                         element.focus();
-                        setTimeout(done, loopTimeForTests);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     it("should have changed element type back to password", function() {
@@ -221,7 +221,7 @@ describe("placekeeper", function() {
                 setTimeout(function() {
                     clone = document.getElementById("elem");
                     done();
-                }, loopTimeForTests);
+                }, loopDurationForTests);
                 placekeeper.priv.__setupPlaceholders();
             });
 
@@ -261,7 +261,7 @@ describe("placekeeper", function() {
                     setTimeout(function() {
                         element = document.getElementById("elem");
                         done();
-                    }, loopTimeForTests);
+                    }, loopDurationForTests);
                 });
 
                 it("should have two inputs on the page", function() {
@@ -337,7 +337,7 @@ describe("placekeeper", function() {
                         setTimeout(function() {
                             clone = document.getElementById("elem");
                             done();
-                        }, loopTimeForTests);
+                        }, loopDurationForTests);
                     });
 
                     it("should have two inputs on the page", function() {
@@ -380,7 +380,7 @@ describe("placekeeper", function() {
             beforeEach(function(done) {
                 element = createInputElement(true, "email");
                 placekeeper.priv.__setupPlaceholders();
-                setTimeout(done, loopTimeForTests);
+                setTimeout(done, loopDurationForTests);
             });
 
             afterEach(function() {
@@ -396,7 +396,7 @@ describe("placekeeper", function() {
                 beforeEach(function(done) {
                     spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
                     trigger(element, "focus");
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 it("should have changed element type back to password", function() {
@@ -422,7 +422,7 @@ describe("placekeeper", function() {
                 spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                 element = createInputElement(true);
                 element.focus();
-                setTimeout(done, loopTimeForTests);
+                setTimeout(done, loopDurationForTests);
                 placekeeper.priv.__setupPlaceholders();
             });
 
@@ -443,7 +443,7 @@ describe("placekeeper", function() {
             beforeEach(function(done) {
                 spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                 element = createInputElement(true);
-                setTimeout(done, loopTimeForTests);
+                setTimeout(done, loopDurationForTests);
                 placekeeper.priv.__setupPlaceholders();
             });
 
@@ -665,7 +665,7 @@ describe("placekeeper", function() {
                 setTimeout(function() {
                     clone = document.getElementById("elem");
                     done();
-                }, loopTimeForTests);
+                }, loopDurationForTests);
             });
 
             afterEach(function() {
@@ -684,7 +684,7 @@ describe("placekeeper", function() {
                     setTimeout(function() {
                         element = document.getElementById("elem");
                         done();
-                    }, loopTimeForTests);
+                    }, loopDurationForTests);
                 });
 
                 it("should have one input on the page", function() {
@@ -744,7 +744,7 @@ describe("placekeeper", function() {
                     spyOnCanChangeToTypeAndReturn(true);
                     element = createInputElement(true, "password");
                     placekeeper.priv.__setupPlaceholders();
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -794,7 +794,7 @@ describe("placekeeper", function() {
             element = createInputElementWithForm(false);
             form = document.getElementsByTagName("form")[0];
             placekeeper.priv.__setupPlaceholders();
-            setTimeout(done, loopTimeForTests);
+            setTimeout(done, loopDurationForTests);
         });
 
         afterEach(function() {
@@ -835,7 +835,7 @@ describe("placekeeper", function() {
             element = createInputElementWithForm(true);
             form = document.getElementsByTagName("form")[0];
             placekeeper.priv.__setupPlaceholders();
-            setTimeout(done, loopTimeForTests);
+            setTimeout(done, loopDurationForTests);
         });
 
         afterEach(function() {
@@ -901,7 +901,7 @@ describe("placekeeper", function() {
         beforeEach(function(done) {
             element = createInputElement(true);
             placekeeper.priv.__setupPlaceholders();
-            setTimeout(done, loopTimeForTests);
+            setTimeout(done, loopDurationForTests);
         });
 
         afterEach(function() {
@@ -959,7 +959,7 @@ describe("placekeeper", function() {
 
         beforeEach(function(done) {
             element = createInputElement(false);
-            setTimeout(done, loopTimeForTests);
+            setTimeout(done, loopDurationForTests);
         });
 
         afterEach(function() {
@@ -1180,7 +1180,7 @@ describe("placekeeper", function() {
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength(10);
                     placekeeper.polyfill.__storeMaxlength(element);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1203,7 +1203,7 @@ describe("placekeeper", function() {
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength();
                     placekeeper.polyfill.__storeMaxlength(element);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1226,7 +1226,7 @@ describe("placekeeper", function() {
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength(false, 10);
                     placekeeper.polyfill.__restoreMaxlength(element);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1249,7 +1249,7 @@ describe("placekeeper", function() {
                 beforeEach(function(done) {
                     element = createInputElementWithMaxLength();
                     placekeeper.polyfill.__restoreMaxlength(element);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1275,7 +1275,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElement(true);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1293,7 +1293,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElement(false);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1315,7 +1315,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElement(false);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1345,7 +1345,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElement(true);
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1375,7 +1375,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     element = createInputElement(true, "date");
-                    setTimeout(done, loopTimeForTests);
+                    setTimeout(done, loopDurationForTests);
                 });
 
                 afterEach(function() {
@@ -1676,7 +1676,7 @@ describe("placekeeper", function() {
 
                     beforeEach(function(done) {
                         element = createInputElement(true);
-                        setTimeout(done, loopTimeForTests);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     afterEach(function() {
@@ -1711,7 +1711,7 @@ describe("placekeeper", function() {
 
                     beforeEach(function(done) {
                         element = createInputElement(false);
-                        setTimeout(done, loopTimeForTests);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     afterEach(function() {
@@ -1733,7 +1733,7 @@ describe("placekeeper", function() {
 
                     beforeEach(function(done) {
                         element = createInputElement(true);
-                        setTimeout(done, loopTimeForTests);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     afterEach(function() {
@@ -1755,7 +1755,7 @@ describe("placekeeper", function() {
 
                     beforeEach(function(done) {
                         element = createTextareaElement(true);
-                        setTimeout(done, loopTimeForTests);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     afterEach(function() {

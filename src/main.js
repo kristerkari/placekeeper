@@ -9,7 +9,7 @@
     var isEnabled = false;
     var hasUnloadEventListener = false;
     var settings = {
-        defaultLoopTime: 100
+        defaultLoopDuration: 100
     };
     var handlers = {};
     var loopInterval = null;
@@ -318,7 +318,7 @@
         placekeeperLoop();
         if (!hasDisabledLiveUpdates()) {
             // main loop
-            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopTime);
+            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
         }
     }
 
