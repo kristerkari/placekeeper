@@ -19,6 +19,14 @@ describe("placekeeper", function() {
         }
     };
 
+    var canActuallyChangeType = (function() {
+        var element = "<input id=\"pwel\" type=\"password\">";
+        document.body.innerHTML = element;
+        var can = placekeeper.support.canChangeToType(document.getElementById("pwel"), "text");
+        document.body.innerHTML = "";
+        return can;
+    }());
+
     function trigger(target, event) {
         var evt;
         if (document.createEvent) {
@@ -47,6 +55,13 @@ describe("placekeeper", function() {
 
     function spyOnNativeSupportAndReturn(bool) {
         spyOn(placekeeper.support, "hasNativePlaceholderSupport")
+        .and.callFake(function() {
+            return bool;
+        });
+    }
+
+    function spyOnCanChangeToTypeAndReturn(bool) {
+        spyOn(placekeeper.support, "canChangeToType")
         .and.callFake(function() {
             return bool;
         });
@@ -150,6 +165,251 @@ describe("placekeeper", function() {
     });
 
     beforeEach(initialSetup);
+
+    describe("password inputs", function() {
+
+        describe("when there is a password input on the page and input type can be changed", function() {
+            var element;
+
+            if (canActuallyChangeType) {
+                beforeEach(function(done) {
+                    spyOnCanChangeToTypeAndReturn(true);
+                    element = createInputElement(true, "password");
+                    placekeeper.priv.__setupPlaceholders();
+                    setTimeout(done, 110);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should have changed password input type to text when there is no focus", function() {
+                    expect(element.getAttribute("type")).toEqual("text");
+                });
+
+                describe("and when input is focused", function() {
+
+                    beforeEach(function(done) {
+                        spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+                        element.focus();
+                        setTimeout(done, 110);
+                    });
+
+                    it("should have changed element type back to password", function() {
+                        expect(element.getAttribute("type")).toEqual("password");
+                    });
+
+                    it("should have called polyfill's __hidePlaceholder method", function() {
+                        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
+                        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+                    });
+
+                });
+            }
+
+        });
+
+        describe("when there is a password input on the page and input type can not be changed", function() {
+            var element;
+            var clone;
+
+            beforeEach(function(done) {
+                spyOnCanChangeToTypeAndReturn(false);
+                element = createInputElement(true, "password");
+                setTimeout(function() {
+                    clone = document.getElementById("elem");
+                    done();
+                }, 110);
+                placekeeper.priv.__setupPlaceholders();
+            });
+
+            afterEach(function() {
+                element.parentNode.removeChild(element);
+            });
+
+            it("should have two inputs on the page", function() {
+                expect(document.getElementsByTagName("input").length).toEqual(2);
+            });
+
+            it("should have changed password input type to text when there is no focus", function() {
+                expect(clone.getAttribute("type")).toEqual("text");
+            });
+
+            it("should have added elem id to clone", function() {
+                expect(clone.id).toEqual("elem");
+            });
+
+            it("should have replacement shown", function() {
+                expect(clone.style.display).toEqual("block");
+            });
+
+            it("should have removed id from element", function() {
+                expect(element.id).toEqual("");
+            });
+
+            it("should have element hidden", function() {
+                expect(element.style.display).toEqual("none");
+            });
+
+            describe("and when input is focused", function() {
+
+                beforeEach(function(done) {
+                    spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+                    trigger(clone, "focus");
+                    setTimeout(function() {
+                        element = document.getElementById("elem");
+                        done();
+                    }, 110);
+                });
+
+                it("should have two inputs on the page", function() {
+                    expect(document.getElementsByTagName("input").length).toEqual(2);
+                });
+
+                it("should have changed element type back to password", function() {
+                    expect(element.getAttribute("type")).toEqual("password");
+                });
+
+                it("should have elem id back to element", function() {
+                    expect(element.id).toEqual("elem");
+                });
+
+                it("should have element shown", function() {
+                    expect(element.style.display).toEqual("block");
+                });
+
+                it("should have remove id from clone", function() {
+                    expect(clone.id).toEqual("");
+                });
+
+                it("should have clone hidden", function() {
+                    expect(clone.style.display).toEqual("none");
+                });
+
+                it("should have called polyfill's __hidePlaceholder method", function() {
+                    expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(clone);
+                    expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+                });
+
+                describe("and when there is a value and input is blurred", function() {
+
+                    beforeEach(function(done) {
+                        spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+                        element.value = "testing";
+                        trigger(element, "blur");
+                        setTimeout(done, 110);
+                    });
+
+                    it("should have two inputs on the page", function() {
+                        expect(document.getElementsByTagName("input").length).toEqual(2);
+                    });
+
+                    it("should have elem id set to element", function() {
+                        expect(element.id).toEqual("elem");
+                    });
+
+                    it("should have element shown", function() {
+                        expect(element.style.display).toEqual("block");
+                    });
+
+                    it("should have remove id from clone", function() {
+                        expect(clone.id).toEqual("");
+                    });
+
+                    it("should have clone hidden", function() {
+                        expect(clone.style.display).toEqual("none");
+                    });
+
+                    it("should have called polyfill's __showPlaceholder method", function() {
+                        expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+                    });
+
+                });
+
+                describe("and when the input is blurred after that", function() {
+
+                    beforeEach(function(done) {
+                        spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+                        trigger(element, "blur");
+                        setTimeout(function() {
+                            clone = document.getElementById("elem");
+                            done();
+                        }, 110);
+                    });
+
+                    it("should have two inputs on the page", function() {
+                        expect(document.getElementsByTagName("input").length).toEqual(2);
+                    });
+
+                    it("should have changed password input type to text", function() {
+                        expect(clone.getAttribute("type")).toEqual("text");
+                    });
+
+                    it("should have added elem id to clone", function() {
+                        expect(clone.id).toEqual("elem");
+                    });
+
+                    it("should have clone shown", function() {
+                        expect(clone.style.display).toEqual("block");
+                    });
+
+                    it("should have removed id from element", function() {
+                        expect(element.id).toEqual("");
+                    });
+
+                    it("should have element hidden", function() {
+                        expect(element.style.display).toEqual("none");
+                    });
+
+                    it("should have called polyfill's __showPlaceholder method", function() {
+                        expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+                    });
+
+                });
+
+            });
+
+        });
+
+        describe("when there is an input on the page that is not password or text type", function() {
+            var element;
+
+            beforeEach(function(done) {
+                element = createInputElement(true, "email");
+                placekeeper.priv.__setupPlaceholders();
+                setTimeout(done, 110);
+            });
+
+            afterEach(function() {
+                element.parentNode.removeChild(element);
+            });
+
+            it("should have changed password input type to text when there is no focus", function() {
+                expect(element.getAttribute("type")).toEqual("email");
+            });
+
+            describe("and when input is focused", function() {
+
+                beforeEach(function(done) {
+                    spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+                    trigger(element, "focus");
+                    setTimeout(done, 110);
+                });
+
+                it("should have changed element type back to password", function() {
+                    expect(element.getAttribute("type")).toEqual("email");
+                });
+
+                it("should have called polyfill's __hidePlaceholder method", function() {
+                    expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
+                    expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+                });
+
+            });
+        });
+
+    });
 
     describe("focusing and blurring an element with placeholder", function() {
 

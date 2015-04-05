@@ -39,6 +39,24 @@
         elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
     }
 
+    function getAttributes(elem) {
+        var newAttrs = {};
+        var attrs = elem.attributes;
+        for (var i = 0; i < attrs.length; i++) {
+            // old IEs will throw an error if you try to copy "type" attribute.
+            if (attrs[i].specified && attrs[i].name !== "type") {
+                newAttrs[attrs[i].name] = attrs[i].value;
+            }
+        }
+        return newAttrs;
+    }
+
+    function setAttributes(elem, attrs) {
+        for (var key in attrs) {
+            elem.setAttribute(key, attrs[key]);
+        }
+    }
+
     function getElementType(element) {
         if (element.type === "textarea") {
             return element.type;
@@ -73,6 +91,8 @@
 
     // Expose public methods
     global.placekeeper.utils = {
+        getAttributes: getAttributes,
+        setAttributes: setAttributes,
         getElementType: getElementType,
         addEventListener: addEventListener,
         removeEventListener: removeEventListener,

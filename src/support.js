@@ -18,8 +18,23 @@
         return isInputSupported() || isTextareaSupported();
     }
 
+    function canChangeToType(elem, type) {
+        // IE9 can change type from password to text,
+        // but not back from text to password.
+        // Input type can not be changed in IE8 and below.
+        try {
+            var oldType = elem.type;
+            elem.type = type;
+            elem.type = oldType;
+            return true;
+        } catch(ex) {
+            return false;
+        }
+    }
+
     // Expose public methods
     global.placekeeper.support = {
+        canChangeToType: canChangeToType,
         isInputSupported: isInputSupported,
         isTextareaSupported: isTextareaSupported,
         hasNativePlaceholderSupport: hasNativePlaceholderSupport

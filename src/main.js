@@ -182,9 +182,12 @@
 
     function addEventListeners(element) {
         handlers.blur = createBlurHandler(element);
+        utils.addEventListener(element, "blur", handlers.blur);
+        if (element.type === "password" && !support.canChangeToType(element, "text")) {
+            return;
+        }
         handlers.focus = createFocusHandler(element);
         utils.addEventListener(element, "focus", handlers.focus);
-        utils.addEventListener(element, "blur", handlers.blur);
     }
 
     function removeEventListeners(element) {
