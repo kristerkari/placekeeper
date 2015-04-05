@@ -21,7 +21,6 @@ module.exports = function(config) {
             "../test/**/*_spec.js"
         ],
 
-
         // list of files to exclude
         exclude: [
         ],
@@ -39,8 +38,12 @@ module.exports = function(config) {
         coverageReporter: {
             dir: "../coverage/",
             reporters: [
-                { type: "lcov" },
-                { type: "text-summary" }
+                {
+                    type: "lcov"
+                },
+                {
+                    type: "text-summary"
+                }
             ]
         },
 
