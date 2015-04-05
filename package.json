@@ -25,6 +25,7 @@
     "coveralls": "^2.11.2",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.7.0",
+    "gulp-concat": "^2.5.2",
     "gulp-jscs": "^1.4.0",
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.31",

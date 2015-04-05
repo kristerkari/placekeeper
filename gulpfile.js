@@ -3,9 +3,21 @@
 
     var path = require("path");
     var gulp = require("gulp");
+    var concat = require('gulp-concat');
     var jscs = require("gulp-jscs");
     var eslint = require("gulp-eslint");
     var karma = require("karma").server;
+
+    gulp.task("build", function() {
+        return gulp.src([
+            "src/support.js",
+            "src/utils.js",
+            "src/polyfill.js",
+            "src/main.js"
+        ])
+        .pipe(concat("placekeeper.js"))
+        .pipe(gulp.dest('.'));
+    });
 
     gulp.task("lint", function() {
         return gulp.src("src/*.js")
