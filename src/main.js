@@ -8,6 +8,9 @@
     var polyfill = global.placekeeper.polyfill;
     var isEnabled = false;
     var hasUnloadEventListener = false;
+    var settings = {
+        defaultLoopTime: 100
+    };
     var handlers = {};
     var loopInterval = null;
     var isFocusEnabled = true;
@@ -310,7 +313,7 @@
         placekeeperLoop();
         if (!hasDisabledLiveUpdates()) {
             // main loop
-            loopInterval = setInterval(placekeeperLoop, 100);
+            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopTime);
         }
     }
 
@@ -346,6 +349,7 @@
     global.placekeeper.priv = {
         __global: global,
         __init: init,
+        __settings: settings,
         __getElements: getElements,
         __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         __setupPlaceholders: setupPlaceholders,
