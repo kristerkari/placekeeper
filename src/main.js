@@ -203,6 +203,11 @@
         utils.removeEventListener(element, "blur", handlers.blur);
     }
 
+    function removeDataAttrs(element) {
+        element.removeAttribute("data-placeholder-value");
+        element.removeAttribute("data-placeholder-has-events");
+    }
+
     function addSubmitListener(form) {
         handlers.submit = createSubmitHandler(form);
         utils.addEventListener(form, "submit", handlers.submit);
@@ -314,6 +319,7 @@
         clearInterval(loopInterval);
         forEachForm(removeSubmitEvent);
         forEachElement(removeEvents);
+        forEachElement(removeDataAttrs);
     }
 
     function getElements() {

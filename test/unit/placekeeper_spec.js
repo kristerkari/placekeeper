@@ -806,6 +806,14 @@ describe("placekeeper", function() {
                 .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
             });
 
+            it("should not have data-placeholder-has-events attribute", function() {
+                expect(element.getAttribute("data-placeholder-has-events")).toEqual(null);
+            });
+
+            it("should not have data-placeholder-value attribute", function() {
+                expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+            });
+
         });
 
     });
