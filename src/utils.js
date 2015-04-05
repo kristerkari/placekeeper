@@ -39,6 +39,17 @@
         elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
     }
 
+    function getElementType(element) {
+        if (element.type === "textarea") {
+            return element.type;
+        }
+        if (!element.getAttribute("type") &&
+            element.tagName.toLowerCase() === "input") {
+            return "text";
+        }
+        return element.getAttribute("type");
+    }
+
     // wrap `document.getElementsByTagName`
     // so that unit tests can correctly spy
     // on it in all browsers
@@ -62,6 +73,7 @@
 
     // Expose public methods
     global.placekeeper.utils = {
+        getElementType: getElementType,
         addEventListener: addEventListener,
         removeEventListener: removeEventListener,
         addClass: addClass,

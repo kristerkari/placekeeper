@@ -46,13 +46,6 @@
         return Boolean(getPlaceholderValue(element));
     }
 
-    function getElementType(element) {
-        if (element.type === "textarea") {
-            return element.type;
-        }
-        return element.getAttribute("type");
-    }
-
     function isSupportedType(elementType) {
         return utils.inArray(supportedElementTypes, elementType);
     }
@@ -64,7 +57,7 @@
         }
 
         for (var i = 0; i < elements.length; i++) {
-            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(getElementType(elements[i]))) {
+            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(utils.getElementType(elements[i]))) {
                 return true;
             }
         }
@@ -172,7 +165,7 @@
 
     function showPlaceholderAfterSubmit(element) {
         if (hasPlaceholderAttrSet(element) &&
-            isSupportedType(getElementType(element))) {
+            isSupportedType(utils.getElementType(element))) {
             polyfill.__showPlaceholder(element);
         }
     }
@@ -238,7 +231,7 @@
     function checkForPlaceholder(element) {
         var placeholder = getPlaceholderValue(element);
         if (placeholder &&
-            isSupportedType(getElementType(element)) &&
+            isSupportedType(utils.getElementType(element)) &&
             !hasEventsAttrSetToTrue(element)) {
             setupElement(element, placeholder);
         }

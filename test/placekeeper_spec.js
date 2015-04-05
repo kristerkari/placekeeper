@@ -80,6 +80,16 @@ describe("placekeeper", function() {
         return document.getElementById("elem");
     }
 
+    function createInputElementWithoutType(hasPlaceholder) {
+        var element = "<input id=\"elem\" maxlength=\"12\"";
+        if (hasPlaceholder) {
+            element += " placeholder=\"Test\"";
+        }
+        element += ">";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
     function createInputElement(hasPlaceholder, type) {
         var element = "<input type=\"" + (type || "text") +
                       "\" id=\"elem\" maxlength=\"12\"";
@@ -296,6 +306,82 @@ describe("placekeeper", function() {
                         expect(element).toHaveClass("placeholder");
                     });
 
+                });
+
+            });
+
+        });
+
+    });
+
+    describe("utils", function() {
+
+        describe("getElementType method", function() {
+
+            describe("when there is an input with type text", function() {
+                var element;
+
+                beforeEach(function() {
+                    element = createInputElement(true);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return text for the type", function() {
+                    expect(placekeeper.utils.getElementType(element)).toEqual("text");
+                });
+
+            });
+
+            describe("when there is an input without type", function() {
+                var element;
+
+                beforeEach(function() {
+                    element = createInputElementWithoutType(true);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return text for the type", function() {
+                    expect(placekeeper.utils.getElementType(element)).toEqual("text");
+                });
+
+            });
+
+            describe("when there is an input with type email", function() {
+                var element;
+
+                beforeEach(function() {
+                    element = createInputElement(true, "email");
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return text for the type", function() {
+                    expect(placekeeper.utils.getElementType(element)).toEqual("email");
+                });
+
+            });
+
+            describe("when there is a textarea", function() {
+                var element;
+
+                beforeEach(function() {
+                    element = createTextareaElement(true);
+                });
+
+                afterEach(function() {
+                    element.parentNode.removeChild(element);
+                });
+
+                it("should return text for the type", function() {
+                    expect(placekeeper.utils.getElementType(element)).toEqual("textarea");
                 });
 
             });
