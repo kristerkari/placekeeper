@@ -115,9 +115,11 @@
     // - http://bugs.jquery.com/ticket/13393
     // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
     function safeActiveElement() {
+        /*eslint-disable no-empty */
         try {
             return document.activeElement;
         } catch (ex) {}
+        /*eslint-enable no-empty */
     }
 
     function createFocusHandler(element) {

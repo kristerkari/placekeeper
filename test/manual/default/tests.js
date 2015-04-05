@@ -1,9 +1,8 @@
-"use strict";
-
 var form = document.getElementById("form1");
 var newInput = document.createElement("input");
 
 setTimeout(function() {
+    "use strict";
 
     // Test changing placeholder attribute value
     document
@@ -21,11 +20,13 @@ setTimeout(function() {
     document.body.appendChild(newInput);
 
     // Test input type changing after page load
+    /*eslint-disable no-empty */
     try {
         document.getElementById("handle3").type = "password";
     } catch (e) {
         // This will fail in IE < 9
     }
+    /*eslint-enable no-empty */
 
     document.getElementById("handle4").removeAttribute("placeholder");
 
@@ -33,6 +34,7 @@ setTimeout(function() {
 
 // Bind a submit event handler to the test form
 function submitHandler(e) {
+    "use strict";
     e.returnValue = false;
     return false;
 }
