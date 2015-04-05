@@ -180,14 +180,20 @@
         };
     }
 
+    function isPasswordInputThatNeedsToBeCloned(element) {
+        return element.type === "password" &&
+               !support.canChangeToType(element, "text");
+    }
+
     function addEventListeners(element) {
         handlers.blur = createBlurHandler(element);
         utils.addEventListener(element, "blur", handlers.blur);
-        if (element.type === "password" && !support.canChangeToType(element, "text")) {
-            return;
+        // password input clones will get their own focus handler,
+        // so the original input won't need one.
+        if (!isPasswordInputThatNeedsToBeCloned(element)) {
+            handlers.focus = createFocusHandler(element);
+            utils.addEventListener(element, "focus", handlers.focus);
         }
-        handlers.focus = createFocusHandler(element);
-        utils.addEventListener(element, "focus", handlers.focus);
     }
 
     function removeEventListeners(element) {
