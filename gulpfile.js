@@ -6,7 +6,15 @@
     var concat = require('gulp-concat');
     var jscs = require("gulp-jscs");
     var eslint = require("gulp-eslint");
+    var connect = require("gulp-connect");
     var karma = require("karma").server;
+
+    gulp.task("server", function() {
+        connect.server({
+            root: ["test/manual", "."],
+            livereload: true
+        });
+    });
 
     gulp.task("build", function() {
         return gulp.src([
