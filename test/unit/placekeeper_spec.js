@@ -2,7 +2,7 @@ describe("placekeeper", function() {
     "use strict";
 
     var placekeeper = window.placekeeper;
-    var loopTimeForTests = 10;
+    var loopTimeForTests = 14;
 
     var fakeWindow = {
         events: {},
