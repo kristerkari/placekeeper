@@ -2,6 +2,18 @@
     "use strict";
 
     global.placekeeper = global.placekeeper || {};
+    var utils = global.placekeeper.utils;
+
+    var supportedElementTypes = [
+        "text",
+        "search",
+        "url",
+        "tel",
+        "email",
+        "password",
+        "number",
+        "textarea"
+    ];
 
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
     var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
@@ -18,6 +30,23 @@
         return isInputSupported() || isTextareaSupported();
     }
 
+    // Avoid IE9 activeElement of death when an iframe is used.
+    //
+    // More info:
+    // - http://bugs.jquery.com/ticket/13393
+    // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
+    function safeActiveElement() {
+        /*eslint-disable no-empty */
+        try {
+            return document.activeElement;
+        } catch (ex) {}
+        /*eslint-enable no-empty */
+    }
+
+    function isSupportedType(elementType) {
+        return utils.inArray(supportedElementTypes, elementType);
+    }
+
     function canChangeToType(elem, type) {
         // IE9 can change type from password to text,
         // but not back from text to password.
@@ -32,8 +61,15 @@
         }
     }
 
-    // Expose public methods
+    function needsToShowPlaceHolder(elem) {
+        return utils.hasPlaceholderAttrSet(elem) &&
+               isSupportedType(utils.getElementType(elem));
+    }
+
     global.placekeeper.support = {
+        needsToShowPlaceHolder: needsToShowPlaceHolder,
+        isSupportedType: isSupportedType,
+        safeActiveElement: safeActiveElement,
         canChangeToType: canChangeToType,
         isInputSupported: isInputSupported,
         isTextareaSupported: isTextareaSupported,
