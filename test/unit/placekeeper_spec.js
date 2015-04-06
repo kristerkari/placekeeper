@@ -52,7 +52,7 @@ describe("placekeeper", function() {
             return false;
         });
         placekeeper.priv.__settings.defaultLoopDuration = 6;
-        placekeeper.priv.__getElements();
+        placekeeper.elements.getElements();
     }
 
     function spyOnNativeSupportAndReturn(bool) {
@@ -717,7 +717,7 @@ describe("placekeeper", function() {
                 if (clone != null) {
                     it("should have called utils.removeEventListener for focus handler", function() {
                         expect(placekeeper.utils.removeEventListener)
-                        .toHaveBeenCalledWith(clone, "focus", placekeeper.polyfill.__handlers.focus);
+                        .toHaveBeenCalledWith(clone, "focus", placekeeper.events.handlers.focus);
                     });
                 }
 
@@ -727,7 +727,7 @@ describe("placekeeper", function() {
                 if (element != null) {
                     it("should have called utils.removeEventListener for blur handler", function() {
                         expect(placekeeper.utils.removeEventListener)
-                        .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
+                        .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
                     });
                 }
 
@@ -772,12 +772,12 @@ describe("placekeeper", function() {
 
                     it("should have called utils.removeEventListener for focus handler", function() {
                         expect(placekeeper.utils.removeEventListener)
-                        .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.focus);
+                        .toHaveBeenCalledWith(element, "focus", placekeeper.events.handlers.focus);
                     });
 
                     it("should have called utils.removeEventListener for blur handler", function() {
                         expect(placekeeper.utils.removeEventListener)
-                        .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
+                        .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
                     });
 
                 });
@@ -888,7 +888,7 @@ describe("placekeeper", function() {
 
             it("should have called utils.removeEventListener for submit handler", function() {
                 expect(placekeeper.utils.removeEventListener)
-                .toHaveBeenCalledWith(form, "submit", placekeeper.priv.__handlers.submit);
+                .toHaveBeenCalledWith(form, "submit", placekeeper.events.handlers.submit);
             });
 
         });
@@ -934,12 +934,12 @@ describe("placekeeper", function() {
 
             it("should have called utils.removeEventListener for focus handler", function() {
                 expect(placekeeper.utils.removeEventListener)
-                .toHaveBeenCalledWith(element, "focus", placekeeper.priv.__handlers.focus);
+                .toHaveBeenCalledWith(element, "focus", placekeeper.events.handlers.focus);
             });
 
             it("should have called utils.removeEventListener for blur handler", function() {
                 expect(placekeeper.utils.removeEventListener)
-                .toHaveBeenCalledWith(element, "blur", placekeeper.priv.__handlers.blur);
+                .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
             });
 
             it("should not have data-placeholder-has-events attribute", function() {
@@ -1268,7 +1268,7 @@ describe("placekeeper", function() {
 
         });
 
-        describe("__hasPlaceholderAttrSet", function() {
+        describe("utils.hasPlaceholderAttrSet", function() {
 
             describe("when called with an element that has placeholder attribute set", function() {
                 var element;
@@ -1283,7 +1283,7 @@ describe("placekeeper", function() {
                 });
 
                 it("should return true", function() {
-                    expect(placekeeper.priv.__hasPlaceholderAttrSet(element)).toEqual(true);
+                    expect(placekeeper.utils.hasPlaceholderAttrSet(element)).toEqual(true);
                 });
 
             });
@@ -1301,7 +1301,7 @@ describe("placekeeper", function() {
                 });
 
                 it("should return false", function() {
-                    expect(placekeeper.priv.__hasPlaceholderAttrSet(element)).toEqual(false);
+                    expect(placekeeper.utils.hasPlaceholderAttrSet(element)).toEqual(false);
                 });
 
             });
@@ -1467,7 +1467,7 @@ describe("placekeeper", function() {
 
         });
 
-        describe("__getElements", function() {
+        describe("elemens.getElements", function() {
 
             describe("when inputs are supported and textareas are not", function() {
 
@@ -1480,7 +1480,7 @@ describe("placekeeper", function() {
                 describe("and when called", function() {
 
                     beforeEach(function() {
-                        placekeeper.priv.__getElements();
+                        placekeeper.elements.getElements();
                     });
 
                     it("should have gotten elements for textarea", function() {
@@ -1506,7 +1506,7 @@ describe("placekeeper", function() {
                 describe("and when called", function() {
 
                     beforeEach(function() {
-                        placekeeper.priv.__getElements();
+                        placekeeper.elements.getElements();
                     });
 
                     it("should not have gotten elements for textarea", function() {
@@ -1531,7 +1531,7 @@ describe("placekeeper", function() {
                 describe("and when called", function() {
 
                     beforeEach(function() {
-                        placekeeper.priv.__getElements();
+                        placekeeper.elements.getElements();
                     });
 
                     it("should not have gotten elements for textarea", function() {
@@ -1557,7 +1557,7 @@ describe("placekeeper", function() {
                 describe("and when called", function() {
 
                     beforeEach(function() {
-                        placekeeper.priv.__getElements();
+                        placekeeper.elements.getElements();
                     });
 
                     it("should have gotten elements for textarea", function() {

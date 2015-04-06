@@ -18,9 +18,12 @@
 
     gulp.task("build", function() {
         return gulp.src([
-            "src/support.js",
+            "src/data.js",
             "src/utils.js",
+            "src/support.js",
+            "src/elements.js",
             "src/polyfill.js",
+            "src/events.js",
             "src/main.js"
         ])
         .pipe(concat("placekeeper.js"))

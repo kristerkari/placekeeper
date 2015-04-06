@@ -48,9 +48,12 @@ module.exports = function(config) {
         captureTimeout: 120000,
         browserNoActivityTimeout: 60000,
         files: [
-            "../src/support.js",
+            "../src/data.js",
             "../src/utils.js",
+            "../src/support.js",
+            "../src/elements.js",
             "../src/polyfill.js",
+            "../src/events.js",
             "../src/main.js",
             "../test/**/*_spec.js"
         ],

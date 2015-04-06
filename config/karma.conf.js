@@ -14,9 +14,12 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            "../src/support.js",
+            "../src/data.js",
             "../src/utils.js",
+            "../src/support.js",
+            "../src/elements.js",
             "../src/polyfill.js",
+            "../src/events.js",
             "../src/main.js",
             "../test/**/*_spec.js"
         ],
