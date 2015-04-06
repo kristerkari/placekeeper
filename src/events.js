@@ -7,7 +7,6 @@
     var elems = global.placekeeper.elements;
     var polyfill = global.placekeeper.polyfill;
     var support = global.placekeeper.support;
-    var hasUnloadEventListener = false;
     var handlers = {};
 
     function hidePlaceholderOnSubmit(element) {
@@ -94,14 +93,9 @@
     }
 
     function addUnloadListener() {
-        if (hasUnloadEventListener) {
-            utils.removeEventListener(global, "beforeunload", clearPlaceholders);
-        }
-
         // Disabling placeholders before unloading the page prevents flash of
         // unstyled placeholders on load if the page was refreshed.
         utils.addEventListener(global, "beforeunload", clearPlaceholders);
-        hasUnloadEventListener = true;
     }
 
     function removeEvents(element) {

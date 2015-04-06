@@ -77,6 +77,7 @@ describe("placekeeper", function() {
         spyOn(placekeeper.utils, "addEventListener")
         .and.callFake(fakeUtils.addEventListener);
         placekeeper.priv.__global = fakeWindow;
+        placekeeper.events.addUnloadListener();
         placekeeper.priv.__setupPlaceholders();
     }
 

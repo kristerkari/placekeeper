@@ -104,7 +104,6 @@
 
     function setupPlaceholders() {
         elems.forEachElement(checkForPlaceholder);
-        events.addUnloadListener();
     }
 
     function placekeeperLoop() {
@@ -146,6 +145,7 @@
     }
 
     elems.getElements();
+    events.addUnloadListener();
     init();
 
     // Expose public methods
