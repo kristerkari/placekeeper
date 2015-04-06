@@ -75,6 +75,10 @@
         element.removeAttribute("data-placeholder-active");
     }
 
+    function removeSubmitAttr(element) {
+        element.removeAttribute("data-placeholder-submit");
+    }
+
     function removeDataAttrs(element) {
         element.removeAttribute("data-placeholder-value");
         element.removeAttribute("data-placeholder-has-events");
@@ -98,6 +102,7 @@
         setMaxLengthAttr: setMaxLengthAttr,
         setTypeAttr: setTypeAttr,
         setEventsAttr: setEventsAttr,
+        removeSubmitAttr: removeSubmitAttr,
         removeMaxLengthAttr: removeMaxLengthAttr,
         removeActiveAttr: removeActiveAttr,
         removeDataAttrs: removeDataAttrs

@@ -116,6 +116,7 @@
             return;
         }
         removeSubmitListener(form);
+        data.removeSubmitAttr(form);
     }
 
     global.placekeeper.events = {

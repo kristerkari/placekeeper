@@ -891,6 +891,10 @@ describe("placekeeper", function() {
                 .toHaveBeenCalledWith(form, "submit", placekeeper.events.handlers.submit);
             });
 
+            it("should not have data-placeholder-submit set to the from", function() {
+                expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
+            });
+
         });
 
     });
