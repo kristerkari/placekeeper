@@ -14,10 +14,6 @@ addons:
   code_climate:
     repo_token: 8693ee93157c5b7c5232a9f74a43a8a836d8e0393d7218a779b569f20c28474c
 
-before_install:
-  npm install -g npm@'^2.7.5'
-  npm --version
-
 after_success:
 - npm run-script coveralls
 - npm run-script codeclimate
