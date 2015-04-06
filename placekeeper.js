@@ -3,41 +3,104 @@
 
     global.placekeeper = global.placekeeper || {};
 
-    // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
-    var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
-
-    function isInputSupported() {
-        return "placeholder" in document.createElement("input") && !isOperaMini;
+    function hasLiveUpdatesAttrSetToFalse(element) {
+        return element.getAttribute("data-placeholder-live") === "false";
     }
 
-    function isTextareaSupported() {
-        return "placeholder" in document.createElement("textarea") && !isOperaMini;
+    function hasFocusAttrSetToFalse(element) {
+        return element.getAttribute("data-placeholder-focus") === "false";
     }
 
-    function hasNativePlaceholderSupport() {
-        return isInputSupported() || isTextareaSupported();
+    function hasEventsAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-has-events") === "true";
     }
 
-    function canChangeToType(elem, type) {
-        // IE9 can change type from password to text,
-        // but not back from text to password.
-        // Input type can not be changed in IE8 and below.
-        try {
-            var oldType = elem.type;
-            elem.type = type;
-            elem.type = oldType;
-            return true;
-        } catch(ex) {
-            return false;
-        }
+    function hasActiveAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-active") === "true";
     }
 
-    // Expose public methods
-    global.placekeeper.support = {
-        canChangeToType: canChangeToType,
-        isInputSupported: isInputSupported,
-        isTextareaSupported: isTextareaSupported,
-        hasNativePlaceholderSupport: hasNativePlaceholderSupport
+    function hasSubmitAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-submit") === "true";
+    }
+
+    function hasCloneAttrSetToTrue(element) {
+        return element.getAttribute("data-placeholder-clone") === "true";
+    }
+
+    function hasTypeAttrSetToPassword(element) {
+        return element.getAttribute("data-placeholder-type") === "password";
+    }
+
+    function setSubmitAttr(element) {
+        element.setAttribute("data-placeholder-submit", "true");
+    }
+
+    function setCloneAttr(element) {
+        element.setAttribute("data-placeholder-clone", "true");
+    }
+
+    function setActiveAttr(element) {
+        element.setAttribute("data-placeholder-active", "true");
+    }
+
+    function setEventsAttr(element) {
+        element.setAttribute("data-placeholder-has-events", "true");
+    }
+
+    function setValueAttr(element, value) {
+        element.setAttribute("data-placeholder-value", value);
+    }
+
+    function getValueAttr(element) {
+        return element.getAttribute("data-placeholder-value");
+    }
+
+    function getMaxLengthAttr(element) {
+        return element.getAttribute("data-placeholder-maxlength");
+    }
+
+    function setMaxLengthAttr(element) {
+        element.setAttribute("data-placeholder-maxlength", element.maxLength);
+    }
+
+    function setTypeAttr(element, type) {
+        element.setAttribute("data-placeholder-type", type);
+    }
+
+    function removeMaxLengthAttr(element) {
+        element.removeAttribute("data-placeholder-maxlength");
+    }
+
+    function removeActiveAttr(element) {
+        element.removeAttribute("data-placeholder-active");
+    }
+
+    function removeDataAttrs(element) {
+        element.removeAttribute("data-placeholder-value");
+        element.removeAttribute("data-placeholder-has-events");
+        element.removeAttribute("data-placeholder-active");
+    }
+
+    global.placekeeper.data = {
+        hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
+        hasFocusAttrSetToFalse: hasFocusAttrSetToFalse,
+        hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
+        hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
+        hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,
+        hasCloneAttrSetToTrue: hasCloneAttrSetToTrue,
+        hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
+        getMaxLengthAttr: getMaxLengthAttr,
+        getValueAttr: getValueAttr,
+        setValueAttr: setValueAttr,
+        setActiveAttr: setActiveAttr,
+        setSubmitAttr: setSubmitAttr,
+        setCloneAttr: setCloneAttr,
+        setMaxLengthAttr: setMaxLengthAttr,
+        setTypeAttr: setTypeAttr,
+        setEventsAttr: setEventsAttr,
+        removeMaxLengthAttr: removeMaxLengthAttr,
+        removeActiveAttr: removeActiveAttr,
+        removeDataAttrs: removeDataAttrs
     };
 
 }(this));
@@ -133,8 +196,22 @@
         return false;
     }
 
-    // Expose public methods
+    function getPlaceholderValue(element) {
+        return "placeholder" in element &&
+               element.placeholder ||
+               // IE10 emulating IE7 fails with getAttribute, hence the use of the attributes node
+               // IE returns an empty object instead of undefined if the attribute is not present
+               element.attributes.placeholder &&
+               element.attributes.placeholder.nodeValue;
+    }
+
+    function hasPlaceholderAttrSet(element) {
+        return Boolean(getPlaceholderValue(element));
+    }
+
     global.placekeeper.utils = {
+        getPlaceholderValue: getPlaceholderValue,
+        hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         getAttributes: getAttributes,
         setAttributes: setAttributes,
         getElementType: getElementType,
@@ -153,49 +230,137 @@
     "use strict";
 
     global.placekeeper = global.placekeeper || {};
+    var utils = global.placekeeper.utils;
+
+    var supportedElementTypes = [
+        "text",
+        "search",
+        "url",
+        "tel",
+        "email",
+        "password",
+        "number",
+        "textarea"
+    ];
+
+    // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
+    var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
+
+    function isInputSupported() {
+        return "placeholder" in document.createElement("input") && !isOperaMini;
+    }
+
+    function isTextareaSupported() {
+        return "placeholder" in document.createElement("textarea") && !isOperaMini;
+    }
+
+    function hasNativePlaceholderSupport() {
+        return isInputSupported() || isTextareaSupported();
+    }
+
+    // Avoid IE9 activeElement of death when an iframe is used.
+    //
+    // More info:
+    // - http://bugs.jquery.com/ticket/13393
+    // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
+    function safeActiveElement() {
+        /*eslint-disable no-empty */
+        try {
+            return document.activeElement;
+        } catch (ex) {}
+        /*eslint-enable no-empty */
+    }
+
+    function isSupportedType(elementType) {
+        return utils.inArray(supportedElementTypes, elementType);
+    }
+
+    function canChangeToType(elem, type) {
+        // IE9 can change type from password to text,
+        // but not back from text to password.
+        // Input type can not be changed in IE8 and below.
+        try {
+            var oldType = elem.type;
+            elem.type = type;
+            elem.type = oldType;
+            return true;
+        } catch(ex) {
+            return false;
+        }
+    }
+
+    function needsToShowPlaceHolder(elem) {
+        return utils.hasPlaceholderAttrSet(elem) &&
+               isSupportedType(utils.getElementType(elem));
+    }
+
+    global.placekeeper.support = {
+        needsToShowPlaceHolder: needsToShowPlaceHolder,
+        isSupportedType: isSupportedType,
+        safeActiveElement: safeActiveElement,
+        canChangeToType: canChangeToType,
+        isInputSupported: isInputSupported,
+        isTextareaSupported: isTextareaSupported,
+        hasNativePlaceholderSupport: hasNativePlaceholderSupport
+    };
+
+}(this));
+
+(function(global) {
+    "use strict";
+
+    global.placekeeper = global.placekeeper || {};
     var support = global.placekeeper.support;
     var utils = global.placekeeper.utils;
-    var handlers = {};
+    var data = global.placekeeper.data;
+    var inputElements = [];
+    var textareaElements = [];
 
-    function hasMaxLength(element) {
-        return element.attributes.maxLength && element.attributes.maxLength.specified;
+    function getInputElements() {
+        return inputElements;
     }
 
-    function restoreMaxlength(element) {
-        var maxLength = element.getAttribute("data-placeholder-maxlength");
-        if (!maxLength) {
-            return;
+    function getTextareaElements() {
+        return textareaElements;
+    }
+
+    function loopElements(inputs, textareas, callback) {
+        var length = inputs.length + textareas.length;
+        for (var i = 0; i < length; i++) {
+            var element = i < inputs.length ?
+            inputs[i] :
+            textareas[i - inputs.length];
+            callback(element);
         }
-        element.setAttribute("maxLength", maxLength);
-        element.removeAttribute("data-placeholder-maxlength");
     }
 
-    function storeMaxlength(element) {
-        if (!hasMaxLength(element)) {
-            return;
+    function forEachForm(callback) {
+        var forms = document.getElementsByTagName("form");
+        var length = forms.length;
+        for (var i = 0; i < length; i++) {
+            callback(forms[i]);
         }
-        element.setAttribute("data-placeholder-maxlength", element.maxLength);
-        // Removing maxLength will not work in IE7,
-        // where a default value of 2147483647 is used instead.
-        element.removeAttribute("maxLength");
     }
 
-    // TODO: refactor clone/event handling.
-    function createFocusHandler(element) {
-        return function() {
-            global.placekeeper.polyfill.__hidePlaceholder(element);
-        };
+    function forEachChildInput(element, callback) {
+        var inputs = element.getElementsByTagName("input");
+        var textareas = element.getElementsByTagName("textarea");
+        loopElements(inputs, textareas, callback);
     }
 
-    function createClone(element) {
-        var clone = document.createElement("input");
-        utils.setAttributes(clone, utils.getAttributes(element));
-        clone.type = "text";
-        clone.removeAttribute("name");
-        handlers.focus = createFocusHandler(clone);
-        utils.addEventListener(clone, "focus", handlers.focus);
-        clone.setAttribute("data-placeholder-clone", "true");
-        return clone;
+    function forEachElement(callback) {
+        loopElements(inputElements, textareaElements, callback);
+    }
+
+    function getElements() {
+        // Get references to all the input and textarea elements currently in the DOM
+        // (live NodeList objects to we only need to do this once)
+        if (!support.isInputSupported()) {
+            inputElements = utils.getElementsByTagName("input");
+        }
+        if (!support.isTextareaSupported()) {
+            textareaElements = utils.getElementsByTagName("textarea");
+        }
     }
 
     function swapId(from, to) {
@@ -216,70 +381,142 @@
     function isClonedPasswordInput(element) {
         return element != null &&
                element.nodeType === 1 &&
-               element.getAttribute("data-placeholder-clone") === "true";
+               data.hasCloneAttrSetToTrue(element);
     }
 
-    function isPasswordInput(element) {
-        return element.getAttribute("data-placeholder-type") === "password";
+    function getPasswordClone(element) {
+        return element.previousSibling;
     }
 
-    // TODO: refactor clone/event handling.
-    function removeEventListeners(element) {
-        utils.removeEventListener(element, "focus", handlers.focus);
+    function getPasswordOriginal(element) {
+        return element.nextSibling;
     }
 
-    // TODO: refactor clone/event handling.
+    function hasPasswordClone(element) {
+        return isClonedPasswordInput(getPasswordClone(element));
+    }
+
+    function createCloneElement(element) {
+        var clone = document.createElement("input");
+        utils.setAttributes(clone, utils.getAttributes(element));
+        clone.type = "text";
+        clone.removeAttribute("name");
+        data.setCloneAttr(clone);
+        return clone;
+    }
+
+    function createClone(element) {
+        var clone = createCloneElement(element);
+        element.parentNode.insertBefore(clone, element);
+    }
+
     function removeClone(element) {
-        var clone = element.previousSibling;
-        if (isClonedPasswordInput(clone)) {
-            removeEventListeners(clone);
-            swapElements(clone, element);
-            element.style.display = "";
-            clone.parentNode.removeChild(clone);
+        var clone = getPasswordClone(element);
+        swapElements(clone, element);
+        element.style.display = "";
+        clone.parentNode.removeChild(clone);
+    }
+
+    function isPasswordInputThatCanNotChange(elem) {
+        return elem.type === "password" && !support.canChangeToType(elem, "text");
+    }
+
+    function createPasswordCloneIfNeeded(element) {
+        if (isPasswordInputThatCanNotChange(element)) {
+            createClone(element);
         }
     }
 
+    function removePasswordCloneIfExists(element) {
+        if (!hasPasswordClone(element)) {
+            return;
+        }
+        removeClone(element);
+    }
+
+    global.placekeeper.elements = {
+        getInputElements: getInputElements,
+        getTextareaElements: getTextareaElements,
+        getElements: getElements,
+        getPasswordClone: getPasswordClone,
+        getPasswordOriginal: getPasswordOriginal,
+        forEachForm: forEachForm,
+        forEachChildInput: forEachChildInput,
+        forEachElement: forEachElement,
+        createPasswordCloneIfNeeded: createPasswordCloneIfNeeded,
+        removePasswordCloneIfExists: removePasswordCloneIfExists,
+        isClonedPasswordInput: isClonedPasswordInput,
+        swapElements: swapElements,
+        hasPasswordClone: hasPasswordClone
+    };
+
+}(this));
+
+(function(global) {
+    "use strict";
+
+    global.placekeeper = global.placekeeper || {};
+    var data = global.placekeeper.data;
+    var elems = global.placekeeper.elements;
+    var utils = global.placekeeper.utils;
+
+    function hasMaxLength(element) {
+        return element.attributes.maxLength && element.attributes.maxLength.specified;
+    }
+
+    function restoreMaxlength(element) {
+        var maxLength = data.getMaxLengthAttr(element);
+        if (!maxLength) {
+            return;
+        }
+        element.setAttribute("maxLength", maxLength);
+        data.removeMaxLengthAttr(element);
+    }
+
+    function storeMaxlength(element) {
+        if (!hasMaxLength(element)) {
+            return;
+        }
+        data.setMaxLengthAttr(element);
+        // Removing maxLength will not work in IE7,
+        // where a default value of 2147483647 is used instead.
+        element.removeAttribute("maxLength");
+    }
+
     function showPlaceholder(element) {
-        var val = element.getAttribute("data-placeholder-value");
+        var val = data.getValueAttr(element);
 
         if (element.value !== "" || val == null) {
             return;
         }
 
         if (element.type === "password") {
-            if (support.canChangeToType(element, "text")) {
-                element.type = "text";
-            } else {
-                var isExistingClone = isClonedPasswordInput(element.previousSibling);
-                var clone = isExistingClone ? element.previousSibling : createClone(element);
-
-                swapElements(element, clone);
-
-                if (!isExistingClone) {
-                    element.parentNode.insertBefore(clone, element);
-                }
-
+            if (elems.hasPasswordClone(element)) {
+                var clone = elems.getPasswordClone(element);
+                elems.swapElements(element, clone);
                 element = clone;
+            } else {
+                element.type = "text";
             }
-            element.setAttribute("data-placeholder-type", "password");
+            data.setTypeAttr(element, "password");
         }
 
         element.value = val;
-        element.setAttribute("data-placeholder-active", "true");
+        data.setActiveAttr(element);
         utils.addClass(element, "placeholder");
         storeMaxlength(element);
     }
 
     function hidePlaceholder(element) {
 
-        if (element.getAttribute("data-placeholder-active") !== "true") {
+        if (!data.hasActiveAttrSetToTrue(element)) {
             return;
         }
 
-        if (isPasswordInput(element)) {
-            if (isClonedPasswordInput(element)) {
-                var original = element.nextSibling;
-                swapElements(element, original);
+        if (data.hasTypeAttrSetToPassword(element)) {
+            if (elems.isClonedPasswordInput(element)) {
+                var original = elems.getPasswordOriginal(element);
+                elems.swapElements(element, original);
                 element = original;
                 element.focus();
             } else {
@@ -287,16 +524,13 @@
             }
         }
 
-        element.value = element.value.replace(element.getAttribute("data-placeholder-value"), "");
-        element.removeAttribute("data-placeholder-active");
+        element.value = element.value.replace(data.getValueAttr(element), "");
+        data.removeActiveAttr(element);
         utils.removeClass(element, "placeholder");
         restoreMaxlength(element);
     }
 
-    // Expose public methods
     global.placekeeper.polyfill = {
-        __handlers: handlers,
-        __removeClone: removeClone,
         __storeMaxlength: storeMaxlength,
         __restoreMaxlength: restoreMaxlength,
         __showPlaceholder: showPlaceholder,
@@ -309,127 +543,25 @@
     "use strict";
 
     global.placekeeper = global.placekeeper || {};
-
-    var support = global.placekeeper.support;
     var utils = global.placekeeper.utils;
+    var data = global.placekeeper.data;
+    var elems = global.placekeeper.elements;
     var polyfill = global.placekeeper.polyfill;
-    var isEnabled = false;
+    var support = global.placekeeper.support;
     var hasUnloadEventListener = false;
-    var settings = {
-        defaultLoopTime: 100
-    };
     var handlers = {};
-    var loopInterval = null;
-    var isFocusEnabled = true;
-    var inputElements = [];
-    var textareaElements = [];
 
-    var supportedElementTypes = [
-        "text",
-        "search",
-        "url",
-        "tel",
-        "email",
-        "password",
-        "number",
-        "textarea"
-    ];
-
-    function isPlacekeeperEnabled() {
-        return isEnabled;
-    }
-
-    function isPlacekeeperFocusEnabled() {
-        return isFocusEnabled;
-    }
-
-    function getPlaceholderValue(element) {
-        return "placeholder" in element &&
-               element.placeholder ||
-               // IE10 emulating IE7 fails with getAttribute, hence the use of the attributes node
-               // IE returns an empty object instead of undefined if the attribute is not present
-               element.attributes.placeholder &&
-               element.attributes.placeholder.nodeValue;
-    }
-
-    function hasPlaceholderAttrSet(element) {
-        return Boolean(getPlaceholderValue(element));
-    }
-
-    function isSupportedType(elementType) {
-        return utils.inArray(supportedElementTypes, elementType);
-    }
-
-    function hasElementsThatNeedPlaceholder(elements) {
-
-        if (!elements) {
-            return false;
+    function hidePlaceholderOnSubmit(element) {
+        if (!data.hasActiveAttrSetToTrue(element)) {
+            return;
         }
+        polyfill.__hidePlaceholder(element);
+    }
 
-        for (var i = 0; i < elements.length; i++) {
-            if (hasPlaceholderAttrSet(elements[i]) && isSupportedType(utils.getElementType(elements[i]))) {
-                return true;
-            }
+    function showPlaceholderAfterSubmit(element) {
+        if (support.needsToShowPlaceHolder(element)) {
+            polyfill.__showPlaceholder(element);
         }
-
-        return false;
-    }
-
-    function needsToSetPlaceholder() {
-        var needsPlaceholder = hasElementsThatNeedPlaceholder(inputElements);
-
-        if (needsPlaceholder === false) {
-            needsPlaceholder = hasElementsThatNeedPlaceholder(textareaElements);
-        }
-
-        return needsPlaceholder;
-    }
-
-    function hasAttrSetToFalse(element, attr) {
-        return element.getAttribute(attr) === "false";
-    }
-
-    function hasLiveUpdatesAttrSetToFalse(element) {
-        return hasAttrSetToFalse(element, "data-placeholder-live");
-    }
-
-    function hasFocusAttrSetToFalse(element) {
-        return hasAttrSetToFalse(element, "data-placeholder-focus");
-    }
-
-    function hasEventsAttrSetToTrue(element) {
-        return element.getAttribute("data-placeholder-has-events") === "true";
-    }
-
-    function hasActiveAttrSetToTrue(element) {
-        return element.getAttribute("data-placeholder-active") === "true";
-    }
-
-    function hasSubmitAttrSetToTrue(element) {
-        return element.getAttribute("data-placeholder-submit") === "true";
-    }
-
-    function hasDisabledLiveUpdates() {
-        return hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-               hasLiveUpdatesAttrSetToFalse(document.body);
-    }
-
-    function hasFocusDisabled() {
-        return hasFocusAttrSetToFalse(document.documentElement) ||
-               hasFocusAttrSetToFalse(document.body);
-    }
-
-    // Avoid IE9 activeElement of death when an iframe is used.
-    //
-    // More info:
-    // - http://bugs.jquery.com/ticket/13393
-    // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
-    function safeActiveElement() {
-        /*eslint-disable no-empty */
-        try {
-            return document.activeElement;
-        } catch (ex) {}
-        /*eslint-enable no-empty */
     }
 
     function createFocusHandler(element) {
@@ -444,83 +576,32 @@
         };
     }
 
-    function loopElements(inputs, textareas, callback) {
-        var length = inputs.length + textareas.length;
-        for (var i = 0; i < length; i++) {
-            var element = i < inputs.length ?
-            inputs[i] :
-            textareas[i - inputs.length];
-            callback(element);
-        }
-    }
-
-    function forEachChildInput(element, callback) {
-        var inputs = element.getElementsByTagName("input");
-        var textareas = element.getElementsByTagName("textarea");
-        loopElements(inputs, textareas, callback);
-    }
-
-    function forEachForm(callback) {
-        var forms = document.getElementsByTagName("form");
-        var length = forms.length;
-        for (var i = 0; i < length; i++) {
-            callback(forms[i]);
-        }
-    }
-
-    function hidePlaceholderOnSubmit(element) {
-        if (!hasActiveAttrSetToTrue(element)) {
-            return;
-        }
-        polyfill.__hidePlaceholder(element);
-    }
-
-    function showPlaceholderAfterSubmit(element) {
-        if (hasPlaceholderAttrSet(element) &&
-            isSupportedType(utils.getElementType(element))) {
-            polyfill.__showPlaceholder(element);
-        }
-    }
-
     function createSubmitHandler(form) {
         return function() {
             // Clear the placeholder values so they don't get submitted
-            forEachChildInput(form, hidePlaceholderOnSubmit);
+            elems.forEachChildInput(form, hidePlaceholderOnSubmit);
             setTimeout(function() {
-                forEachChildInput(form, showPlaceholderAfterSubmit);
+                elems.forEachChildInput(form, showPlaceholderAfterSubmit);
             }, 10);
         };
-    }
-
-    function isPasswordInputThatNeedsToBeCloned(element) {
-        return element.type === "password" &&
-               !support.canChangeToType(element, "text");
     }
 
     function addEventListeners(element) {
         handlers.blur = createBlurHandler(element);
         utils.addEventListener(element, "blur", handlers.blur);
-        // password input clones will get their own focus handler,
-        // so the original input won't need one.
-        if (!isPasswordInputThatNeedsToBeCloned(element)) {
-            handlers.focus = createFocusHandler(element);
-            utils.addEventListener(element, "focus", handlers.focus);
+        if (elems.hasPasswordClone(element)) {
+            element = elems.getPasswordClone(element);
         }
+        handlers.focus = createFocusHandler(element);
+        utils.addEventListener(element, "focus", handlers.focus);
     }
 
     function removeEventListeners(element) {
         utils.removeEventListener(element, "blur", handlers.blur);
-        // TODO: refactor clone/event handling.
-        if (isPasswordInputThatNeedsToBeCloned(element)) {
-            polyfill.__removeClone(element);
-        } else {
-            utils.removeEventListener(element, "focus", handlers.focus);
+        if (elems.hasPasswordClone(element)) {
+            element = elems.getPasswordClone(element);
         }
-    }
-
-    function removeDataAttrs(element) {
-        element.removeAttribute("data-placeholder-value");
-        element.removeAttribute("data-placeholder-has-events");
+        utils.removeEventListener(element, "focus", handlers.focus);
     }
 
     function addSubmitListener(form) {
@@ -532,67 +613,28 @@
         utils.removeEventListener(form, "submit", handlers.submit);
     }
 
-    function addSubmitEvent(form) {
-        if (form == null || hasSubmitAttrSetToTrue(form)) {
-            return;
-        }
-        addSubmitListener(form);
-        // Set a flag on the form so we know it's been handled
-        // (forms can contain multiple inputs).
-        form.setAttribute("data-placeholder-submit", "true");
-    }
-
-    function removeSubmitEvent(form) {
-        if (!hasSubmitAttrSetToTrue(form)) {
-            return;
-        }
-        removeSubmitListener(form);
-    }
-
-    function setupElement(element, placeholderValue) {
-        element.setAttribute("data-placeholder-value", placeholderValue);
-        element.setAttribute("data-placeholder-has-events", "true");
-        addSubmitEvent(element.form);
-        addEventListeners(element);
-        if (element !== safeActiveElement()) {
-            polyfill.__showPlaceholder(element);
-        }
-    }
-
-    function checkForPlaceholder(element) {
-        var placeholder = getPlaceholderValue(element);
-        if (placeholder &&
-            isSupportedType(utils.getElementType(element)) &&
-            !hasEventsAttrSetToTrue(element)) {
-            setupElement(element, placeholder);
-        }
-    }
-
-    function forEachElement(callback) {
-        loopElements(inputElements, textareaElements, callback);
-    }
-
     function hidePlaceholder(element) {
-        if (!hasActiveAttrSetToTrue(element)) {
+        if (!data.hasActiveAttrSetToTrue(element)) {
             return;
         }
         polyfill.__hidePlaceholder(element);
     }
 
-    function removeEvents(element) {
-        if (!hasEventsAttrSetToTrue(element)) {
+    function clearPlaceholders() {
+        elems.forEachElement(hidePlaceholder);
+    }
+
+    function addSubmitEvent(form) {
+        if (form == null || data.hasSubmitAttrSetToTrue(form)) {
             return;
         }
-        removeEventListeners(element);
+        addSubmitListener(form);
+        // Set a flag on the form so we know it's been handled
+        // (forms can contain multiple inputs).
+        data.setSubmitAttr(form);
     }
 
-    function clearPlaceholders() {
-        forEachElement(hidePlaceholder);
-    }
-
-    function setupPlaceholders() {
-        forEachElement(checkForPlaceholder);
-
+    function addUnloadListener() {
         if (hasUnloadEventListener) {
             utils.removeEventListener(global, "beforeunload", clearPlaceholders);
         }
@@ -601,6 +643,121 @@
         // unstyled placeholders on load if the page was refreshed.
         utils.addEventListener(global, "beforeunload", clearPlaceholders);
         hasUnloadEventListener = true;
+    }
+
+    function removeEvents(element) {
+        if (!data.hasEventsAttrSetToTrue(element)) {
+            return;
+        }
+        removeEventListeners(element);
+    }
+
+    function removeSubmitEvent(form) {
+        if (!data.hasSubmitAttrSetToTrue(form)) {
+            return;
+        }
+        removeSubmitListener(form);
+    }
+
+    global.placekeeper.events = {
+        handlers: handlers,
+        addEventListeners: addEventListeners,
+        addSubmitEvent: addSubmitEvent,
+        addUnloadListener: addUnloadListener,
+        removeEvents: removeEvents,
+        removeSubmitEvent: removeSubmitEvent
+    };
+
+}(this));
+
+(function(global) {
+    "use strict";
+
+    global.placekeeper = global.placekeeper || {};
+
+    var support = global.placekeeper.support;
+    var data = global.placekeeper.data;
+    var utils = global.placekeeper.utils;
+    var elems = global.placekeeper.elements;
+    var events = global.placekeeper.events;
+    var polyfill = global.placekeeper.polyfill;
+    var isEnabled = false;
+    var settings = {
+        defaultLoopDuration: 100
+    };
+    var loopInterval = null;
+    var isFocusEnabled = true;
+
+    function isPlacekeeperEnabled() {
+        return isEnabled;
+    }
+
+    function isPlacekeeperFocusEnabled() {
+        return isFocusEnabled;
+    }
+
+    function hasElementsThatNeedPlaceholder(elements) {
+
+        if (!elements) {
+            return false;
+        }
+
+        for (var i = 0; i < elements.length; i++) {
+            if (support.needsToShowPlaceHolder(elements[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function needsToSetPlaceholder() {
+        var needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
+
+        if (needsPlaceholder === false) {
+            needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
+        }
+
+        return needsPlaceholder;
+    }
+
+    function hasDisabledLiveUpdates() {
+        return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
+               data.hasLiveUpdatesAttrSetToFalse(document.body);
+    }
+
+    function hasFocusDisabled() {
+        return data.hasFocusAttrSetToFalse(document.documentElement) ||
+               data.hasFocusAttrSetToFalse(document.body);
+    }
+
+    function setupElement(element, placeholderValue) {
+        data.setValueAttr(element, placeholderValue);
+        data.setEventsAttr(element);
+        elems.createPasswordCloneIfNeeded(element);
+        events.addSubmitEvent(element.form);
+        events.addEventListeners(element);
+        if (element !== support.safeActiveElement()) {
+            polyfill.__showPlaceholder(element);
+        }
+    }
+
+    function needsSetup(element, placeholder) {
+        return placeholder &&
+               support.isSupportedType(utils.getElementType(element)) &&
+               !data.hasEventsAttrSetToTrue(element);
+    }
+
+    function checkForPlaceholder(element) {
+        var placeholder = utils.getPlaceholderValue(element);
+        if (needsSetup(element, placeholder)) {
+            setupElement(element, placeholder);
+        }
+    }
+
+    function setupPlaceholders() {
+        elems.forEachElement(checkForPlaceholder);
+        events.addUnloadListener();
     }
 
     function placekeeperLoop() {
@@ -625,30 +782,20 @@
         placekeeperLoop();
         if (!hasDisabledLiveUpdates()) {
             // main loop
-            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopTime);
+            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
         }
     }
 
     function disablePlacekeeper() {
         isEnabled = false;
         clearInterval(loopInterval);
-        forEachForm(removeSubmitEvent);
-        forEachElement(removeEvents);
-        forEachElement(removeDataAttrs);
+        elems.forEachForm(events.removeSubmitEvent);
+        elems.forEachElement(events.removeEvents);
+        elems.forEachElement(data.removeDataAttrs);
+        elems.forEachElement(elems.removePasswordCloneIfExists);
     }
 
-    function getElements() {
-        // Get references to all the input and textarea elements currently in the DOM
-        // (live NodeList objects to we only need to do this once)
-        if (!support.isInputSupported()) {
-            inputElements = utils.getElementsByTagName("input");
-        }
-        if (!support.isTextareaSupported()) {
-            textareaElements = utils.getElementsByTagName("textarea");
-        }
-    }
-
-    getElements();
+    elems.getElements();
     init();
 
     // Expose public methods
@@ -662,10 +809,7 @@
         __global: global,
         __init: init,
         __settings: settings,
-        __getElements: getElements,
-        __hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         __setupPlaceholders: setupPlaceholders,
-        __handlers: handlers,
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
 
