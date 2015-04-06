@@ -87,6 +87,7 @@
         element.removeAttribute("data-placeholder-value");
         element.removeAttribute("data-placeholder-has-events");
         element.removeAttribute("data-placeholder-active");
+        element.removeAttribute("data-placeholder-maxlength");
     }
 
     global.placekeeper.data = {
