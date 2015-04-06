@@ -911,6 +911,7 @@ describe("placekeeper", function() {
 
         afterEach(function() {
             element.parentNode.removeChild(element);
+            placekeeper.disable();
         });
 
         it("should have set data-placeholder-value to the element", function() {
