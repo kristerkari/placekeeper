@@ -36,6 +36,8 @@
     "disallowSpacesInsideBrackets": true,
     "disallowSpacesInsideParentheses": true,
     "maximumLineLength": 140,
+    "requireSemicolons": true,
+    "disallowMultipleSpaces": true,
     "requireSpaceBeforeKeywords": [
         "else",
         "while",
