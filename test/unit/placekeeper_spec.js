@@ -899,6 +899,47 @@ describe("placekeeper", function() {
 
     });
 
+    describe("when live updates are enabled and there is an element with placeholder on the page", function() {
+        var element;
+
+        beforeEach(function(done) {
+            spyOnNativeSupportAndReturn(false);
+            element = createInputElement(true);
+            placekeeper.priv.__init();
+            setTimeout(done, loopDurationForTests);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        it("should have set data-placeholder-value to the element", function() {
+            expect(element.getAttribute("data-placeholder-value")).toEqual("Test");
+        });
+
+        it("should have live updates enabled", function() {
+            expect(placekeeper.isLiveUpdateEnabled()).toEqual(true);
+        });
+
+        describe("and when placeholder value is changed", function() {
+
+            beforeEach(function(done) {
+                element.placeholder = "TestChanged";
+                setTimeout(done, loopDurationForTests);
+            });
+
+            it("should correctly be able to get changed placeholder value", function() {
+                expect(placekeeper.utils.getPlaceholderValue(element)).toEqual("TestChanged");
+            });
+
+            it("should have changed data-placeholder-value to the element", function() {
+                expect(element.getAttribute("data-placeholder-value")).toEqual("TestChanged");
+            });
+
+        });
+
+    });
+
     describe("when there is an element with placeholder on the page", function() {
         var element;
 

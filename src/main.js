@@ -15,6 +15,7 @@
     };
     var loopInterval = null;
     var isFocusEnabled = true;
+    var isLiveUpdateEnabled = false;
 
     function isPlacekeeperEnabled() {
         return isEnabled;
@@ -22,6 +23,10 @@
 
     function isPlacekeeperFocusEnabled() {
         return isFocusEnabled;
+    }
+
+    function isPlacekeeperLiveUpdateEnabled() {
+        return isLiveUpdateEnabled;
     }
 
     function hasElementsThatNeedPlaceholder(elements) {
@@ -70,16 +75,30 @@
         }
     }
 
-    function needsSetup(element, placeholder) {
-        return placeholder &&
-               support.isSupportedType(utils.getElementType(element)) &&
+    function needsSetup(element) {
+        return support.isSupportedType(utils.getElementType(element)) &&
                !data.hasEventsAttrSetToTrue(element);
+    }
+
+    function hasPlaceholderValueChanged(element, placeholder) {
+        return data.hasValueAttr(element) &&
+               data.getValueAttr(element) !== placeholder;
     }
 
     function checkForPlaceholder(element) {
         var placeholder = utils.getPlaceholderValue(element);
-        if (needsSetup(element, placeholder)) {
+
+        if (!placeholder) {
+            return;
+        }
+
+        if (needsSetup(element)) {
             setupElement(element, placeholder);
+            return;
+        }
+
+        if (hasPlaceholderValueChanged(element, placeholder)) {
+            data.setValueAttr(element, placeholder);
         }
     }
 
@@ -109,8 +128,11 @@
         clearInterval(loopInterval);
         placekeeperLoop();
         if (!hasDisabledLiveUpdates()) {
+            isLiveUpdateEnabled = true;
             // main loop
             loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
+        } else {
+            isLiveUpdateEnabled = false;
         }
     }
 
@@ -131,6 +153,7 @@
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
     global.placekeeper.isFocusEnabled = isPlacekeeperFocusEnabled;
+    global.placekeeper.isLiveUpdateEnabled = isPlacekeeperLiveUpdateEnabled;
 
     // Exposed private methods
     global.placekeeper.priv = {

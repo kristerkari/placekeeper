@@ -27,6 +27,10 @@
         return element.getAttribute("data-placeholder-clone") === "true";
     }
 
+    function hasValueAttr(element) {
+        return element.getAttribute("data-placeholder-value") != null;
+    }
+
     function hasTypeAttrSetToPassword(element) {
         return element.getAttribute("data-placeholder-type") === "password";
     }
@@ -92,6 +96,7 @@
         hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
         hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,
         hasCloneAttrSetToTrue: hasCloneAttrSetToTrue,
+        hasValueAttr: hasValueAttr,
         hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
         getMaxLengthAttr: getMaxLengthAttr,
         getValueAttr: getValueAttr,
