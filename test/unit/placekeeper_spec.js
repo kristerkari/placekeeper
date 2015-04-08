@@ -1114,8 +1114,13 @@ describe("placekeeper", function() {
 
                 beforeEach(function() {
                     triggerEvent.html(element, "focus");
+                    element.focus();
                     spyOn(placekeeper.utils, "moveCaret");
                     triggerEvent.html(element, "click");
+                });
+
+                it("element should be activeElement", function() {
+                    expect(element).toEqual(placekeeper.support.safeActiveElement());
                 });
 
                 it("should have called moveCaret method", function() {
@@ -1131,6 +1136,11 @@ describe("placekeeper", function() {
                     spyOn(placekeeper.utils, "moveCaret").and.callThrough();
                     spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
                     triggerEvent.html(element, "focus");
+                    element.focus();
+                });
+
+                it("element should be activeElement", function() {
+                    expect(element).toEqual(placekeeper.support.safeActiveElement());
                 });
 
                 it("should not have called polyfill's __hidePlaceholder method", function() {
