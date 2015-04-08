@@ -5,29 +5,15 @@
 
     var support = global.placekeeper.support;
     var data = global.placekeeper.data;
+    var mode = global.placekeeper.mode;
     var utils = global.placekeeper.utils;
     var elems = global.placekeeper.elements;
     var events = global.placekeeper.events;
     var polyfill = global.placekeeper.polyfill;
-    var isEnabled = false;
     var settings = {
         defaultLoopDuration: 100
     };
     var loopInterval = null;
-    var isFocusEnabled = true;
-    var isLiveUpdateEnabled = false;
-
-    function isPlacekeeperEnabled() {
-        return isEnabled;
-    }
-
-    function isPlacekeeperFocusEnabled() {
-        return isFocusEnabled;
-    }
-
-    function isPlacekeeperLiveUpdateEnabled() {
-        return isLiveUpdateEnabled;
-    }
 
     function hasElementsThatNeedPlaceholder(elements) {
 
@@ -52,16 +38,6 @@
         }
 
         return needsPlaceholder;
-    }
-
-    function hasDisabledLiveUpdates() {
-        return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-               data.hasLiveUpdatesAttrSetToFalse(document.body);
-    }
-
-    function hasFocusDisabled() {
-        return data.hasFocusAttrSetToFalse(document.documentElement) ||
-               data.hasFocusAttrSetToFalse(document.body);
     }
 
     function setupElement(element, placeholderValue) {
@@ -107,13 +83,14 @@
     }
 
     function placekeeperLoop() {
-        if (hasFocusDisabled()) {
-            isFocusEnabled = false;
+        if (mode.hasFocusDisabled()) {
+            mode.disableFocus();
         }
 
-        isEnabled = needsToSetPlaceholder();
-
-        if (!isEnabled) {
+        if (needsToSetPlaceholder()) {
+            mode.enable();
+        } else {
+            mode.disable();
             return;
         }
 
@@ -126,17 +103,17 @@
         }
         clearInterval(loopInterval);
         placekeeperLoop();
-        if (!hasDisabledLiveUpdates()) {
-            isLiveUpdateEnabled = true;
+        if (!mode.hasDisabledLiveUpdates()) {
+            mode.enableLive();
             // main loop
             loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
         } else {
-            isLiveUpdateEnabled = false;
+            mode.disableLive();
         }
     }
 
     function disablePlacekeeper() {
-        isEnabled = false;
+        mode.disable();
         clearInterval(loopInterval);
         elems.forEachForm(events.removeSubmitEvent);
         elems.forEachElement(events.removeEvents);
@@ -149,11 +126,11 @@
     init();
 
     // Expose public methods
-    global.placekeeper.isEnabled = isPlacekeeperEnabled;
+    global.placekeeper.isEnabled = mode.isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
-    global.placekeeper.isFocusEnabled = isPlacekeeperFocusEnabled;
-    global.placekeeper.isLiveUpdateEnabled = isPlacekeeperLiveUpdateEnabled;
+    global.placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
+    global.placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
 
     // Exposed private methods
     global.placekeeper.priv = {

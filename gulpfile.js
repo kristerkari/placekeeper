@@ -19,6 +19,7 @@
     gulp.task("build", function() {
         return gulp.src([
             "src/data.js",
+            "src/mode.js",
             "src/utils.js",
             "src/support.js",
             "src/elements.js",
