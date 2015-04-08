@@ -87,6 +87,7 @@
         element.removeAttribute("data-placeholder-value");
         element.removeAttribute("data-placeholder-has-events");
         element.removeAttribute("data-placeholder-active");
+        element.removeAttribute("data-placeholder-maxlength");
     }
 
     global.placekeeper.data = {
@@ -119,13 +120,93 @@
     "use strict";
 
     global.placekeeper = global.placekeeper || {};
+    var data = global.placekeeper.data;
+
+    var isEnabled = false;
+    var isFocusEnabled = true;
+    var isLiveUpdateEnabled = false;
+
+    function isPlacekeeperEnabled() {
+        return isEnabled;
+    }
+
+    function isPlacekeeperFocusEnabled() {
+        return isFocusEnabled;
+    }
+
+    function isPlacekeeperLiveUpdateEnabled() {
+        return isLiveUpdateEnabled;
+    }
+
+    function hasDisabledLiveUpdates() {
+        return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
+               data.hasLiveUpdatesAttrSetToFalse(document.body);
+    }
+
+    function hasFocusDisabled() {
+        return data.hasFocusAttrSetToFalse(document.documentElement) ||
+               data.hasFocusAttrSetToFalse(document.body);
+    }
+
+    function enableFocus() {
+        isFocusEnabled = true;
+    }
+
+    function disableFocus() {
+        isFocusEnabled = false;
+    }
+
+    function enableLive() {
+        isLiveUpdateEnabled = true;
+    }
+
+    function disableLive() {
+        isLiveUpdateEnabled = false;
+    }
+
+    function disable() {
+        isEnabled = false;
+    }
+
+    function enable() {
+        isEnabled = true;
+    }
+
+    global.placekeeper.mode = {
+        isPlacekeeperEnabled: isPlacekeeperEnabled,
+        isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
+        isPlacekeeperLiveUpdateEnabled: isPlacekeeperLiveUpdateEnabled,
+        hasDisabledLiveUpdates: hasDisabledLiveUpdates,
+        hasFocusDisabled: hasFocusDisabled,
+        enableFocus: enableFocus,
+        disableFocus: disableFocus,
+        enableLive: enableLive,
+        disableLive: disableLive,
+        disable: disable,
+        enable: enable
+    };
+
+}(this));
+
+(function(global) {
+    "use strict";
+
+    global.placekeeper = global.placekeeper || {};
 
     function addEventListener(elem, event, fn) {
         if (elem.addEventListener) {
             return elem.addEventListener(event, fn, false);
         }
         if (elem.attachEvent) {
-            return elem.attachEvent("on" + event, fn);
+            return elem.attachEvent("on" + event, function(e) {
+                e.preventDefault = function() {
+                    e.returnValue = false;
+                };
+                e.stopPropagation = function() {
+                    e.cancelBubble = true;
+                };
+                fn.call(elem, e);
+            });
         }
     }
 
@@ -192,6 +273,10 @@
         return document.getElementsByTagName(type);
     }
 
+    function preventDefault(evt) {
+        evt.preventDefault();
+    }
+
     // Check whether an item is in an array
     // (we don't use Array.prototype.indexOf
     // so we don't clobber any existing polyfills
@@ -204,6 +289,17 @@
             }
         }
         return false;
+    }
+
+    function moveCaret(elem, index) {
+        if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.move("character", index);
+            range.select();
+        } else if (elem.selectionStart) {
+            elem.focus();
+            elem.setSelectionRange(index, index);
+        }
     }
 
     function getPlaceholderValue(element) {
@@ -220,6 +316,7 @@
     }
 
     global.placekeeper.utils = {
+        moveCaret: moveCaret,
         getPlaceholderValue: getPlaceholderValue,
         hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         getAttributes: getAttributes,
@@ -230,6 +327,7 @@
         addClass: addClass,
         removeClass: removeClass,
         hasClass: hasClass,
+        preventDefault: preventDefault,
         getElementsByTagName: getElementsByTagName,
         inArray: inArray
     };
@@ -251,6 +349,34 @@
         "password",
         "number",
         "textarea"
+    ];
+
+    // The list of keycodes that are not allowed when the polyfill is configured
+    // to hide-on-input.
+    var badKeys = [
+
+      // The following keys all cause the caret to jump to the end of the input
+      // value.
+
+      27, // Escape
+      33, // Page up
+      34, // Page down
+      35, // End
+      36, // Home
+
+      // Arrow keys allow you to move the caret manually, which should be
+      // prevented when the placeholder is visible.
+
+      37, // Left
+      38, // Up
+      39, // Right
+      40, // Down
+
+      // The following keys allow you to modify the placeholder text by removing
+      // characters, which should be prevented when the placeholder is visible.
+
+      8, // Backspace
+      46 // Delete
     ];
 
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
@@ -285,6 +411,10 @@
         return utils.inArray(supportedElementTypes, elementType);
     }
 
+    function isBadKey(keyCode) {
+        return utils.inArray(badKeys, keyCode);
+    }
+
     function canChangeToType(elem, type) {
         // IE9 can change type from password to text,
         // but not back from text to password.
@@ -307,6 +437,7 @@
     global.placekeeper.support = {
         needsToShowPlaceHolder: needsToShowPlaceHolder,
         isSupportedType: isSupportedType,
+        isBadKey: isBadKey,
         safeActiveElement: safeActiveElement,
         canChangeToType: canChangeToType,
         isInputSupported: isInputSupported,
@@ -555,11 +686,12 @@
     global.placekeeper = global.placekeeper || {};
     var utils = global.placekeeper.utils;
     var data = global.placekeeper.data;
+    var mode = global.placekeeper.mode;
     var elems = global.placekeeper.elements;
     var polyfill = global.placekeeper.polyfill;
     var support = global.placekeeper.support;
-    var hasUnloadEventListener = false;
     var handlers = {};
+    var keydownVal;
 
     function hidePlaceholderOnSubmit(element) {
         if (!data.hasActiveAttrSetToTrue(element)) {
@@ -574,9 +706,23 @@
         }
     }
 
+    function isActiveAndHasPlaceholderSet(element) {
+        return data.hasActiveAttrSetToTrue(element) &&
+               element.value === data.getValueAttr(element);
+    }
+
+    function shouldNotHidePlaceholder(element) {
+        return !mode.isPlacekeeperFocusEnabled() &&
+                isActiveAndHasPlaceholderSet(element);
+    }
+
     function createFocusHandler(element) {
         return function() {
-            polyfill.__hidePlaceholder(element);
+            if (shouldNotHidePlaceholder(element)) {
+                utils.moveCaret(element, 0);
+            } else {
+                polyfill.__hidePlaceholder(element);
+            }
         };
     }
 
@@ -596,6 +742,42 @@
         };
     }
 
+    function createKeydownHandler(element) {
+        return function(evt) {
+            keydownVal = element.value;
+
+            // Prevent the use of certain keys
+            // (try to keep the cursor before the placeholder).
+            if (isActiveAndHasPlaceholderSet(element) && support.isBadKey(evt.keyCode)) {
+                utils.preventDefault(evt);
+                return false;
+            }
+        };
+    }
+
+    function createKeyupHandler(element) {
+        return function() {
+            if (keydownVal != null && keydownVal !== element.value) {
+                polyfill.__hidePlaceholder(element);
+            }
+
+            // If the element is now empty we need to show the placeholder
+            if (element.value === "") {
+                element.blur();
+                utils.moveCaret(element, 0);
+            }
+        };
+    }
+
+    function createClickHandler(element) {
+        return function() {
+            if (element === support.safeActiveElement() &&
+                isActiveAndHasPlaceholderSet(element)) {
+                utils.moveCaret(element, 0);
+            }
+        };
+    }
+
     function addEventListeners(element) {
         handlers.blur = createBlurHandler(element);
         utils.addEventListener(element, "blur", handlers.blur);
@@ -604,6 +786,24 @@
         }
         handlers.focus = createFocusHandler(element);
         utils.addEventListener(element, "focus", handlers.focus);
+
+        // If the placeholder should hide on input rather than on focus we need
+        // additional event handlers
+        if (!mode.isPlacekeeperFocusEnabled()) {
+            handlers.keydown = createKeydownHandler(element);
+            handlers.keyup = createKeyupHandler(element);
+            handlers.click = createClickHandler(element);
+            utils.addEventListener(element, "keydown", handlers.keydown);
+            utils.addEventListener(element, "keyup", handlers.keyup);
+            utils.addEventListener(element, "click", handlers.click);
+        }
+
+    }
+
+    function hasHideOnInputHandlers() {
+        return "keydown" in handlers &&
+               "keyup" in handlers &&
+               "click" in handlers;
     }
 
     function removeEventListeners(element) {
@@ -612,6 +812,11 @@
             element = elems.getPasswordClone(element);
         }
         utils.removeEventListener(element, "focus", handlers.focus);
+        if (hasHideOnInputHandlers()) {
+            utils.removeEventListener(element, "keydown", handlers.keydown);
+            utils.removeEventListener(element, "keyup", handlers.keyup);
+            utils.removeEventListener(element, "click", handlers.click);
+        }
     }
 
     function addSubmitListener(form) {
@@ -645,14 +850,9 @@
     }
 
     function addUnloadListener() {
-        if (hasUnloadEventListener) {
-            utils.removeEventListener(global, "beforeunload", clearPlaceholders);
-        }
-
         // Disabling placeholders before unloading the page prevents flash of
         // unstyled placeholders on load if the page was refreshed.
         utils.addEventListener(global, "beforeunload", clearPlaceholders);
-        hasUnloadEventListener = true;
     }
 
     function removeEvents(element) {
@@ -688,29 +888,15 @@
 
     var support = global.placekeeper.support;
     var data = global.placekeeper.data;
+    var mode = global.placekeeper.mode;
     var utils = global.placekeeper.utils;
     var elems = global.placekeeper.elements;
     var events = global.placekeeper.events;
     var polyfill = global.placekeeper.polyfill;
-    var isEnabled = false;
     var settings = {
         defaultLoopDuration: 100
     };
     var loopInterval = null;
-    var isFocusEnabled = true;
-    var isLiveUpdateEnabled = false;
-
-    function isPlacekeeperEnabled() {
-        return isEnabled;
-    }
-
-    function isPlacekeeperFocusEnabled() {
-        return isFocusEnabled;
-    }
-
-    function isPlacekeeperLiveUpdateEnabled() {
-        return isLiveUpdateEnabled;
-    }
 
     function hasElementsThatNeedPlaceholder(elements) {
 
@@ -735,16 +921,6 @@
         }
 
         return needsPlaceholder;
-    }
-
-    function hasDisabledLiveUpdates() {
-        return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-               data.hasLiveUpdatesAttrSetToFalse(document.body);
-    }
-
-    function hasFocusDisabled() {
-        return data.hasFocusAttrSetToFalse(document.documentElement) ||
-               data.hasFocusAttrSetToFalse(document.body);
     }
 
     function setupElement(element, placeholderValue) {
@@ -787,17 +963,17 @@
 
     function setupPlaceholders() {
         elems.forEachElement(checkForPlaceholder);
-        events.addUnloadListener();
     }
 
     function placekeeperLoop() {
-        if (hasFocusDisabled()) {
-            isFocusEnabled = false;
+        if (mode.hasFocusDisabled()) {
+            mode.disableFocus();
         }
 
-        isEnabled = needsToSetPlaceholder();
-
-        if (!isEnabled) {
+        if (needsToSetPlaceholder()) {
+            mode.enable();
+        } else {
+            mode.disable();
             return;
         }
 
@@ -810,17 +986,17 @@
         }
         clearInterval(loopInterval);
         placekeeperLoop();
-        if (!hasDisabledLiveUpdates()) {
-            isLiveUpdateEnabled = true;
+        if (!mode.hasDisabledLiveUpdates()) {
+            mode.enableLive();
             // main loop
             loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
         } else {
-            isLiveUpdateEnabled = false;
+            mode.disableLive();
         }
     }
 
     function disablePlacekeeper() {
-        isEnabled = false;
+        mode.disable();
         clearInterval(loopInterval);
         elems.forEachForm(events.removeSubmitEvent);
         elems.forEachElement(events.removeEvents);
@@ -829,14 +1005,15 @@
     }
 
     elems.getElements();
+    events.addUnloadListener();
     init();
 
     // Expose public methods
-    global.placekeeper.isEnabled = isPlacekeeperEnabled;
+    global.placekeeper.isEnabled = mode.isPlacekeeperEnabled;
     global.placekeeper.enable = init;
     global.placekeeper.disable = disablePlacekeeper;
-    global.placekeeper.isFocusEnabled = isPlacekeeperFocusEnabled;
-    global.placekeeper.isLiveUpdateEnabled = isPlacekeeperLiveUpdateEnabled;
+    global.placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
+    global.placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
 
     // Exposed private methods
     global.placekeeper.priv = {
