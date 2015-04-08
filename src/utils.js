@@ -8,7 +8,15 @@
             return elem.addEventListener(event, fn, false);
         }
         if (elem.attachEvent) {
-            return elem.attachEvent("on" + event, fn);
+            return elem.attachEvent("on" + event, function(e) {
+                e.preventDefault = function() {
+                    e.returnValue = false;
+                };
+                e.stopPropagation = function() {
+                    e.cancelBubble = true;
+                };
+                fn.call(elem, e);
+            });
         }
     }
 
