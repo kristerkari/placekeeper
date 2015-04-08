@@ -83,6 +83,10 @@
         return document.getElementsByTagName(type);
     }
 
+    function preventDefault(evt) {
+        evt.preventDefault();
+    }
+
     // Check whether an item is in an array
     // (we don't use Array.prototype.indexOf
     // so we don't clobber any existing polyfills
@@ -95,6 +99,17 @@
             }
         }
         return false;
+    }
+
+    function moveCaret(elem, index) {
+        if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.move("character", index);
+            range.select();
+        } else if (elem.selectionStart) {
+            elem.focus();
+            elem.setSelectionRange(index, index);
+        }
     }
 
     function getPlaceholderValue(element) {
@@ -111,6 +126,7 @@
     }
 
     global.placekeeper.utils = {
+        moveCaret: moveCaret,
         getPlaceholderValue: getPlaceholderValue,
         hasPlaceholderAttrSet: hasPlaceholderAttrSet,
         getAttributes: getAttributes,
@@ -121,6 +137,7 @@
         addClass: addClass,
         removeClass: removeClass,
         hasClass: hasClass,
+        preventDefault: preventDefault,
         getElementsByTagName: getElementsByTagName,
         inArray: inArray
     };

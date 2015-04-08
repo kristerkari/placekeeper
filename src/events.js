@@ -4,10 +4,12 @@
     global.placekeeper = global.placekeeper || {};
     var utils = global.placekeeper.utils;
     var data = global.placekeeper.data;
+    var mode = global.placekeeper.mode;
     var elems = global.placekeeper.elements;
     var polyfill = global.placekeeper.polyfill;
     var support = global.placekeeper.support;
     var handlers = {};
+    var keydownVal;
 
     function hidePlaceholderOnSubmit(element) {
         if (!data.hasActiveAttrSetToTrue(element)) {
@@ -22,9 +24,23 @@
         }
     }
 
+    function isActiveAndHasPlaceholderSet(element) {
+        return data.hasActiveAttrSetToTrue(element) &&
+               element.value === data.getValueAttr(element);
+    }
+
+    function shouldNotHidePlaceholder(element) {
+        return !mode.isPlacekeeperFocusEnabled() &&
+                isActiveAndHasPlaceholderSet(element);
+    }
+
     function createFocusHandler(element) {
         return function() {
-            polyfill.__hidePlaceholder(element);
+            if (shouldNotHidePlaceholder(element)) {
+                utils.moveCaret(element, 0);
+            } else {
+                polyfill.__hidePlaceholder(element);
+            }
         };
     }
 
@@ -44,6 +60,42 @@
         };
     }
 
+    function createKeydownHandler(element) {
+        return function(evt) {
+            keydownVal = element.value;
+
+            // Prevent the use of certain keys
+            // (try to keep the cursor before the placeholder).
+            if (isActiveAndHasPlaceholderSet(element) && support.isBadKey(evt.keyCode)) {
+                utils.preventDefault(evt);
+                return false;
+            }
+        };
+    }
+
+    function createKeyupHandler(element) {
+        return function() {
+            if (keydownVal != null && keydownVal !== element.value) {
+                polyfill.__hidePlaceholder(element);
+            }
+
+            // If the element is now empty we need to show the placeholder
+            if (element.value === "") {
+                element.blur();
+                utils.moveCaret(element, 0);
+            }
+        };
+    }
+
+    function createClickHandler(element) {
+        return function() {
+            if (element === support.safeActiveElement() &&
+                isActiveAndHasPlaceholderSet(element)) {
+                utils.moveCaret(element, 0);
+            }
+        };
+    }
+
     function addEventListeners(element) {
         handlers.blur = createBlurHandler(element);
         utils.addEventListener(element, "blur", handlers.blur);
@@ -52,6 +104,24 @@
         }
         handlers.focus = createFocusHandler(element);
         utils.addEventListener(element, "focus", handlers.focus);
+
+        // If the placeholder should hide on input rather than on focus we need
+        // additional event handlers
+        if (!mode.isPlacekeeperFocusEnabled()) {
+            handlers.keydown = createKeydownHandler(element);
+            handlers.keyup = createKeyupHandler(element);
+            handlers.click = createClickHandler(element);
+            utils.addEventListener(element, "keydown", handlers.keydown);
+            utils.addEventListener(element, "keyup", handlers.keyup);
+            utils.addEventListener(element, "click", handlers.click);
+        }
+
+    }
+
+    function hasHideOnInputHandlers() {
+        return "keydown" in handlers &&
+               "keyup" in handlers &&
+               "click" in handlers;
     }
 
     function removeEventListeners(element) {
@@ -60,6 +130,11 @@
             element = elems.getPasswordClone(element);
         }
         utils.removeEventListener(element, "focus", handlers.focus);
+        if (hasHideOnInputHandlers()) {
+            utils.removeEventListener(element, "keydown", handlers.keydown);
+            utils.removeEventListener(element, "keyup", handlers.keyup);
+            utils.removeEventListener(element, "click", handlers.click);
+        }
     }
 
     function addSubmitListener(form) {

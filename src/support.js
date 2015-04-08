@@ -15,6 +15,34 @@
         "textarea"
     ];
 
+    // The list of keycodes that are not allowed when the polyfill is configured
+    // to hide-on-input.
+    var badKeys = [
+
+      // The following keys all cause the caret to jump to the end of the input
+      // value.
+
+      27, // Escape
+      33, // Page up
+      34, // Page down
+      35, // End
+      36, // Home
+
+      // Arrow keys allow you to move the caret manually, which should be
+      // prevented when the placeholder is visible.
+
+      37, // Left
+      38, // Up
+      39, // Right
+      40, // Down
+
+      // The following keys allow you to modify the placeholder text by removing
+      // characters, which should be prevented when the placeholder is visible.
+
+      8, // Backspace
+      46 // Delete
+    ];
+
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
     var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
@@ -47,6 +75,10 @@
         return utils.inArray(supportedElementTypes, elementType);
     }
 
+    function isBadKey(keyCode) {
+        return utils.inArray(badKeys, keyCode);
+    }
+
     function canChangeToType(elem, type) {
         // IE9 can change type from password to text,
         // but not back from text to password.
@@ -69,6 +101,7 @@
     global.placekeeper.support = {
         needsToShowPlaceHolder: needsToShowPlaceHolder,
         isSupportedType: isSupportedType,
+        isBadKey: isBadKey,
         safeActiveElement: safeActiveElement,
         canChangeToType: canChangeToType,
         isInputSupported: isInputSupported,
