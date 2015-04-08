@@ -22,6 +22,7 @@ module.exports = function(config) {
             "../src/polyfill.js",
             "../src/events.js",
             "../src/main.js",
+            "../test/utils/*.js",
             "../test/**/*_spec.js"
         ],
 

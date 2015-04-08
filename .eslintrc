@@ -4,6 +4,9 @@
       "node": true,
       "jasmine": true
     },
+    "globals": {
+      "triggerEvent": false
+    },
     "rules": {
         "no-comma-dangle": 2,
         "no-cond-assign": 2,

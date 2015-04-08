@@ -1,4 +1,7 @@
 {
+  "globals": {
+    "triggerEvent": false
+  },
   "browser": true,
   "node": true,
   "jasmine": true,
@@ -11,5 +14,6 @@
   "undef": true,
   "strict": true,
   "curly": true,
+  "sub": true,
   "expr": true
 }

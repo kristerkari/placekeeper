@@ -28,20 +28,6 @@ describe("placekeeper", function() {
         return can;
     }());
 
-    function trigger(target, event) {
-        var evt;
-        if (document.createEvent) {
-            // dispatch for firefox + others
-            evt = document.createEvent("HTMLEvents");
-            evt.initEvent(event, true, true);
-            target.dispatchEvent(evt);
-        } else if (document.createEventObject) {
-            // dispatch for IE
-            evt = document.createEventObject();
-            target.fireEvent("on" + event, evt);
-        }
-    }
-
     function initialSetup() {
         spyOn(placekeeper.support, "isInputSupported")
         .and.callFake(function() {
@@ -70,7 +56,7 @@ describe("placekeeper", function() {
     }
 
     function triggerFakePageReload() {
-        trigger(fakeWindow, "beforeunload");
+        triggerEvent.html(fakeWindow, "beforeunload");
     }
 
     function setupFakeWindow() {
@@ -258,7 +244,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
-                    trigger(clone, "focus");
+                    triggerEvent.html(clone, "focus");
                     setTimeout(function() {
                         element = document.getElementById("elem");
                         done();
@@ -299,7 +285,7 @@ describe("placekeeper", function() {
                     beforeEach(function(done) {
                         spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                         element.value = "testing";
-                        trigger(element, "blur");
+                        triggerEvent.html(element, "blur");
                         setTimeout(done, 110);
                     });
 
@@ -334,7 +320,7 @@ describe("placekeeper", function() {
 
                     beforeEach(function(done) {
                         spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
-                        trigger(element, "blur");
+                        triggerEvent.html(element, "blur");
                         setTimeout(function() {
                             clone = document.getElementById("elem");
                             done();
@@ -396,7 +382,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function(done) {
                     spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
-                    trigger(element, "focus");
+                    triggerEvent.html(element, "focus");
                     setTimeout(done, loopDurationForTests);
                 });
 
@@ -485,7 +471,7 @@ describe("placekeeper", function() {
 
                 beforeEach(function() {
                     spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
-                    trigger(element, "focus");
+                    triggerEvent.html(element, "focus");
                 });
 
                 it("should have called polyfill's __hidePlaceholder method", function() {
@@ -522,7 +508,7 @@ describe("placekeeper", function() {
                     describe("and when element is blurred after that", function() {
 
                         beforeEach(function() {
-                            trigger(element, "blur");
+                            triggerEvent.html(element, "blur");
                         });
 
                         it("should have called polyfill's __showPlaceholder method", function() {
@@ -549,7 +535,7 @@ describe("placekeeper", function() {
                 describe("and when element is blurred after that", function() {
 
                     beforeEach(function() {
-                        trigger(element, "blur");
+                        triggerEvent.html(element, "blur");
                     });
 
                     it("should have called polyfill's __showPlaceholder method", function() {
@@ -807,7 +793,7 @@ describe("placekeeper", function() {
             beforeEach(function() {
                 spyOn(placekeeper.polyfill, "__hidePlaceholder");
                 spyOn(placekeeper.polyfill, "__showPlaceholder");
-                trigger(form, "submit");
+                triggerEvent.html(form, "submit");
             });
 
             it("should not have added data-placeholder-submit to the form", function() {
@@ -848,7 +834,7 @@ describe("placekeeper", function() {
             beforeEach(function() {
                 spyOn(placekeeper.polyfill, "__hidePlaceholder");
                 spyOn(placekeeper.polyfill, "__showPlaceholder");
-                trigger(form, "submit");
+                triggerEvent.html(form, "submit");
             });
 
             it("should have added data-placeholder-submit to the form", function() {
