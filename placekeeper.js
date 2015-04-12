@@ -465,6 +465,14 @@
         return textareaElements;
     }
 
+    function getForm(element) {
+        var form = element.form;
+        if (form != null && typeof form === "string") {
+            form = document.getElementById(form);
+        }
+        return form;
+    }
+
     function loopElements(inputs, textareas, callback) {
         var length = inputs.length + textareas.length;
         for (var i = 0; i < length; i++) {
@@ -576,6 +584,7 @@
     }
 
     global.placekeeper.elements = {
+        getForm: getForm,
         getInputElements: getInputElements,
         getTextareaElements: getTextareaElements,
         getElements: getElements,
@@ -927,7 +936,7 @@
         data.setValueAttr(element, placeholderValue);
         data.setEventsAttr(element);
         elems.createPasswordCloneIfNeeded(element);
-        events.addSubmitEvent(element.form);
+        events.addSubmitEvent(elems.getForm(element));
         events.addEventListeners(element);
         if (element !== support.safeActiveElement()) {
             polyfill.__showPlaceholder(element);
