@@ -380,7 +380,7 @@ describe("placekeeper", function() {
                         spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
                         element.value = "testing";
                         triggerEvent.html(element, "blur");
-                        setTimeout(done, 110);
+                        setTimeout(done, loopDurationForTests);
                     });
 
                     it("should have two inputs on the page", function() {
