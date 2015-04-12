@@ -44,7 +44,7 @@
         data.setValueAttr(element, placeholderValue);
         data.setEventsAttr(element);
         elems.createPasswordCloneIfNeeded(element);
-        events.addSubmitEvent(element.form);
+        events.addSubmitEvent(elems.getForm(element));
         events.addEventListeners(element);
         if (element !== support.safeActiveElement()) {
             polyfill.__showPlaceholder(element);
