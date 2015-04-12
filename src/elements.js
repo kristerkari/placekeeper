@@ -128,7 +128,7 @@
     }
 
     function removePasswordCloneIfExists(element) {
-        if (!hasPasswordClone(element)) {
+        if (element == null || !hasPasswordClone(element)) {
             return;
         }
         removeClone(element);
