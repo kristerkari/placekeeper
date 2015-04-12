@@ -147,7 +147,7 @@
     }
 
     function hidePlaceholder(element) {
-        if (!utils.hasClass(element, "placeholder")) {
+        if (!data.hasActiveAttrSetToTrue(element)) {
             return;
         }
         polyfill.__removePlaceholder(element, false);
