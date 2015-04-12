@@ -61,6 +61,10 @@
                data.getValueAttr(element) !== placeholder;
     }
 
+    function hasValueChanged(element, placeholder) {
+        return element.value !== "" && element.value !== placeholder;
+    }
+
     function checkForPlaceholder(element) {
         var placeholder = utils.getPlaceholderValue(element);
 
@@ -75,6 +79,10 @@
 
         if (hasPlaceholderValueChanged(element, placeholder)) {
             data.setValueAttr(element, placeholder);
+        }
+
+        if (hasValueChanged(element, placeholder)) {
+            polyfill.__hidePlaceholder(element);
         }
     }
 

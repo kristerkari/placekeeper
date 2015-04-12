@@ -1092,6 +1092,35 @@ describe("placekeeper", function() {
 
         });
 
+        describe("and when element value is changed", function() {
+
+            beforeEach(function(done) {
+                element.value = "Changed";
+                setTimeout(done, loopDurationForTests);
+            });
+
+            it("should have set element's value to changed value (Changed)", function() {
+                expect(element.value).toEqual("Changed");
+            });
+
+            it("should have removed data-placeholder-active", function() {
+                expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+            });
+
+            it("should have removed placeholder class", function() {
+                expect(element).not.toHaveClass("placeholder");
+            });
+
+            it("should have removed data-placeholder-maxlength", function() {
+                expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+            });
+
+            it("should have restored maxlength attribute", function() {
+                expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
+            });
+
+        });
+
     });
 
     describe("when there is an element with placeholder on the page", function() {
