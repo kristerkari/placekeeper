@@ -1136,19 +1136,123 @@ describe("placekeeper", function() {
             element.parentNode.removeChild(element);
         });
 
-        describe("when page is reloaded", function() {
+        describe("when input has focus", function() {
 
             beforeEach(function() {
-                spyOn(placekeeper.polyfill, "__hidePlaceholder");
+                triggerEvent.html(element, "focus");
+                element.focus();
+            });
+
+            /* TODO: Find out why this fails in IE8 and enable when fixed.
+            it("element should be activeElement", function() {
+                expect(element).toEqual(placekeeper.support.safeActiveElement());
+            });
+            */
+
+            describe("and when the page is reloaded", function() {
+
+                beforeEach(function() {
+                    setupFakeWindow();
+                    triggerFakePageReload();
+                });
+
+                afterEach(restoreRealWindow);
+
+                it("should have removed element's value", function() {
+                    expect(element.value).toEqual("");
+                });
+
+                it("should have removed data-placeholder-active", function() {
+                    expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+                });
+
+                it("should have removed placeholder class", function() {
+                    expect(element).not.toHaveClass("placeholder");
+                });
+
+                it("should have removed data-placeholder-maxlength", function() {
+                    expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+                });
+
+                it("should have restored maxlength attribute", function() {
+                    expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
+                });
+
+            });
+
+        });
+
+        describe("when input value is set and page reloaded", function() {
+
+            beforeEach(function() {
+                element.value = "MyVal";
+                spyOn(placekeeper.polyfill, "__removePlaceholder").and.callThrough();
                 setupFakeWindow();
                 triggerFakePageReload();
             });
 
             afterEach(restoreRealWindow);
 
-            it("should have called polyfill's __hidePlaceholder method", function() {
-                expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-                expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+            it("should not have called polyfill's __removePlaceholder method", function() {
+                expect(placekeeper.polyfill.__removePlaceholder).not.toHaveBeenCalled();
+                expect(placekeeper.polyfill.__removePlaceholder.calls.count()).toEqual(0);
+            });
+
+            it("should not have removed element's value", function() {
+                expect(element.value).toEqual("MyVal");
+            });
+
+            it("should have removed data-placeholder-active", function() {
+                expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+            });
+
+            it("should have removed placeholder class", function() {
+                expect(element).not.toHaveClass("placeholder");
+            });
+
+            it("should have removed data-placeholder-maxlength", function() {
+                expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+            });
+
+            it("should have restored maxlength attribute", function() {
+                expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
+            });
+
+        });
+
+        describe("when page is reloaded", function() {
+
+            beforeEach(function() {
+                spyOn(placekeeper.polyfill, "__removePlaceholder").and.callThrough();
+                setupFakeWindow();
+                triggerFakePageReload();
+            });
+
+            afterEach(restoreRealWindow);
+
+            it("should have called polyfill's __removePlaceholder method", function() {
+                expect(placekeeper.polyfill.__removePlaceholder).toHaveBeenCalledWith(element, false);
+                expect(placekeeper.polyfill.__removePlaceholder.calls.count()).toEqual(1);
+            });
+
+            it("should have removed element's value", function() {
+                expect(element.value).toEqual("");
+            });
+
+            it("should have removed data-placeholder-active", function() {
+                expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+            });
+
+            it("should have removed placeholder class", function() {
+                expect(element).not.toHaveClass("placeholder");
+            });
+
+            it("should have removed data-placeholder-maxlength", function() {
+                expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
+            });
+
+            it("should have restored maxlength attribute", function() {
+                expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
             });
 
         });

@@ -147,10 +147,10 @@
     }
 
     function hidePlaceholder(element) {
-        if (!data.hasActiveAttrSetToTrue(element)) {
+        if (!utils.hasClass(element, "placeholder")) {
             return;
         }
-        polyfill.__hidePlaceholder(element);
+        polyfill.__removePlaceholder(element, false);
     }
 
     function clearPlaceholders() {
@@ -168,8 +168,9 @@
     }
 
     function addUnloadListener() {
-        // Disabling placeholders before unloading the page prevents flash of
-        // unstyled placeholders on load if the page was refreshed.
+        // Disabling placeholders before unloading the page
+        // ensures that placeholder values are not stored
+        // in browser's "form data" store.
         utils.addEventListener(global, "beforeunload", clearPlaceholders);
     }
 

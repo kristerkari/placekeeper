@@ -53,6 +53,13 @@
         storeMaxlength(element);
     }
 
+    function removePlaceholder(element, replace) {
+        element.value = replace ? element.value.replace(data.getValueAttr(element), "") : "";
+        data.removeActiveAttr(element);
+        utils.removeClass(element, "placeholder");
+        restoreMaxlength(element);
+    }
+
     function hidePlaceholder(element) {
 
         if (!data.hasActiveAttrSetToTrue(element)) {
@@ -70,15 +77,13 @@
             }
         }
 
-        element.value = element.value.replace(data.getValueAttr(element), "");
-        data.removeActiveAttr(element);
-        utils.removeClass(element, "placeholder");
-        restoreMaxlength(element);
+        removePlaceholder(element, true);
     }
 
     global.placekeeper.polyfill = {
         __storeMaxlength: storeMaxlength,
         __restoreMaxlength: restoreMaxlength,
+        __removePlaceholder: removePlaceholder,
         __showPlaceholder: showPlaceholder,
         __hidePlaceholder: hidePlaceholder
     };

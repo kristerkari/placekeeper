@@ -46,9 +46,6 @@
         elems.createPasswordCloneIfNeeded(element);
         events.addSubmitEvent(elems.getForm(element));
         events.addEventListeners(element);
-        if (element !== support.safeActiveElement()) {
-            polyfill.__showPlaceholder(element);
-        }
     }
 
     function needsSetup(element) {
@@ -65,6 +62,10 @@
         return element.value !== "" && element.value !== placeholder;
     }
 
+    function hasValueOrIsActive(element) {
+        return element.value !== "" || element === support.safeActiveElement();
+    }
+
     function checkForPlaceholder(element) {
         var placeholder = utils.getPlaceholderValue(element);
 
@@ -74,16 +75,19 @@
 
         if (needsSetup(element)) {
             setupElement(element, placeholder);
-            return;
+        } else {
+            if (hasPlaceholderValueChanged(element, placeholder)) {
+                data.setValueAttr(element, placeholder);
+            }
+            if (hasValueChanged(element, placeholder)) {
+                polyfill.__hidePlaceholder(element);
+            }
         }
 
-        if (hasPlaceholderValueChanged(element, placeholder)) {
-            data.setValueAttr(element, placeholder);
+        if (!hasValueOrIsActive(element)) {
+            polyfill.__showPlaceholder(element);
         }
 
-        if (hasValueChanged(element, placeholder)) {
-            polyfill.__hidePlaceholder(element);
-        }
     }
 
     function setupPlaceholders() {
