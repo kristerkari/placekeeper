@@ -101,6 +101,17 @@ describe("placekeeper", function() {
         return document.getElementById("elem");
     }
 
+    function createInputElementWithValue(hasPlaceholder, type) {
+        var element = "<input type=\"" + (type || "text") +
+                      "\" id=\"elem\" maxlength=\"12\"";
+        if (hasPlaceholder) {
+            element += " placeholder=\"Test\" value=\"MyVal\"";
+        }
+        element += ">";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
     function createInputElement(hasPlaceholder, type) {
         var element = "<input type=\"" + (type || "text") +
                       "\" id=\"elem\" maxlength=\"12\"";
@@ -145,6 +156,16 @@ describe("placekeeper", function() {
         return document.getElementById("elem");
     }
 
+    function createTextareaElementWithValue(hasPlaceholder) {
+        var element = "<textarea id=\"elem\"";
+        if (hasPlaceholder) {
+            element += " placeholder=\"Test\"";
+        }
+        element += ">MyVal</textarea>";
+        document.body.innerHTML = element;
+        return document.getElementById("elem");
+    }
+
     beforeEach(function() {
         jasmine.addMatchers({
             toHaveClass: function() {
@@ -173,6 +194,60 @@ describe("placekeeper", function() {
     });
 
     beforeEach(initialSetup);
+
+    describe("when there is an input with placeholder and existing value on the page", function() {
+        var element;
+
+        beforeEach(function(done) {
+            element = createInputElementWithValue(true);
+            placekeeper.priv.__setupPlaceholders();
+            setTimeout(done, loopDurationForTests);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        it("should keep element value as it is", function() {
+            expect(element.value).toEqual("MyVal");
+        });
+
+        it("should not have set data-placeholder-active", function() {
+            expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+        });
+
+        it("should not have added placeholder class", function() {
+            expect(element).not.toHaveClass("placeholder");
+        });
+
+    });
+
+    describe("when there is a textarea with placeholder and existing value on the page", function() {
+        var element;
+
+        beforeEach(function(done) {
+            element = createTextareaElementWithValue(true);
+            placekeeper.priv.__setupPlaceholders();
+            setTimeout(done, loopDurationForTests);
+        });
+
+        afterEach(function() {
+            element.parentNode.removeChild(element);
+        });
+
+        it("should keep element value as it is", function() {
+            expect(element.value).toEqual("MyVal");
+        });
+
+        it("should not have set data-placeholder-active", function() {
+            expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+        });
+
+        it("should not have added placeholder class", function() {
+            expect(element).not.toHaveClass("placeholder");
+        });
+
+    });
 
     describe("password inputs", function() {
 
