@@ -577,7 +577,7 @@
     }
 
     function removePasswordCloneIfExists(element) {
-        if (!hasPasswordClone(element)) {
+        if (element == null || !hasPasswordClone(element)) {
             return;
         }
         removeClone(element);
@@ -657,6 +657,13 @@
         storeMaxlength(element);
     }
 
+    function removePlaceholder(element, replace) {
+        element.value = replace ? element.value.replace(data.getValueAttr(element), "") : "";
+        data.removeActiveAttr(element);
+        utils.removeClass(element, "placeholder");
+        restoreMaxlength(element);
+    }
+
     function hidePlaceholder(element) {
 
         if (!data.hasActiveAttrSetToTrue(element)) {
@@ -674,15 +681,13 @@
             }
         }
 
-        element.value = element.value.replace(data.getValueAttr(element), "");
-        data.removeActiveAttr(element);
-        utils.removeClass(element, "placeholder");
-        restoreMaxlength(element);
+        removePlaceholder(element, true);
     }
 
     global.placekeeper.polyfill = {
         __storeMaxlength: storeMaxlength,
         __restoreMaxlength: restoreMaxlength,
+        __removePlaceholder: removePlaceholder,
         __showPlaceholder: showPlaceholder,
         __hidePlaceholder: hidePlaceholder
     };
@@ -838,10 +843,10 @@
     }
 
     function hidePlaceholder(element) {
-        if (!data.hasActiveAttrSetToTrue(element)) {
+        if (!utils.hasClass(element, "placeholder")) {
             return;
         }
-        polyfill.__hidePlaceholder(element);
+        polyfill.__removePlaceholder(element, false);
     }
 
     function clearPlaceholders() {
@@ -859,8 +864,9 @@
     }
 
     function addUnloadListener() {
-        // Disabling placeholders before unloading the page prevents flash of
-        // unstyled placeholders on load if the page was refreshed.
+        // Disabling placeholders before unloading the page
+        // ensures that placeholder values are not stored
+        // in browser's "form data" store.
         utils.addEventListener(global, "beforeunload", clearPlaceholders);
     }
 
@@ -938,9 +944,6 @@
         elems.createPasswordCloneIfNeeded(element);
         events.addSubmitEvent(elems.getForm(element));
         events.addEventListeners(element);
-        if (element !== support.safeActiveElement()) {
-            polyfill.__showPlaceholder(element);
-        }
     }
 
     function needsSetup(element) {
@@ -953,6 +956,14 @@
                data.getValueAttr(element) !== placeholder;
     }
 
+    function hasValueChanged(element, placeholder) {
+        return element.value !== "" && element.value !== placeholder;
+    }
+
+    function hasValueOrIsActive(element) {
+        return element.value !== "" || element === support.safeActiveElement();
+    }
+
     function checkForPlaceholder(element) {
         var placeholder = utils.getPlaceholderValue(element);
 
@@ -962,12 +973,19 @@
 
         if (needsSetup(element)) {
             setupElement(element, placeholder);
-            return;
+        } else {
+            if (hasPlaceholderValueChanged(element, placeholder)) {
+                data.setValueAttr(element, placeholder);
+            }
+            if (hasValueChanged(element, placeholder)) {
+                polyfill.__hidePlaceholder(element);
+            }
         }
 
-        if (hasPlaceholderValueChanged(element, placeholder)) {
-            data.setValueAttr(element, placeholder);
+        if (!hasValueOrIsActive(element)) {
+            polyfill.__showPlaceholder(element);
         }
+
     }
 
     function setupPlaceholders() {
