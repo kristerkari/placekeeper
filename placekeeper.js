@@ -7,8 +7,8 @@
         return element.getAttribute("data-placeholder-live") === "false";
     }
 
-    function hasFocusAttrSetToFalse(element) {
-        return element.getAttribute("data-placeholder-focus") === "false";
+    function hasModeAttrSetToInput(element) {
+        return element.getAttribute("data-placeholder-mode") === "input";
     }
 
     function hasEventsAttrSetToTrue(element) {
@@ -92,7 +92,7 @@
 
     global.placekeeper.data = {
         hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
-        hasFocusAttrSetToFalse: hasFocusAttrSetToFalse,
+        hasModeAttrSetToInput: hasModeAttrSetToInput,
         hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
         hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
         hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,
@@ -144,8 +144,8 @@
     }
 
     function hasFocusDisabled() {
-        return data.hasFocusAttrSetToFalse(document.documentElement) ||
-               data.hasFocusAttrSetToFalse(document.body);
+        return data.hasModeAttrSetToInput(document.documentElement) ||
+               data.hasModeAttrSetToInput(document.body);
     }
 
     function enableFocus() {
@@ -995,6 +995,8 @@
     function placekeeperLoop() {
         if (mode.hasFocusDisabled()) {
             mode.disableFocus();
+        } else {
+            mode.enableFocus();
         }
 
         if (needsToSetPlaceholder()) {
