@@ -97,6 +97,8 @@
     function placekeeperLoop() {
         if (mode.hasFocusDisabled()) {
             mode.disableFocus();
+        } else {
+            mode.enableFocus();
         }
 
         if (needsToSetPlaceholder()) {

@@ -26,8 +26,8 @@
     }
 
     function hasFocusDisabled() {
-        return data.hasFocusAttrSetToFalse(document.documentElement) ||
-               data.hasFocusAttrSetToFalse(document.body);
+        return data.hasModeAttrSetToInput(document.documentElement) ||
+               data.hasModeAttrSetToInput(document.body);
     }
 
     function enableFocus() {

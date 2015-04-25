@@ -7,8 +7,8 @@
         return element.getAttribute("data-placeholder-live") === "false";
     }
 
-    function hasFocusAttrSetToFalse(element) {
-        return element.getAttribute("data-placeholder-focus") === "false";
+    function hasModeAttrSetToInput(element) {
+        return element.getAttribute("data-placeholder-mode") === "input";
     }
 
     function hasEventsAttrSetToTrue(element) {
@@ -92,7 +92,7 @@
 
     global.placekeeper.data = {
         hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
-        hasFocusAttrSetToFalse: hasFocusAttrSetToFalse,
+        hasModeAttrSetToInput: hasModeAttrSetToInput,
         hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
         hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
         hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,

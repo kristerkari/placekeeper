@@ -1579,43 +1579,77 @@ describe("placekeeper", function() {
 
             describe("root element data attributes", function() {
 
-                describe("data-placeholder-focus attribute", function() {
+                describe("data-placeholder-mode attribute", function() {
 
-                    describe("when set to false in html element", function() {
+                    describe("when set to \"input\" in html element", function() {
 
                         beforeEach(function() {
-                            document.documentElement.setAttribute("data-placeholder-focus", "false");
+                            document.documentElement.setAttribute("data-placeholder-mode", "input");
                             spyOnNativeSupportAndReturn(false);
                             placekeeper.priv.__init();
                         });
 
                         afterEach(function() {
-                            document.documentElement.removeAttribute("data-placeholder-focus");
+                            document.documentElement.removeAttribute("data-placeholder-mode");
                         });
 
                         it("should have focus mode disabled", function() {
                             expect(placekeeper.isFocusEnabled()).toEqual(false);
                         });
-
                     });
 
-                    describe("when set to false in body element", function() {
+                    describe("when set to \"input\" in body element", function() {
 
                         beforeEach(function() {
-                            document.body.setAttribute("data-placeholder-focus", "false");
+                            document.body.setAttribute("data-placeholder-mode", "input");
                             spyOnNativeSupportAndReturn(false);
                             placekeeper.priv.__init();
                         });
 
                         afterEach(function() {
-                            document.body.removeAttribute("data-placeholder-focus");
+                            document.body.removeAttribute("data-placeholder-mode");
                         });
 
                         it("should have focus mode disabled", function() {
                             expect(placekeeper.isFocusEnabled()).toEqual(false);
                         });
+                    });
+
+                    describe("when set to \"focus\" in html element", function() {
+
+                        beforeEach(function() {
+                            document.documentElement.setAttribute("data-placeholder-mode", "focus");
+                            spyOnNativeSupportAndReturn(false);
+                            placekeeper.priv.__init();
+                        });
+
+                        afterEach(function() {
+                            document.documentElement.removeAttribute("data-placeholder-mode");
+                        });
+
+                        it("should have focus mode enabled", function() {
+                            expect(placekeeper.isFocusEnabled()).toEqual(true);
+                        });
+                    });
+
+                    describe("when set to \"focus\" in body element", function() {
+
+                        beforeEach(function() {
+                            document.body.setAttribute("data-placeholder-mode", "focus");
+                            spyOnNativeSupportAndReturn(false);
+                            placekeeper.priv.__init();
+                        });
+
+                        afterEach(function() {
+                            document.body.removeAttribute("data-placeholder-mode");
+                        });
+
+                        it("should have focus mode enabled", function() {
+                            expect(placekeeper.isFocusEnabled()).toEqual(true);
+                        });
 
                     });
+
                 });
 
                 describe("data-placeholder-live attribute", function() {
