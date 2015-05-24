@@ -1,7 +1,7 @@
 (function(global) {
-    "use strict";
+  "use strict";
 
-    var placekeeper = {};
+  var placekeeper = {};
 
   (function() {
 
