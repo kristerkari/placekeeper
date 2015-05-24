@@ -2,9 +2,11 @@
     "env": {
       "browser": true,
       "node": true,
+      "amd": true,
       "jasmine": true
     },
     "globals": {
+      "placekeeper": true,
       "triggerEvent": false
     },
     "rules": {
@@ -59,7 +61,7 @@
         "radix": 2,
         "wrap-iife": 2,
         "yoda": [2, "never"],
-        "strict": [2, "function"],
+        "strict": 0,
         "no-underscore-dangle": 0,
         "no-unused-vars": 1
     }

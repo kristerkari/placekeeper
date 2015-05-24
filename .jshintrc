@@ -1,5 +1,7 @@
 {
   "globals": {
+    "placekeeper": true,
+    "define": false,
     "triggerEvent": false
   },
   "browser": true,
@@ -12,7 +14,7 @@
   "eqeqeq": true,
   "eqnull": true,
   "undef": true,
-  "strict": true,
+  "strict": false,
   "curly": true,
   "sub": true,
   "expr": true

@@ -1,8 +1,6 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-    var data = global.placekeeper.data;
+    var data = placekeeper.data;
 
     var isEnabled = false;
     var isFocusEnabled = true;
@@ -54,7 +52,7 @@
         isEnabled = true;
     }
 
-    global.placekeeper.mode = {
+    placekeeper.mode = {
         isPlacekeeperEnabled: isPlacekeeperEnabled,
         isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
         isPlacekeeperLiveUpdateEnabled: isPlacekeeperLiveUpdateEnabled,
@@ -68,4 +66,4 @@
         enable: enable
     };
 
-}(this));
+}());

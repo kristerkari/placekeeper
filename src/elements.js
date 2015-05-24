@@ -1,10 +1,8 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-    var support = global.placekeeper.support;
-    var utils = global.placekeeper.utils;
-    var data = global.placekeeper.data;
+    var support = placekeeper.support;
+    var utils = placekeeper.utils;
+    var data = placekeeper.data;
     var inputElements = [];
     var textareaElements = [];
 
@@ -134,7 +132,7 @@
         removeClone(element);
     }
 
-    global.placekeeper.elements = {
+    placekeeper.elements = {
         getForm: getForm,
         getInputElements: getInputElements,
         getTextareaElements: getTextareaElements,
@@ -151,4 +149,4 @@
         hasPasswordClone: hasPasswordClone
     };
 
-}(this));
+}());
