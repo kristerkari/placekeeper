@@ -39,7 +39,7 @@
     .pipe(trimlines({
       leading: false
     }))
-    .pipe(gulp.dest('.'));
+    .pipe(gulp.dest("."));
   });
 
   gulp.task("lint", function() {
