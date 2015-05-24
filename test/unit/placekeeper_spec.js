@@ -216,7 +216,7 @@ describe("placekeeper", function() {
                   throw new Error("\"" + actual + "\" did not equal \"" + expected + "\"");
                 }
                 done();
-              }, 4)
+              }, 4);
             }
 
             try {
