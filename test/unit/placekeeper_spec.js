@@ -204,34 +204,31 @@ describe("placekeeper", function() {
           }
         };
       },
-      toEqualWithRetry: function(util) {
+      toEqualUsingRetry: function(util) {
         var tries = 5;
         var nr = 0;
         return {
           compare: function(actual, expected, done) {
 
-            function test() {
-              setTimeout(function() {
-                if (!util.equals(actual, expected)) {
-                  throw new Error("\"" + actual + "\" did not equal \"" + expected + "\"");
-                }
-                done();
-              }, 4);
-            }
+            var result = {
+              message: "expected \"" + actual + "\" to equal \"" + expected + "\""
+            };
 
-            try {
-              test();
-            } catch(ex) {
-              if (ex && nr++ < tries) {
-                test();
+            function test() {
+              if (util.equals(actual, expected)) {
+                result.pass = true;
+                done();
+              } else if (nr++ < tries) {
+                setTimeout(test, 20);
               } else {
-                done(ex);
+                result.pass = false;
+                done();
               }
             }
 
-            return {
-              pass: true
-            };
+            test();
+
+            return result;
           }
         };
       }
@@ -324,7 +321,7 @@ describe("placekeeper", function() {
           });
 
           it("should have changed element type back to password", function(done) {
-            expect(element.getAttribute("type")).toEqualWithRetry("password", done);
+            expect(element.getAttribute("type")).toEqualUsingRetry("password", done);
           });
 
           it("should have called polyfill's __hidePlaceholder method", function() {
@@ -407,7 +404,7 @@ describe("placekeeper", function() {
         });
 
         it("should have remove id from clone", function(done) {
-          expect(clone.id).toEqualWithRetry("", done);
+          expect(clone.id).toEqualUsingRetry("", done);
         });
 
         it("should have clone hidden", function() {
@@ -440,8 +437,8 @@ describe("placekeeper", function() {
             expect(element.style.display).toEqual("block");
           });
 
-          it("should have remove id from clone", function() {
-            expect(clone.id).toEqual("");
+          it("should have remove id from clone", function(done) {
+            expect(clone.id).toEqualUsingRetry("", done);
           });
 
           it("should have clone hidden", function() {
