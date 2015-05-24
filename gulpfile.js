@@ -35,7 +35,7 @@
       amount: 2
     }))
     .pipe(concat("placekeeper.js"))
-    .pipe(wrap("(function(global) {\n    \"use strict\";\n\n    var placekeeper = {};\n\n<%= contents %>\n}(this));\n\n"))
+    .pipe(wrap("(function(global) {\n  \"use strict\";\n\n  var placekeeper = {};\n\n<%= contents %>\n}(this));\n\n"))
     .pipe(trimlines({
       leading: false
     }))
