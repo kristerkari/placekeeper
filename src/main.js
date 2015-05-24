@@ -1,15 +1,12 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-
-    var support = global.placekeeper.support;
-    var data = global.placekeeper.data;
-    var mode = global.placekeeper.mode;
-    var utils = global.placekeeper.utils;
-    var elems = global.placekeeper.elements;
-    var events = global.placekeeper.events;
-    var polyfill = global.placekeeper.polyfill;
+    var support = placekeeper.support;
+    var data = placekeeper.data;
+    var mode = placekeeper.mode;
+    var utils = placekeeper.utils;
+    var elems = placekeeper.elements;
+    var events = placekeeper.events;
+    var polyfill = placekeeper.polyfill;
     var settings = {
         defaultLoopDuration: 100
     };
@@ -140,14 +137,14 @@
     init();
 
     // Expose public methods
-    global.placekeeper.isEnabled = mode.isPlacekeeperEnabled;
-    global.placekeeper.enable = init;
-    global.placekeeper.disable = disablePlacekeeper;
-    global.placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-    global.placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
+    placekeeper.isEnabled = mode.isPlacekeeperEnabled;
+    placekeeper.enable = init;
+    placekeeper.disable = disablePlacekeeper;
+    placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
+    placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
 
     // Exposed private methods
-    global.placekeeper.priv = {
+    placekeeper.priv = {
         __global: global,
         __init: init,
         __settings: settings,
@@ -155,4 +152,4 @@
         __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
     };
 
-}(this));
+}());

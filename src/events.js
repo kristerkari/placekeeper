@@ -1,13 +1,11 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-    var utils = global.placekeeper.utils;
-    var data = global.placekeeper.data;
-    var mode = global.placekeeper.mode;
-    var elems = global.placekeeper.elements;
-    var polyfill = global.placekeeper.polyfill;
-    var support = global.placekeeper.support;
+    var utils = placekeeper.utils;
+    var data = placekeeper.data;
+    var mode = placekeeper.mode;
+    var elems = placekeeper.elements;
+    var polyfill = placekeeper.polyfill;
+    var support = placekeeper.support;
     var handlers = {};
     var keydownVal;
 
@@ -189,7 +187,7 @@
         data.removeSubmitAttr(form);
     }
 
-    global.placekeeper.events = {
+    placekeeper.events = {
         handlers: handlers,
         addEventListeners: addEventListeners,
         addSubmitEvent: addSubmitEvent,
@@ -198,4 +196,4 @@
         removeSubmitEvent: removeSubmitEvent
     };
 
-}(this));
+}());

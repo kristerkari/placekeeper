@@ -1,8 +1,6 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-    var utils = global.placekeeper.utils;
+    var utils = placekeeper.utils;
 
     var supportedElementTypes = [
         "text",
@@ -98,7 +96,7 @@
                isSupportedType(utils.getElementType(elem));
     }
 
-    global.placekeeper.support = {
+    placekeeper.support = {
         needsToShowPlaceHolder: needsToShowPlaceHolder,
         isSupportedType: isSupportedType,
         isBadKey: isBadKey,
@@ -109,4 +107,4 @@
         hasNativePlaceholderSupport: hasNativePlaceholderSupport
     };
 
-}(this));
+}());

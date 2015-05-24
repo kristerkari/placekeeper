@@ -1,10 +1,8 @@
-(function(global) {
-    "use strict";
+(function() {
 
-    global.placekeeper = global.placekeeper || {};
-    var data = global.placekeeper.data;
-    var elems = global.placekeeper.elements;
-    var utils = global.placekeeper.utils;
+    var data = placekeeper.data;
+    var elems = placekeeper.elements;
+    var utils = placekeeper.utils;
 
     function hasMaxLength(element) {
         return element.attributes.maxLength && element.attributes.maxLength.specified;
@@ -80,7 +78,7 @@
         removePlaceholder(element, true);
     }
 
-    global.placekeeper.polyfill = {
+    placekeeper.polyfill = {
         __storeMaxlength: storeMaxlength,
         __restoreMaxlength: restoreMaxlength,
         __removePlaceholder: removePlaceholder,
@@ -88,4 +86,4 @@
         __hidePlaceholder: hidePlaceholder
     };
 
-}(this));
+}());

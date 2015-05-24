@@ -1,7 +1,4 @@
-(function(global) {
-    "use strict";
-
-    global.placekeeper = global.placekeeper || {};
+(function() {
 
     function addEventListener(elem, event, fn) {
         if (elem.addEventListener) {
@@ -125,7 +122,7 @@
         return Boolean(getPlaceholderValue(element));
     }
 
-    global.placekeeper.utils = {
+    placekeeper.utils = {
         moveCaret: moveCaret,
         getPlaceholderValue: getPlaceholderValue,
         hasPlaceholderAttrSet: hasPlaceholderAttrSet,
@@ -142,4 +139,4 @@
         inArray: inArray
     };
 
-}(this));
+}());

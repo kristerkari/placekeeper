@@ -7,6 +7,9 @@
     var jscs = require("gulp-jscs");
     var eslint = require("gulp-eslint");
     var connect = require("gulp-connect");
+    var indent = require("gulp-indent");
+    var trimlines = require('gulp-trimlines');
+    var wrap = require("gulp-wrap");
     var karma = require("karma").server;
 
     gulp.task("server", function() {
@@ -25,9 +28,17 @@
             "src/elements.js",
             "src/polyfill.js",
             "src/events.js",
-            "src/main.js"
+            "src/main.js",
+            "src/module.js"
         ])
+        .pipe(indent({
+            amount: 4
+        }))
         .pipe(concat("placekeeper.js"))
+        .pipe(wrap("(function(global) {\n    \"use strict\";\n\n    var placekeeper = {};\n\n<%= contents %>\n}(this));\n\n"))
+        .pipe(trimlines({
+            leading: false
+        }))
         .pipe(gulp.dest('.'));
     });
 

@@ -1,7 +1,4 @@
-(function(global) {
-    "use strict";
-
-    global.placekeeper = global.placekeeper || {};
+(function() {
 
     function hasLiveUpdatesAttrSetToFalse(element) {
         return element.getAttribute("data-placeholder-live") === "false";
@@ -90,7 +87,7 @@
         element.removeAttribute("data-placeholder-maxlength");
     }
 
-    global.placekeeper.data = {
+    placekeeper.data = {
         hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
         hasModeAttrSetToInput: hasModeAttrSetToInput,
         hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
@@ -114,4 +111,4 @@
         removeDataAttrs: removeDataAttrs
     };
 
-}(this));
+}());
