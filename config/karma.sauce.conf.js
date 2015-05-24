@@ -7,11 +7,13 @@ module.exports = function(config) {
       browserName: "iphone",
       version: "5.1"
     },
+    /*
     ie7: {
       base: "SauceLabs",
       browserName: "internet explorer",
       version: "7.0"
     },
+    */
     ie8: {
       base: "SauceLabs",
       browserName: "internet explorer",
