@@ -4,6 +4,11 @@
     "define": false,
     "triggerEvent": false
   },
+  "predef": [
+    "placekeeper",
+    "define",
+    "triggerEvent"
+  ],
   "forin": false,
   "browser": true,
   "node": true,
