@@ -8,7 +8,7 @@
     var eslint = require("gulp-eslint");
     var connect = require("gulp-connect");
     var indent = require("gulp-indent");
-    var trimlines = require('gulp-trimlines');
+    var trimlines = require("gulp-trimlines");
     var wrap = require("gulp-wrap");
     var karma = require("karma").server;
 
