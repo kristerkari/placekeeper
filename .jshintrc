@@ -4,6 +4,7 @@
     "define": false,
     "triggerEvent": false
   },
+  "forin": false,
   "browser": true,
   "node": true,
   "jasmine": true,
