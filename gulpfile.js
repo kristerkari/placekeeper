@@ -32,7 +32,7 @@
       "src/module.js"
     ])
     .pipe(indent({
-      amount: 4
+      amount: 2
     }))
     .pipe(concat("placekeeper.js"))
     .pipe(wrap("(function(global) {\n    \"use strict\";\n\n    var placekeeper = {};\n\n<%= contents %>\n}(this));\n\n"))
