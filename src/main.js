@@ -1,155 +1,155 @@
 (function() {
 
-    var support = placekeeper.support;
-    var data = placekeeper.data;
-    var mode = placekeeper.mode;
-    var utils = placekeeper.utils;
-    var elems = placekeeper.elements;
-    var events = placekeeper.events;
-    var polyfill = placekeeper.polyfill;
-    var settings = {
-        defaultLoopDuration: 100
-    };
-    var loopInterval = null;
+  var support = placekeeper.support;
+  var data = placekeeper.data;
+  var mode = placekeeper.mode;
+  var utils = placekeeper.utils;
+  var elems = placekeeper.elements;
+  var events = placekeeper.events;
+  var polyfill = placekeeper.polyfill;
+  var settings = {
+    defaultLoopDuration: 100
+  };
+  var loopInterval = null;
 
-    function hasElementsThatNeedPlaceholder(elements) {
+  function hasElementsThatNeedPlaceholder(elements) {
 
-        if (!elements) {
-            return false;
-        }
-
-        for (var i = 0; i < elements.length; i++) {
-            if (support.needsToShowPlaceHolder(elements[i])) {
-                return true;
-            }
-        }
-
-        return false;
+    if (!elements) {
+      return false;
     }
 
-    function needsToSetPlaceholder() {
-        var needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
-
-        if (needsPlaceholder === false) {
-            needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
-        }
-
-        return needsPlaceholder;
+    for (var i = 0; i < elements.length; i++) {
+      if (support.needsToShowPlaceHolder(elements[i])) {
+        return true;
+      }
     }
 
-    function setupElement(element, placeholderValue) {
-        data.setValueAttr(element, placeholderValue);
-        data.setEventsAttr(element);
-        elems.createPasswordCloneIfNeeded(element);
-        events.addSubmitEvent(elems.getForm(element));
-        events.addEventListeners(element);
+    return false;
+  }
+
+  function needsToSetPlaceholder() {
+    var needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
+
+    if (needsPlaceholder === false) {
+      needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
     }
 
-    function needsSetup(element) {
-        return support.isSupportedType(utils.getElementType(element)) &&
-               !data.hasEventsAttrSetToTrue(element);
+    return needsPlaceholder;
+  }
+
+  function setupElement(element, placeholderValue) {
+    data.setValueAttr(element, placeholderValue);
+    data.setEventsAttr(element);
+    elems.createPasswordCloneIfNeeded(element);
+    events.addSubmitEvent(elems.getForm(element));
+    events.addEventListeners(element);
+  }
+
+  function needsSetup(element) {
+    return support.isSupportedType(utils.getElementType(element)) &&
+           !data.hasEventsAttrSetToTrue(element);
+  }
+
+  function hasPlaceholderValueChanged(element, placeholder) {
+    return data.hasValueAttr(element) &&
+           data.getValueAttr(element) !== placeholder;
+  }
+
+  function hasValueChanged(element, placeholder) {
+    return element.value !== "" && element.value !== placeholder;
+  }
+
+  function hasValueOrIsActive(element) {
+    return element.value !== "" || element === support.safeActiveElement();
+  }
+
+  function checkForPlaceholder(element) {
+    var placeholder = utils.getPlaceholderValue(element);
+
+    if (!placeholder) {
+      return;
     }
 
-    function hasPlaceholderValueChanged(element, placeholder) {
-        return data.hasValueAttr(element) &&
-               data.getValueAttr(element) !== placeholder;
+    if (needsSetup(element)) {
+      setupElement(element, placeholder);
+    } else {
+      if (hasPlaceholderValueChanged(element, placeholder)) {
+        data.setValueAttr(element, placeholder);
+      }
+      if (hasValueChanged(element, placeholder)) {
+        polyfill.__hidePlaceholder(element);
+      }
     }
 
-    function hasValueChanged(element, placeholder) {
-        return element.value !== "" && element.value !== placeholder;
+    if (!hasValueOrIsActive(element)) {
+      polyfill.__showPlaceholder(element);
     }
 
-    function hasValueOrIsActive(element) {
-        return element.value !== "" || element === support.safeActiveElement();
+  }
+
+  function setupPlaceholders() {
+    elems.forEachElement(checkForPlaceholder);
+  }
+
+  function placekeeperLoop() {
+    if (mode.hasFocusDisabled()) {
+      mode.disableFocus();
+    } else {
+      mode.enableFocus();
     }
 
-    function checkForPlaceholder(element) {
-        var placeholder = utils.getPlaceholderValue(element);
-
-        if (!placeholder) {
-            return;
-        }
-
-        if (needsSetup(element)) {
-            setupElement(element, placeholder);
-        } else {
-            if (hasPlaceholderValueChanged(element, placeholder)) {
-                data.setValueAttr(element, placeholder);
-            }
-            if (hasValueChanged(element, placeholder)) {
-                polyfill.__hidePlaceholder(element);
-            }
-        }
-
-        if (!hasValueOrIsActive(element)) {
-            polyfill.__showPlaceholder(element);
-        }
-
+    if (needsToSetPlaceholder()) {
+      mode.enable();
+    } else {
+      mode.disable();
+      return;
     }
 
-    function setupPlaceholders() {
-        elems.forEachElement(checkForPlaceholder);
+    setupPlaceholders();
+  }
+
+  function init() {
+    if (support.hasNativePlaceholderSupport()) {
+      return;
     }
-
-    function placekeeperLoop() {
-        if (mode.hasFocusDisabled()) {
-            mode.disableFocus();
-        } else {
-            mode.enableFocus();
-        }
-
-        if (needsToSetPlaceholder()) {
-            mode.enable();
-        } else {
-            mode.disable();
-            return;
-        }
-
-        setupPlaceholders();
+    clearInterval(loopInterval);
+    placekeeperLoop();
+    if (!mode.hasDisabledLiveUpdates()) {
+      mode.enableLive();
+      // main loop
+      loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
+    } else {
+      mode.disableLive();
     }
+  }
 
-    function init() {
-        if (support.hasNativePlaceholderSupport()) {
-            return;
-        }
-        clearInterval(loopInterval);
-        placekeeperLoop();
-        if (!mode.hasDisabledLiveUpdates()) {
-            mode.enableLive();
-            // main loop
-            loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
-        } else {
-            mode.disableLive();
-        }
-    }
+  function disablePlacekeeper() {
+    mode.disable();
+    clearInterval(loopInterval);
+    elems.forEachForm(events.removeSubmitEvent);
+    elems.forEachElement(events.removeEvents);
+    elems.forEachElement(data.removeDataAttrs);
+    elems.forEachElement(elems.removePasswordCloneIfExists);
+  }
 
-    function disablePlacekeeper() {
-        mode.disable();
-        clearInterval(loopInterval);
-        elems.forEachForm(events.removeSubmitEvent);
-        elems.forEachElement(events.removeEvents);
-        elems.forEachElement(data.removeDataAttrs);
-        elems.forEachElement(elems.removePasswordCloneIfExists);
-    }
+  elems.getElements();
+  events.addUnloadListener();
+  init();
 
-    elems.getElements();
-    events.addUnloadListener();
-    init();
+  // Expose public methods
+  placekeeper.isEnabled = mode.isPlacekeeperEnabled;
+  placekeeper.enable = init;
+  placekeeper.disable = disablePlacekeeper;
+  placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
+  placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
 
-    // Expose public methods
-    placekeeper.isEnabled = mode.isPlacekeeperEnabled;
-    placekeeper.enable = init;
-    placekeeper.disable = disablePlacekeeper;
-    placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-    placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
-
-    // Exposed private methods
-    placekeeper.priv = {
-        __global: global,
-        __init: init,
-        __settings: settings,
-        __setupPlaceholders: setupPlaceholders,
-        __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
-    };
+  // Exposed private methods
+  placekeeper.priv = {
+    __global: global,
+    __init: init,
+    __settings: settings,
+    __setupPlaceholders: setupPlaceholders,
+    __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
+  };
 
 }());
