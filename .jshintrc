@@ -18,5 +18,6 @@
   "strict": false,
   "curly": true,
   "sub": true,
+  "indent": 2,
   "expr": true
 }

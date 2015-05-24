@@ -76,5 +76,5 @@
         "afterConsequent": true,
         "beforeAlternate": true
     },
-    "validateIndentation": 4
+    "validateIndentation": 2
 }
