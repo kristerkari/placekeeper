@@ -211,7 +211,9 @@ describe("placekeeper", function() {
           compare: function(actual, expected, done) {
 
             var result = {
-              message: "expected \"" + actual + "\" to equal \"" + expected + "\""
+              message: "expected \"" + actual +
+                       "\" to equal \"" +
+                       expected + "\" (failed after " + tries + " tries)"
             };
 
             function test() {
