@@ -38,6 +38,10 @@
     "maximumLineLength": 140,
     "requireSemicolons": true,
     "disallowMultipleSpaces": true,
+    "requirePaddingNewLinesAfterUseStrict": true,
+    "validateNewlineAfterArrayElements": {
+      "maximum": 4
+    },
     "requireSpaceBeforeKeywords": [
         "else",
         "while",
