@@ -657,10 +657,6 @@
 
     function hidePlaceholder(element) {
 
-      if (!data.hasActiveAttrSetToTrue(element)) {
-        return;
-      }
-
       if (data.hasTypeAttrSetToPassword(element)) {
         if (elems.isClonedPasswordInput(element)) {
           var original = elems.getPasswordOriginal(element);
@@ -723,7 +719,7 @@
       return function() {
         if (shouldNotHidePlaceholder(element)) {
           utils.moveCaret(element, 0);
-        } else {
+        } else if (data.hasActiveAttrSetToTrue(element)) {
           polyfill.__hidePlaceholder(element);
         }
       };
@@ -731,6 +727,11 @@
 
     function createBlurHandler(element) {
       return function() {
+
+        if (data.hasActiveAttrSetToTrue(element)) {
+          return;
+        }
+
         polyfill.__showPlaceholder(element);
       };
     }
