@@ -60,10 +60,6 @@
 
   function hidePlaceholder(element) {
 
-    if (!data.hasActiveAttrSetToTrue(element)) {
-      return;
-    }
-
     if (data.hasTypeAttrSetToPassword(element)) {
       if (elems.isClonedPasswordInput(element)) {
         var original = elems.getPasswordOriginal(element);
