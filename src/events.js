@@ -36,7 +36,7 @@
     return function() {
       if (shouldNotHidePlaceholder(element)) {
         utils.moveCaret(element, 0);
-      } else {
+      } else if (data.hasActiveAttrSetToTrue(element)) {
         polyfill.__hidePlaceholder(element);
       }
     };
@@ -44,6 +44,11 @@
 
   function createBlurHandler(element) {
     return function() {
+
+      if (data.hasActiveAttrSetToTrue(element)) {
+        return;
+      }
+
       polyfill.__showPlaceholder(element);
     };
   }

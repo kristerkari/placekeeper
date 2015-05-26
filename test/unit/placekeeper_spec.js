@@ -78,18 +78,48 @@ describe("placekeeper", function() {
     placekeeper.priv.__global = window;
   }
 
+  function getStyle(el, prop) {
+    var style = window.getComputedStyle ? window.getComputedStyle(el, null) : el.currentStyle;
+    if (style) {
+      return style [
+        prop.replace(/-(\w)/gi, function(word, letter) {
+          return letter.toUpperCase();
+        })
+      ];
+    }
+  }
+
+  function isHidden(el) {
+    return getStyle(el, "display") === "none";
+  }
+
   function focus(element) {
     triggerEvent.html(element, "focus");
-    if (element.style.display === "block" && element !== document.activeElement) {
+    if (!isHidden(element) && element !== document.activeElement) {
       element.focus();
     }
   }
 
+  function retryFocus(element, done) {
+    var tries = 5;
+    var nr = 0;
+
+    function f() {
+      focus(element);
+      if (element === document.activeElement) {
+        done();
+      } else if (nr++ < tries) {
+        setTimeout(f, 4);
+      } else {
+        done();
+      }
+    }
+
+    f();
+  }
+
   function blur(element) {
     triggerEvent.html(element, "blur");
-    if (element.style.display === "block" && element === document.activeElement) {
-      element.blur();
-    }
   }
 
   function createInputElementWithMaxLength(maxLength, maxLengthAttr) {
@@ -203,36 +233,6 @@ describe("placekeeper", function() {
             };
           }
         };
-      },
-      toEqualUsingRetry: function(util) {
-        var tries = 5;
-        var nr = 0;
-        return {
-          compare: function(actual, expected, done) {
-
-            var result = {
-              message: "expected \"" + actual +
-                       "\" to equal \"" +
-                       expected + "\" (failed after " + tries + " tries)"
-            };
-
-            function test() {
-              if (util.equals(actual, expected)) {
-                result.pass = true;
-                done();
-              } else if (nr++ < tries) {
-                setTimeout(test, 20);
-              } else {
-                result.pass = false;
-                done();
-              }
-            }
-
-            test();
-
-            return result;
-          }
-        };
       }
     });
   });
@@ -318,12 +318,13 @@ describe("placekeeper", function() {
 
           beforeEach(function(done) {
             spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
-            focus(element);
-            setTimeout(done, loopDurationForTests);
+            retryFocus(element, function() {
+              setTimeout(done, loopDurationForTests);
+            });
           });
 
-          it("should have changed element type back to password", function(done) {
-            expect(element.getAttribute("type")).toEqualUsingRetry("password", done);
+          it("should have changed element type back to password", function() {
+            expect(element.getAttribute("type")).toEqual("password");
           });
 
           it("should have called polyfill's __hidePlaceholder method", function() {
@@ -382,11 +383,12 @@ describe("placekeeper", function() {
 
         beforeEach(function(done) {
           spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
-          focus(clone);
-          setTimeout(function() {
-            element = document.getElementById("elem");
-            done();
-          }, loopDurationForTests);
+          retryFocus(clone, function() {
+            setTimeout(function() {
+              element = document.getElementById("elem");
+              done();
+            }, loopDurationForTests);
+          });
         });
 
         it("should have two inputs on the page", function() {
@@ -405,8 +407,8 @@ describe("placekeeper", function() {
           expect(element.style.display).toEqual("block");
         });
 
-        it("should have remove id from clone", function(done) {
-          expect(clone.id).toEqualUsingRetry("", done);
+        it("should have remove id from clone", function() {
+          expect(clone.id).toEqual("");
         });
 
         it("should have clone hidden", function() {
@@ -415,7 +417,6 @@ describe("placekeeper", function() {
 
         it("should have called polyfill's __hidePlaceholder method", function() {
           expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(clone);
-          expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
         });
 
         describe("and when there is a value and input is blurred", function() {
@@ -439,8 +440,8 @@ describe("placekeeper", function() {
             expect(element.style.display).toEqual("block");
           });
 
-          it("should have remove id from clone", function(done) {
-            expect(clone.id).toEqualUsingRetry("", done);
+          it("should have remove id from clone", function() {
+            expect(clone.id).toEqual("");
           });
 
           it("should have clone hidden", function() {
