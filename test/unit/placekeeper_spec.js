@@ -1183,15 +1183,13 @@ describe("placekeeper", function() {
 
     describe("when input has focus", function() {
 
-      beforeEach(function() {
-        focus(element);
+      beforeEach(function(done) {
+        retryFocus(element, done);
       });
 
-      /* TODO: Find out why this fails in IE8 and enable when fixed.
       it("element should be activeElement", function() {
           expect(element).toEqual(placekeeper.support.safeActiveElement());
       });
-      */
 
       describe("and when the page is reloaded", function() {
 
