@@ -73,6 +73,14 @@
     if (needsSetup(element)) {
       setupElement(element, placeholder);
     } else {
+
+      if (elems.hasPasswordClone(element)) {
+        var clone = elems.getPasswordClone(element);
+        if (element.disabled !== clone.disabled) {
+          clone.disabled = element.disabled;
+        }
+      }
+
       if (hasPlaceholderValueChanged(element, placeholder)) {
         data.setValueAttr(element, placeholder);
       }

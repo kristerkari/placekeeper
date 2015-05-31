@@ -15,6 +15,9 @@ setTimeout(function() {
   newInput.setAttribute("placeholder", "Test created element");
   document.body.appendChild(newInput);
 
+  document.getElementById("d1").disabled = false;
+  document.getElementById("d2").disabled = false;
+
   // Test input type changing after page load
   try {
     document.getElementById("handle3").type = "password";
