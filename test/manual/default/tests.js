@@ -30,6 +30,9 @@ setTimeout(function() {
 
   document.getElementById("handle4").removeAttribute("placeholder");
 
+  document.getElementById("d1").disabled = false;
+  document.getElementById("d2").disabled = false;
+
 }, 1000);
 
 // Bind a submit event handler to the test form

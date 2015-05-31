@@ -59,6 +59,18 @@
         <input type="text" form="form2" placeholder="Test form attribute">
     </form>
 
+    <!-- Polyfill should handle disabled text inputs -->
+    <input type="text" placeholder="Disabled text input" disabled>
+
+    <!-- Polyfill should handle disabled password inputs -->
+    <input type="password" placeholder="Disabled password input" disabled>
+
+    <!-- Polyfill should handle disabled text input that gets enabled after 1s -->
+    <input id="d1" type="text" placeholder="Enabled text input" disabled>
+
+    <!-- Polyfill should handle disabled password input that gets enabled after 1s -->
+    <input id="d2" type="password" placeholder="Enabled password input" disabled>
+
     <script src="../../../dist/placekeeper.js"></script>
     <script src="tests.js"></script>
   </body>
