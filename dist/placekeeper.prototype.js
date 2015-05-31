@@ -1073,6 +1073,7 @@
 
   if (!global.placekeeper.support.hasNativePlaceholderSupport()) {
 
+    /*global $F:true */
     $F = function(elem) {
       return getValue.call(this, originalGlobal, elem);
     };
