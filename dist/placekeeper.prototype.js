@@ -1067,6 +1067,7 @@
     if (elem.getAttribute("data-placeholder-active")) {
       return "";
     }
+    /*jshint validthis: true */
     return originalFn.call(this, elem);
   }
 
