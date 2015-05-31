@@ -1,11 +1,16 @@
 {
     "env": {
       "browser": true,
+      "jquery": true,
       "node": true,
       "amd": true,
       "jasmine": true
     },
     "globals": {
+      "YUI": false,
+      "Y": false,
+      "Form": false,
+      "$F": true,
       "placekeeper": true,
       "triggerEvent": false
     },
