@@ -1,26 +1,19 @@
 {
   "globals": {
-    "YUI": false,
-    "Y": false,
-    "Form": false,
-    "$": false,
-    "$F": true,
     "placekeeper": true,
     "define": false,
     "triggerEvent": false
   },
   "predef": [
-    "YUI",
-    "Y",
-    "Form",
-    "$",
-    "$F",
     "placekeeper",
     "define",
     "triggerEvent"
   ],
   "forin": false,
   "browser": true,
+  "prototypejs": true,
+  "jquery": true,
+  "yui": true,
   "node": true,
   "jasmine": true,
   "es3": true,

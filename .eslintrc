@@ -1,6 +1,7 @@
 {
     "env": {
       "browser": true,
+      "jquery": true,
       "node": true,
       "amd": true,
       "jasmine": true
@@ -9,7 +10,6 @@
       "YUI": false,
       "Y": false,
       "Form": false,
-      "$": false,
       "$F": true,
       "placekeeper": true,
       "triggerEvent": false
