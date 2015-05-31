@@ -1,10 +1,20 @@
 {
   "globals": {
+    "YUI": false,
+    "Y": false,
+    "Form": false,
+    "$": false,
+    "$F": true,
     "placekeeper": true,
     "define": false,
     "triggerEvent": false
   },
   "predef": [
+    "YUI",
+    "Y",
+    "Form",
+    "$",
+    "$F",
     "placekeeper",
     "define",
     "triggerEvent"

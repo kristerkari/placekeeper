@@ -12,6 +12,12 @@
   var wrap = require("gulp-wrap");
   var karma = require("karma").server;
 
+  var adapters = [
+    "jquery",
+    "prototype",
+    "yui3"
+  ];
+
   gulp.task("server", function() {
     connect.server({
       root: ["test/manual", "."],
@@ -39,7 +45,20 @@
     .pipe(trimlines({
       leading: false
     }))
-    .pipe(gulp.dest("."));
+    .pipe(gulp.dest("dist"));
+  });
+
+  function buildAdapter(adapter) {
+    return gulp.src([
+      "dist/placekeeper.js",
+      "src/adapters/adapter." + adapter + ".js"
+    ])
+    .pipe(concat("placekeeper." + adapter + ".js"))
+    .pipe(gulp.dest("dist"));
+  }
+
+  gulp.task("adapters", function() {
+    return adapters.forEach(buildAdapter);
   });
 
   gulp.task("lint", function() {

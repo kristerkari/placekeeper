@@ -6,6 +6,11 @@
       "jasmine": true
     },
     "globals": {
+      "YUI": false,
+      "Y": false,
+      "Form": false,
+      "$": false,
+      "$F": true,
       "placekeeper": true,
       "triggerEvent": false
     },
