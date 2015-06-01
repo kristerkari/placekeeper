@@ -1405,7 +1405,7 @@ describe("placekeeper", function() {
       });
 
       it("element should be activeElement", function() {
-          expect(element).toEqual(placekeeper.support.safeActiveElement());
+        expect(element).toEqual(placekeeper.support.safeActiveElement());
       });
 
       describe("and when the page is reloaded", function() {
