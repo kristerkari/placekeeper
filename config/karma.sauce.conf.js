@@ -58,7 +58,7 @@ module.exports = function(config) {
       "../src/main.js",
       "../src/module.js",
       "../test/utils/*.js",
-      "../test/**/*_spec.js"
+      "../test/**/*.spec.js"
     ],
     preprocessors: {
       "../src/*.js": ["wrap"]
