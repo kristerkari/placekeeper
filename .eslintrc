@@ -11,6 +11,7 @@
       "Y": false,
       "Form": false,
       "$F": true,
+      "helpers": true,
       "placekeeper": true,
       "triggerEvent": false
     },

@@ -1,10 +1,12 @@
 {
   "globals": {
+    "helpers": true,
     "placekeeper": true,
     "define": false,
     "triggerEvent": false
   },
   "predef": [
+    "helpers",
     "placekeeper",
     "define",
     "triggerEvent"
