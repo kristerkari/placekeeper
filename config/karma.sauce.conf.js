@@ -1,3 +1,6 @@
+var extend = require("lodash.assign");
+var shared = require("./karma.shared.conf.js");
+
 module.exports = function(config) {
   "use strict";
 
@@ -42,38 +45,17 @@ module.exports = function(config) {
     }
   };
 
-  config.set({
-    basePath: "",
-    frameworks: ["jasmine"],
+  config.set(extend(shared, {
     captureTimeout: 120000,
     browserNoActivityTimeout: 60000,
-    files: [
-      "../src/data.js",
-      "../src/mode.js",
-      "../src/utils.js",
-      "../src/support.js",
-      "../src/elements.js",
-      "../src/polyfill.js",
-      "../src/events.js",
-      "../src/main.js",
-      "../src/module.js",
-      "../test/utils/*.js",
-      "../test/**/*.spec.js"
-    ],
     preprocessors: {
       "../src/*.js": ["wrap"]
-    },
-    wrapPreprocessor: {
-      template: "(function(global) {\n\n\"use strict\";\n\n" +
-                "global.placekeeper = global.placekeeper || {};\n\n" +
-                "<%= contents %>\n\n}(window))"
     },
     sauceLabs: {
       testName: "HTML5 placeholder polyfill"
     },
     customLaunchers: customLaunchers,
     browsers: Object.keys(customLaunchers),
-    reporters: ["dots", "saucelabs"],
-    singleRun: true
-  });
+    reporters: ["dots", "saucelabs"]
+  }));
 };
