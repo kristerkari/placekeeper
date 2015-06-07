@@ -25,7 +25,7 @@ describe("password inputs", function() {
       describe("and when input is focused", function() {
 
         beforeEach(function(done) {
-          spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
           helpers.retryFocus(element, function() {
             setTimeout(done, helpers.loopDurationForTests);
           });
@@ -35,9 +35,9 @@ describe("password inputs", function() {
           expect(element.getAttribute("type")).toEqual("password");
         });
 
-        it("should have called polyfill's __hidePlaceholder method", function() {
-          expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's hidePlaceholder method", function() {
+          expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+          expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
         });
 
       });
@@ -114,7 +114,7 @@ describe("password inputs", function() {
       describe("and when input is focused", function() {
 
         beforeEach(function(done) {
-          spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
           helpers.retryFocus(clone, function() {
             setTimeout(function() {
               element = document.getElementById("elem");
@@ -147,14 +147,14 @@ describe("password inputs", function() {
           expect(clone.style.display).toEqual("none");
         });
 
-        it("should have called polyfill's __hidePlaceholder method", function() {
-          expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(clone);
+        it("should have called polyfill's hidePlaceholder method", function() {
+          expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
         });
 
         describe("and when there is a value and input is blurred", function() {
 
           beforeEach(function(done) {
-            spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+            spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
             element.value = "testing";
             helpers.blur(element);
             setTimeout(done, helpers.loopDurationForTests);
@@ -180,8 +180,8 @@ describe("password inputs", function() {
             expect(clone.style.display).toEqual("none");
           });
 
-          it("should have called polyfill's __showPlaceholder method", function() {
-            expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+          it("should have called polyfill's showPlaceholder method", function() {
+            expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
           });
 
         });
@@ -189,7 +189,7 @@ describe("password inputs", function() {
         describe("and when the input is blurred after that", function() {
 
           beforeEach(function(done) {
-            spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+            spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
             helpers.blur(element);
             setTimeout(function() {
               clone = document.getElementById("elem");
@@ -221,8 +221,8 @@ describe("password inputs", function() {
             expect(element.style.display).toEqual("none");
           });
 
-          it("should have called polyfill's __showPlaceholder method", function() {
-            expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+          it("should have called polyfill's showPlaceholder method", function() {
+            expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
           });
 
         });
@@ -296,7 +296,7 @@ describe("password inputs", function() {
     describe("and when input is focused", function() {
 
       beforeEach(function(done) {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+        spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
         helpers.retryFocus(clone, function() {
           setTimeout(function() {
             element = document.getElementById("elem");
@@ -329,14 +329,14 @@ describe("password inputs", function() {
         expect(clone.style.display).toEqual("none");
       });
 
-      it("should have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(clone);
+      it("should have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
       });
 
       describe("and when there is a value and input is blurred", function() {
 
         beforeEach(function(done) {
-          spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
           element.value = "testing";
           helpers.blur(element);
           setTimeout(done, helpers.loopDurationForTests);
@@ -362,9 +362,8 @@ describe("password inputs", function() {
           expect(clone.style.display).toEqual("none");
         });
 
-        it("should have called polyfill's __showPlaceholder method", function() {
-          expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-          // expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's showPlaceholder method", function() {
+          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
         });
 
       });
@@ -372,7 +371,7 @@ describe("password inputs", function() {
       describe("and when the input is blurred after that", function() {
 
         beforeEach(function(done) {
-          spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
           helpers.blur(element);
           setTimeout(function() {
             clone = document.getElementById("elem");
@@ -404,8 +403,8 @@ describe("password inputs", function() {
           expect(element.style.display).toEqual("none");
         });
 
-        it("should have called polyfill's __showPlaceholder method", function() {
-          expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
+        it("should have called polyfill's showPlaceholder method", function() {
+          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
         });
 
       });
@@ -434,7 +433,7 @@ describe("password inputs", function() {
     describe("and when input is focused", function() {
 
       beforeEach(function(done) {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+        spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
         helpers.focus(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
@@ -443,9 +442,9 @@ describe("password inputs", function() {
         expect(element.getAttribute("type")).toEqual("email");
       });
 
-      it("should have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
     });

@@ -16,7 +16,7 @@
 
   function getForm(element) {
     var form = element.form;
-    if (form != null && typeof form === "string") {
+    if (typeof form === "string") {
       form = document.getElementById(form);
     }
     return form;
@@ -34,8 +34,7 @@
 
   function forEachForm(callback) {
     var forms = document.getElementsByTagName("form");
-    var length = forms.length;
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < forms.length; i++) {
       callback(forms[i]);
     }
   }
@@ -126,7 +125,7 @@
   }
 
   function removePasswordCloneIfExists(element) {
-    if (element == null || !hasPasswordClone(element)) {
+    if (!hasPasswordClone(element)) {
       return;
     }
     removeClone(element);

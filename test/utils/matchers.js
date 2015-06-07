@@ -1,5 +1,22 @@
 beforeEach(function() {
   jasmine.addMatchers({
+    toHaveNoDataAttributes: function() {
+      return {
+        compare: function(actual) {
+          var dataAttrs = [];
+          for (var i = 0; i < actual.attributes.length; i++) {
+            if ((/data\-/).test(actual.attributes[i].nodeName)) {
+              dataAttrs.push(actual.attributes[i].nodeName);
+            }
+          }
+          var pass = dataAttrs.length === 0;
+          return {
+            message: "Expected element to have 0 data-attributes, but got " + dataAttrs,
+            pass: pass
+          };
+        }
+      };
+    },
     toHaveClass: function() {
       return {
         compare: function(actual, expected) {

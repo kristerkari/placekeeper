@@ -85,6 +85,7 @@
     element.removeAttribute("data-placeholder-has-events");
     element.removeAttribute("data-placeholder-active");
     element.removeAttribute("data-placeholder-maxlength");
+    element.removeAttribute("data-placeholder-type");
   }
 
   placekeeper.data = {

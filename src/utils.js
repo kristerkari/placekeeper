@@ -45,15 +45,15 @@
   }
 
   function getAttributes(elem) {
-    var newAttrs = {};
+    var copiedAttrs = {};
     var attrs = elem.attributes;
     for (var i = 0; i < attrs.length; i++) {
       // old IEs will throw an error if you try to copy "type" attribute.
       if (attrs[i].specified && attrs[i].name !== "type") {
-        newAttrs[attrs[i].name] = attrs[i].value;
+        copiedAttrs[attrs[i].name] = attrs[i].value;
       }
     }
-    return newAttrs;
+    return copiedAttrs;
   }
 
   function setAttributes(elem, attrs) {

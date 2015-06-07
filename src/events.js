@@ -9,47 +9,45 @@
   var handlers = {};
   var keydownVal;
 
-  function hidePlaceholderOnSubmit(element) {
-    if (!data.hasActiveAttrSetToTrue(element)) {
-      return;
-    }
-    polyfill.__hidePlaceholder(element);
-  }
-
-  function showPlaceholderAfterSubmit(element) {
-    if (support.needsToShowPlaceHolder(element)) {
-      polyfill.__showPlaceholder(element);
-    }
-  }
-
   function isActiveAndHasPlaceholderSet(element) {
     return data.hasActiveAttrSetToTrue(element) &&
            element.value === data.getValueAttr(element);
   }
 
+  function hidePlaceholderOnSubmit(element) {
+    if (!isActiveAndHasPlaceholderSet(element)) {
+      return;
+    }
+    polyfill.hidePlaceholder(element);
+  }
+
+  function showPlaceholderAfterSubmit(element) {
+    if (support.needsToShowPlaceHolder(element)) {
+      polyfill.showPlaceholder(element);
+    }
+  }
+
   function shouldNotHidePlaceholder(element) {
     return !mode.isPlacekeeperFocusEnabled() &&
-            isActiveAndHasPlaceholderSet(element);
+           isActiveAndHasPlaceholderSet(element);
   }
 
   function createFocusHandler(element) {
     return function() {
       if (shouldNotHidePlaceholder(element)) {
         utils.moveCaret(element, 0);
-      } else if (data.hasActiveAttrSetToTrue(element)) {
-        polyfill.__hidePlaceholder(element);
+      } else if (isActiveAndHasPlaceholderSet(element)) {
+        polyfill.hidePlaceholder(element);
       }
     };
   }
 
   function createBlurHandler(element) {
     return function() {
-
-      if (data.hasActiveAttrSetToTrue(element)) {
+      if (isActiveAndHasPlaceholderSet(element)) {
         return;
       }
-
-      polyfill.__showPlaceholder(element);
+      polyfill.showPlaceholder(element);
     };
   }
 
@@ -79,7 +77,7 @@
   function createKeyupHandler(element) {
     return function() {
       if (keydownVal != null && keydownVal !== element.value) {
-        polyfill.__hidePlaceholder(element);
+        polyfill.hidePlaceholder(element);
       }
 
       // If the element is now empty we need to show the placeholder
@@ -150,10 +148,10 @@
   }
 
   function hidePlaceholder(element) {
-    if (!data.hasActiveAttrSetToTrue(element)) {
+    if (!isActiveAndHasPlaceholderSet(element)) {
       return;
     }
-    polyfill.__removePlaceholder(element, false);
+    polyfill.removePlaceholder(element, false);
   }
 
   function clearPlaceholders() {
