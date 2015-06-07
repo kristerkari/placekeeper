@@ -16,7 +16,7 @@
 
   function getForm(element) {
     var form = element.form;
-    if (form != null && typeof form === "string") {
+    if (typeof form === "string") {
       form = document.getElementById(form);
     }
     return form;
