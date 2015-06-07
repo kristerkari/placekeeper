@@ -9,9 +9,10 @@ describe("focusing and blurring an element with placeholder", function() {
     beforeEach(function(done) {
       spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
       element = helpers.createInputElement(true);
-      element.focus();
-      setTimeout(done, helpers.loopDurationForTests);
-      placekeeper.priv.__setupPlaceholders();
+      helpers.retryFocus(element, function() {
+        setTimeout(done, helpers.loopDurationForTests);
+        placekeeper.priv.__setupPlaceholders();
+      });
     });
 
     afterEach(function() {
