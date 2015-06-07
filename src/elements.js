@@ -34,8 +34,7 @@
 
   function forEachForm(callback) {
     var forms = document.getElementsByTagName("form");
-    var length = forms.length;
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < forms.length; i++) {
       callback(forms[i]);
     }
   }
