@@ -54,12 +54,8 @@ describe("public methods", function() {
           expect(element.style.display).toEqual("");
         });
 
-        it("should not have data-placeholder-has-events attribute", function() {
-          expect(element.getAttribute("data-placeholder-has-events")).toEqual(null);
-        });
-
-        it("should not have data-placeholder-value attribute", function() {
-          expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+        it("should have remove all data-attributes from element", function() {
+          expect(element).toHaveNoDataAttributes();
         });
 
         // In IE7 element is `null`
@@ -113,12 +109,8 @@ describe("public methods", function() {
             placekeeper.disable();
           });
 
-          it("should not have data-placeholder-has-events attribute", function() {
-            expect(element.getAttribute("data-placeholder-has-events")).toEqual(null);
-          });
-
-          it("should not have data-placeholder-value attribute", function() {
-            expect(element.getAttribute("data-placeholder-value")).toEqual(null);
+          it("should have remove all data-attributes from element", function() {
+            expect(element).toHaveNoDataAttributes();
           });
 
           it("should have called utils.removeEventListener for focus handler", function() {

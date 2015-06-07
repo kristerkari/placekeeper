@@ -225,6 +225,10 @@ describe("hide on input mode", function() {
           placekeeper.disable();
         });
 
+        it("should have remove all data-attributes from element", function() {
+          expect(element).toHaveNoDataAttributes();
+        });
+
         it("should have called utils.removeEventListener for keydown handler", function() {
           expect(placekeeper.utils.removeEventListener)
           .toHaveBeenCalledWith(element, "keydown", placekeeper.events.handlers.keydown);
