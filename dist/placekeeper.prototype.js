@@ -90,6 +90,7 @@
       element.removeAttribute("data-placeholder-has-events");
       element.removeAttribute("data-placeholder-active");
       element.removeAttribute("data-placeholder-maxlength");
+      element.removeAttribute("data-placeholder-type");
     }
 
     placekeeper.data = {
@@ -235,15 +236,15 @@
     }
 
     function getAttributes(elem) {
-      var newAttrs = {};
+      var copiedAttrs = {};
       var attrs = elem.attributes;
       for (var i = 0; i < attrs.length; i++) {
         // old IEs will throw an error if you try to copy "type" attribute.
         if (attrs[i].specified && attrs[i].name !== "type") {
-          newAttrs[attrs[i].name] = attrs[i].value;
+          copiedAttrs[attrs[i].name] = attrs[i].value;
         }
       }
-      return newAttrs;
+      return copiedAttrs;
     }
 
     function setAttributes(elem, attrs) {
@@ -460,7 +461,7 @@
 
     function getForm(element) {
       var form = element.form;
-      if (form != null && typeof form === "string") {
+      if (typeof form === "string") {
         form = document.getElementById(form);
       }
       return form;
@@ -478,8 +479,7 @@
 
     function forEachForm(callback) {
       var forms = document.getElementsByTagName("form");
-      var length = forms.length;
-      for (var i = 0; i < length; i++) {
+      for (var i = 0; i < forms.length; i++) {
         callback(forms[i]);
       }
     }
@@ -570,7 +570,7 @@
     }
 
     function removePasswordCloneIfExists(element) {
-      if (element == null || !hasPasswordClone(element)) {
+      if (!hasPasswordClone(element)) {
         return;
       }
       removeClone(element);
@@ -672,11 +672,11 @@
     }
 
     placekeeper.polyfill = {
-      __storeMaxlength: storeMaxlength,
-      __restoreMaxlength: restoreMaxlength,
-      __removePlaceholder: removePlaceholder,
-      __showPlaceholder: showPlaceholder,
-      __hidePlaceholder: hidePlaceholder
+      storeMaxlength: storeMaxlength,
+      restoreMaxlength: restoreMaxlength,
+      removePlaceholder: removePlaceholder,
+      showPlaceholder: showPlaceholder,
+      hidePlaceholder: hidePlaceholder
     };
 
   }());
@@ -692,47 +692,45 @@
     var handlers = {};
     var keydownVal;
 
-    function hidePlaceholderOnSubmit(element) {
-      if (!data.hasActiveAttrSetToTrue(element)) {
-        return;
-      }
-      polyfill.__hidePlaceholder(element);
-    }
-
-    function showPlaceholderAfterSubmit(element) {
-      if (support.needsToShowPlaceHolder(element)) {
-        polyfill.__showPlaceholder(element);
-      }
-    }
-
     function isActiveAndHasPlaceholderSet(element) {
       return data.hasActiveAttrSetToTrue(element) &&
              element.value === data.getValueAttr(element);
     }
 
+    function hidePlaceholderOnSubmit(element) {
+      if (!isActiveAndHasPlaceholderSet(element)) {
+        return;
+      }
+      polyfill.hidePlaceholder(element);
+    }
+
+    function showPlaceholderAfterSubmit(element) {
+      if (support.needsToShowPlaceHolder(element)) {
+        polyfill.showPlaceholder(element);
+      }
+    }
+
     function shouldNotHidePlaceholder(element) {
       return !mode.isPlacekeeperFocusEnabled() &&
-              isActiveAndHasPlaceholderSet(element);
+             isActiveAndHasPlaceholderSet(element);
     }
 
     function createFocusHandler(element) {
       return function() {
         if (shouldNotHidePlaceholder(element)) {
           utils.moveCaret(element, 0);
-        } else if (data.hasActiveAttrSetToTrue(element)) {
-          polyfill.__hidePlaceholder(element);
+        } else if (isActiveAndHasPlaceholderSet(element)) {
+          polyfill.hidePlaceholder(element);
         }
       };
     }
 
     function createBlurHandler(element) {
       return function() {
-
-        if (data.hasActiveAttrSetToTrue(element)) {
+        if (isActiveAndHasPlaceholderSet(element)) {
           return;
         }
-
-        polyfill.__showPlaceholder(element);
+        polyfill.showPlaceholder(element);
       };
     }
 
@@ -762,7 +760,7 @@
     function createKeyupHandler(element) {
       return function() {
         if (keydownVal != null && keydownVal !== element.value) {
-          polyfill.__hidePlaceholder(element);
+          polyfill.hidePlaceholder(element);
         }
 
         // If the element is now empty we need to show the placeholder
@@ -833,10 +831,10 @@
     }
 
     function hidePlaceholder(element) {
-      if (!data.hasActiveAttrSetToTrue(element)) {
+      if (!isActiveAndHasPlaceholderSet(element)) {
         return;
       }
-      polyfill.__removePlaceholder(element, false);
+      polyfill.removePlaceholder(element, false);
     }
 
     function clearPlaceholders() {
@@ -961,16 +959,24 @@
       if (needsSetup(element)) {
         setupElement(element, placeholder);
       } else {
+
+        if (elems.hasPasswordClone(element)) {
+          var clone = elems.getPasswordClone(element);
+          if (element.disabled !== clone.disabled) {
+            clone.disabled = element.disabled;
+          }
+        }
+
         if (hasPlaceholderValueChanged(element, placeholder)) {
           data.setValueAttr(element, placeholder);
         }
         if (hasValueChanged(element, placeholder)) {
-          polyfill.__hidePlaceholder(element);
+          polyfill.hidePlaceholder(element);
         }
       }
 
       if (!hasValueOrIsActive(element)) {
-        polyfill.__showPlaceholder(element);
+        polyfill.showPlaceholder(element);
       }
 
     }
