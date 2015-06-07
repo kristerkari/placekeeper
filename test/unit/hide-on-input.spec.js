@@ -113,7 +113,7 @@ describe("hide on input mode", function() {
 
         beforeEach(function() {
           spyOn(placekeeper.utils, "moveCaret").and.callThrough();
-          spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
           triggerEvent.html(element, "focus");
           element.focus();
         });
@@ -122,9 +122,9 @@ describe("hide on input mode", function() {
           expect(element).toEqual(placekeeper.support.safeActiveElement());
         });
 
-        it("should not have called polyfill's __hidePlaceholder method", function() {
-          expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
-          expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+        it("should not have called polyfill's hidePlaceholder method", function() {
+          expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
+          expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
         });
 
         it("should have moved caret to the beginning", function() {
@@ -150,9 +150,9 @@ describe("hide on input mode", function() {
             triggerEvent.keyboard(element, "keyup", 13);
           });
 
-          it("should not have called polyfill's __hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
-            expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+          it("should not have called polyfill's hidePlaceholder method", function() {
+            expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
+            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
           });
 
           it("should not have emptied the placeholder value", function() {
@@ -177,9 +177,9 @@ describe("hide on input mode", function() {
             triggerEvent.keyboard(element, "keyup", 65);
           });
 
-          it("should have called polyfill's __hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-            expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+          it("should have called polyfill's hidePlaceholder method", function() {
+            expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
           });
 
           it("should have element value as 'a'", function() {
@@ -209,9 +209,9 @@ describe("hide on input mode", function() {
             expect(placekeeper.utils.preventDefault.calls.count()).toEqual(1);
           });
 
-          it("should not have called polyfill's __hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
-            expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+          it("should not have called polyfill's hidePlaceholder method", function() {
+            expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
+            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
           });
 
         });

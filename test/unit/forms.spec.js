@@ -21,8 +21,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder");
-        spyOn(placekeeper.polyfill, "__showPlaceholder");
+        spyOn(placekeeper.polyfill, "hidePlaceholder");
+        spyOn(placekeeper.polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -30,14 +30,14 @@ describe("forms", function() {
         expect(form.getAttribute("data-placeholder-submit")).toEqual("true");
       });
 
-      it("should have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
-      it("should not have called polyfill's __showPlaceholder method", function() {
-        expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", function() {
+        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
       describe("and after 10ms (when form is submitted)", function() {
@@ -46,9 +46,9 @@ describe("forms", function() {
           setTimeout(done, 10);
         });
 
-        it("should have called polyfill's __showPlaceholder method", function() {
-          expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's showPlaceholder method", function() {
+          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });
@@ -93,8 +93,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder");
-        spyOn(placekeeper.polyfill, "__showPlaceholder");
+        spyOn(placekeeper.polyfill, "hidePlaceholder");
+        spyOn(placekeeper.polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -102,14 +102,14 @@ describe("forms", function() {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
       });
 
-      it("should not have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
-      it("should not have called polyfill's __showPlaceholder method", function() {
-        expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", function() {
+        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
     });
@@ -134,8 +134,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder");
-        spyOn(placekeeper.polyfill, "__showPlaceholder");
+        spyOn(placekeeper.polyfill, "hidePlaceholder");
+        spyOn(placekeeper.polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -143,14 +143,14 @@ describe("forms", function() {
         expect(form.getAttribute("data-placeholder-submit")).toEqual("true");
       });
 
-      it("should have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
-      it("should not have called polyfill's __showPlaceholder method", function() {
-        expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", function() {
+        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
       describe("and after 10ms (when form is submitted)", function() {
@@ -159,9 +159,9 @@ describe("forms", function() {
           setTimeout(done, 10);
         });
 
-        it("should have called polyfill's __showPlaceholder method", function() {
-          expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's showPlaceholder method", function() {
+          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });

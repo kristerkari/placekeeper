@@ -3,14 +3,14 @@ describe("private methods", function() {
 
   beforeEach(helpers.initialSetup);
 
-  describe("__storeMaxlength", function() {
+  describe("storeMaxlength", function() {
 
     describe("when called with an element that has maxLength attribute set", function() {
       var element;
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength(10);
-        placekeeper.polyfill.__storeMaxlength(element);
+        placekeeper.polyfill.storeMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -33,7 +33,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength();
-        placekeeper.polyfill.__storeMaxlength(element);
+        placekeeper.polyfill.storeMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -49,14 +49,14 @@ describe("private methods", function() {
 
   });
 
-  describe("__restoreMaxlength", function() {
+  describe("restoreMaxlength", function() {
 
     describe("when called with an element that has maxLength data attribute set", function() {
       var element;
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength(false, 10);
-        placekeeper.polyfill.__restoreMaxlength(element);
+        placekeeper.polyfill.restoreMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -79,7 +79,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength();
-        placekeeper.polyfill.__restoreMaxlength(element);
+        placekeeper.polyfill.restoreMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 

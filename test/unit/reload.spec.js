@@ -63,16 +63,16 @@ describe("reload", function() {
 
       beforeEach(function() {
         element.value = "MyVal";
-        spyOn(placekeeper.polyfill, "__removePlaceholder").and.callThrough();
+        spyOn(placekeeper.polyfill, "removePlaceholder").and.callThrough();
         helpers.setupFakeWindow();
         helpers.triggerFakePageReload();
       });
 
       afterEach(helpers.restoreRealWindow);
 
-      it("should not have called polyfill's __removePlaceholder method", function() {
-        expect(placekeeper.polyfill.__removePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__removePlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's removePlaceholder method", function() {
+        expect(placekeeper.polyfill.removePlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.removePlaceholder.calls.count()).toEqual(0);
       });
 
       it("should not have removed element's value", function() {
@@ -100,16 +100,16 @@ describe("reload", function() {
     describe("when page is reloaded", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__removePlaceholder").and.callThrough();
+        spyOn(placekeeper.polyfill, "removePlaceholder").and.callThrough();
         helpers.setupFakeWindow();
         helpers.triggerFakePageReload();
       });
 
       afterEach(helpers.restoreRealWindow);
 
-      it("should have called polyfill's __removePlaceholder method", function() {
-        expect(placekeeper.polyfill.__removePlaceholder).toHaveBeenCalledWith(element, false);
-        expect(placekeeper.polyfill.__removePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's removePlaceholder method", function() {
+        expect(placekeeper.polyfill.removePlaceholder).toHaveBeenCalledWith(element, false);
+        expect(placekeeper.polyfill.removePlaceholder.calls.count()).toEqual(1);
       });
 
       it("should have removed element's value", function() {
@@ -178,16 +178,16 @@ describe("reload", function() {
     describe("when page is reloaded", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder");
+        spyOn(placekeeper.polyfill, "hidePlaceholder");
         helpers.setupFakeWindow();
         helpers.triggerFakePageReload();
       });
 
       afterEach(helpers.restoreRealWindow);
 
-      it("should not have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
     });

@@ -75,11 +75,11 @@
   }
 
   placekeeper.polyfill = {
-    __storeMaxlength: storeMaxlength,
-    __restoreMaxlength: restoreMaxlength,
-    __removePlaceholder: removePlaceholder,
-    __showPlaceholder: showPlaceholder,
-    __hidePlaceholder: hidePlaceholder
+    storeMaxlength: storeMaxlength,
+    restoreMaxlength: restoreMaxlength,
+    removePlaceholder: removePlaceholder,
+    showPlaceholder: showPlaceholder,
+    hidePlaceholder: hidePlaceholder
   };
 
 }());

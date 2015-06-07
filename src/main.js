@@ -85,12 +85,12 @@
         data.setValueAttr(element, placeholder);
       }
       if (hasValueChanged(element, placeholder)) {
-        polyfill.__hidePlaceholder(element);
+        polyfill.hidePlaceholder(element);
       }
     }
 
     if (!hasValueOrIsActive(element)) {
-      polyfill.__showPlaceholder(element);
+      polyfill.showPlaceholder(element);
     }
 
   }

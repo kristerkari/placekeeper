@@ -7,7 +7,7 @@ describe("focusing and blurring an element with placeholder", function() {
     var element;
 
     beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
       element = helpers.createInputElement(true);
       helpers.retryFocus(element, function() {
         setTimeout(done, helpers.loopDurationForTests);
@@ -19,9 +19,9 @@ describe("focusing and blurring an element with placeholder", function() {
       element.parentNode.removeChild(element);
     });
 
-    it("should not have called polyfill's __showPlaceholder method", function() {
-      expect(placekeeper.polyfill.__showPlaceholder).not.toHaveBeenCalled();
-      expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(0);
+    it("should not have called polyfill's showPlaceholder method", function() {
+      expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
+      expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
     });
 
   });
@@ -30,7 +30,7 @@ describe("focusing and blurring an element with placeholder", function() {
     var element;
 
     beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "__showPlaceholder").and.callThrough();
+      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
       element = helpers.createInputElement(true);
       setTimeout(done, helpers.loopDurationForTests);
       placekeeper.priv.__setupPlaceholders();
@@ -56,9 +56,9 @@ describe("focusing and blurring an element with placeholder", function() {
       expect(element).toHaveClass("placeholder");
     });
 
-    it("should have called polyfill's __showPlaceholder method", function() {
-      expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-      expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(1);
+    it("should have called polyfill's showPlaceholder method", function() {
+      expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+      expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
     });
 
     it("should have set data-placeholder-maxlength to 12", function() {
@@ -72,13 +72,13 @@ describe("focusing and blurring an element with placeholder", function() {
     describe("and when element is focused", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "__hidePlaceholder").and.callThrough();
+        spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
         helpers.focus(element);
       });
 
-      it("should have called polyfill's __hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.__hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.__hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", function() {
+        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
       it("should have remove element's value", function() {
@@ -113,9 +113,9 @@ describe("focusing and blurring an element with placeholder", function() {
             helpers.blur(element);
           });
 
-          it("should have called polyfill's __showPlaceholder method", function() {
-            expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-            expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(2);
+          it("should have called polyfill's showPlaceholder method", function() {
+            expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+            expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(2);
           });
 
           it("should have set element's value to Test", function() {
@@ -140,9 +140,9 @@ describe("focusing and blurring an element with placeholder", function() {
           helpers.blur(element);
         });
 
-        it("should have called polyfill's __showPlaceholder method", function() {
-          expect(placekeeper.polyfill.__showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.__showPlaceholder.calls.count()).toEqual(2);
+        it("should have called polyfill's showPlaceholder method", function() {
+          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(2);
         });
 
         it("should have set element's value to Test", function() {
