@@ -91,6 +91,20 @@ Placekeeper is tested with unit tests and manual testing using several browsers 
 
 ⓘ  Partial support in older Safari and Opera versions refers to lacking placeholder support otextarea elements.
 
+### Avoiding Internet Explorer compatibility mode with older IE versions
+
+> Internet Explorer has “Compatibility View”. Compatibility View makes IE behave like the older versions of Internet Explorer, the ones before Microsoft started paying more attention to web standards.
+
+> It makes sense – there are a lot of websites out there that were written to render well on old versions of Internet Explorer, and Microsoft needed to make the move to standards compliance in a way that doesn’t break all of them.
+
+> The problem is, Compatibility View can be a little… insistent.
+
+- http://dalelane.co.uk/blog/?p=2222
+
+Unfortunately compatibility mode can cause weird bugs to show up and break functionality. Sometimes compatibility mode is enabled by the user, sometimes by the browser.
+
+Best way of stopping your page from going to compatibility mode and telling Internet Explorer to render in latest engine is to send a header from server side with the name `X-UA-Compatible` and value `IE=edge`.
+
 ## Development
 
 To start developing make sure that you have [Node.js](https://nodejs.org/) or [io.js](https://iojs.org/) installed.
