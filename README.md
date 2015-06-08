@@ -27,7 +27,7 @@ Include the Placekeeper's javascript on your page and it will be intialized auto
 
 ### HTML
 
-```
+```html
 <input type="text" placeholder="Enter your name">
 ```
 
@@ -93,7 +93,7 @@ Placekeeper is tested with unit tests and manual testing using several browsers 
 
 ## Development
 
-To start developing make sure that you have Node.js or io.js installed.
+To start developing make sure that you have [Node.js](https://nodejs.org/) or [io.js](https://iojs.org/) installed.
 
 ### Install dependencies
 
