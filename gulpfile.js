@@ -11,6 +11,8 @@
   var trimlines = require("gulp-trimlines");
   var wrap = require("gulp-wrap");
   var karma = require("karma").server;
+  var uglify = require("gulp-uglify");
+  var rename = require("gulp-rename");
 
   var adapters = [
     "jquery",
@@ -45,6 +47,13 @@
     .pipe(trimlines({
       leading: false
     }))
+    .pipe(gulp.dest("dist"))
+    .pipe(uglify({
+      mangle: true
+    }))
+    .pipe(rename({
+      extname: ".min.js"
+    }))
     .pipe(gulp.dest("dist"));
   });
 
@@ -54,6 +63,13 @@
       "src/adapters/adapter." + adapter + ".js"
     ])
     .pipe(concat("placekeeper." + adapter + ".js"))
+    .pipe(gulp.dest("dist"))
+    .pipe(uglify({
+      mangle: true
+    }))
+    .pipe(rename({
+      extname: ".min.js"
+    }))
     .pipe(gulp.dest("dist"));
   }
 
