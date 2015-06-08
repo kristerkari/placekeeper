@@ -25,7 +25,7 @@
     });
   });
 
-  gulp.task("build", function() {
+  gulp.task("source", function() {
     return gulp.src([
       "src/data.js",
       "src/mode.js",
@@ -60,6 +60,8 @@
   gulp.task("adapters", function() {
     return adapters.forEach(buildAdapter);
   });
+
+  gulp.task("build", ["source", "adapters"]);
 
   gulp.task("lint", function() {
     return gulp.src("src/*.js")
