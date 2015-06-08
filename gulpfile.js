@@ -13,6 +13,7 @@
   var karma = require("karma").server;
   var uglify = require("gulp-uglify");
   var rename = require("gulp-rename");
+  var sizereport = require("gulp-sizereport");
 
   var adapters = [
     "jquery",
@@ -104,6 +105,13 @@
       singleRun: false,
       autoWatch: true
     }, done);
+  });
+
+  gulp.task("size", function () {
+    return gulp.src("./dist/*")
+               .pipe(sizereport({
+                  gzip: true
+                }));
   });
 
 }());
