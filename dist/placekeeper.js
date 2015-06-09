@@ -5,8 +5,8 @@
 
   (function() {
 
-    function hasLiveUpdatesAttrSetToFalse(element) {
-      return element.getAttribute("data-placeholder-live") === "false";
+    function hasWatchAttrSetToFalse(element) {
+      return element.getAttribute("data-placeholder-watch") === "false";
     }
 
     function hasModeAttrSetToInput(element) {
@@ -94,7 +94,7 @@
     }
 
     placekeeper.data = {
-      hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
+      hasWatchAttrSetToFalse: hasWatchAttrSetToFalse,
       hasModeAttrSetToInput: hasModeAttrSetToInput,
       hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
       hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
@@ -125,7 +125,7 @@
 
     var isEnabled = false;
     var isFocusEnabled = true;
-    var isLiveUpdateEnabled = false;
+    var isWatchingEnabled = false;
 
     function isPlacekeeperEnabled() {
       return isEnabled;
@@ -135,13 +135,13 @@
       return isFocusEnabled;
     }
 
-    function isPlacekeeperLiveUpdateEnabled() {
-      return isLiveUpdateEnabled;
+    function isPlacekeeperWatchingEnabled() {
+      return isWatchingEnabled;
     }
 
-    function hasDisabledLiveUpdates() {
-      return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-             data.hasLiveUpdatesAttrSetToFalse(document.body);
+    function hasWatchingDisabled() {
+      return data.hasWatchAttrSetToFalse(document.documentElement) ||
+             data.hasWatchAttrSetToFalse(document.body);
     }
 
     function hasFocusDisabled() {
@@ -157,12 +157,12 @@
       isFocusEnabled = false;
     }
 
-    function enableLive() {
-      isLiveUpdateEnabled = true;
+    function enableWatching() {
+      isWatchingEnabled = true;
     }
 
-    function disableLive() {
-      isLiveUpdateEnabled = false;
+    function disableWatching() {
+      isWatchingEnabled = false;
     }
 
     function disable() {
@@ -176,13 +176,13 @@
     placekeeper.mode = {
       isPlacekeeperEnabled: isPlacekeeperEnabled,
       isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
-      isPlacekeeperLiveUpdateEnabled: isPlacekeeperLiveUpdateEnabled,
-      hasDisabledLiveUpdates: hasDisabledLiveUpdates,
+      isPlacekeeperWatchingEnabled: isPlacekeeperWatchingEnabled,
+      hasWatchingDisabled: hasWatchingDisabled,
       hasFocusDisabled: hasFocusDisabled,
       enableFocus: enableFocus,
       disableFocus: disableFocus,
-      enableLive: enableLive,
-      disableLive: disableLive,
+      enableWatching: enableWatching,
+      disableWatching: disableWatching,
       disable: disable,
       enable: enable
     };
@@ -1008,12 +1008,12 @@
       }
       clearInterval(loopInterval);
       placekeeperLoop();
-      if (!mode.hasDisabledLiveUpdates()) {
-        mode.enableLive();
+      if (!mode.hasWatchingDisabled()) {
+        mode.enableWatching();
         // main loop
         loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
       } else {
-        mode.disableLive();
+        mode.disableWatching();
       }
     }
 
@@ -1035,7 +1035,7 @@
     placekeeper.enable = init;
     placekeeper.disable = disablePlacekeeper;
     placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-    placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
+    placekeeper.isWatchingEnabled = mode.isPlacekeeperWatchingEnabled;
 
     // Exposed private methods
     placekeeper.priv = {
