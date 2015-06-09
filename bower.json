@@ -1,17 +1,30 @@
 {
   "name": "placekeeper",
-  "version": "1.0.0-alpha",
+  "description": "HTML5 placeholder attribute polyfill",
+  "version": "1.0.0",
   "homepage": "https://github.com/kristerkari/placekeeper",
   "authors": [
     "Krister Kari <krister@krister.fi>"
   ],
-  "main": "index.js",
+  "main": [
+    "dist/placekeeper.js",
+    "dist/placekeeper.jquery.js",
+    "dist/placekeeper.prototype.js",
+    "dist/placekeeper.yui3.js"
+  ],
+  "keywords": [
+    "placeholder",
+    "polyfill"
+  ],
   "moduleType": [
-    "globals"
+    "globals",
+    "amd",
+    "node"
   ],
   "license": "MIT",
   "ignore": [
     "**/.*",
+    "coverage",
     "node_modules",
     "bower_components",
     "test",
