@@ -24,10 +24,15 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "coverage",
-    "node_modules",
     "bower_components",
+    "config",
+    "coverage",
+    "dist/*.min.js",
+    "node_modules",
+    "src",
     "test",
-    "tests"
+    "tests",
+    "*.sh",
+    "*.js"
   ]
 }
