@@ -76,7 +76,7 @@ Disables Placekeeper's feature that watches for placeholder attribute changes on
 
 All browsers from the last ~3-4 years support HTML5 placeholder attribute, so use this polyfill only if you want to support older browsers (e.g. Internet Explorer < 10 and older iOS/Android versions).
 
-Placekeeper is tested with unit tests and manual testing using several browsers that do not support the HTML5 placeholder attribute. If you notice that Placekeeper is not working with a browser, please open an issue about it.
+Placekeeper is heavily tested with unit tests and manual testing using several browsers that do not support the HTML5 placeholder attribute. If you notice that Placekeeper is not working with a browser, please open a new Github issue about it.
 
 ### Browser support for HTML5 placeholder attribute
 
