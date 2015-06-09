@@ -49,7 +49,7 @@ module.exports = function(config) {
     captureTimeout: 120000,
     browserNoActivityTimeout: 60000,
     preprocessors: {
-      "../src/*.js": ["wrap"]
+      "src/*.js": ["wrap"]
     },
     sauceLabs: {
       testName: "HTML5 placeholder polyfill"

@@ -6,11 +6,11 @@ module.exports = function(config) {
 
   config.set(extend(shared, {
     preprocessors: {
-      "../src/**/!(support).js": ["coverage"],
-      "../src/*.js": ["wrap"]
+      "src/**/!(support).js": ["coverage"],
+      "src/*.js": ["wrap"]
     },
     coverageReporter: {
-      dir: "../coverage/",
+      dir: "coverage/",
       reporters: [
         {
           type: "lcov"
