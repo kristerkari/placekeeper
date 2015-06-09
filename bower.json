@@ -32,6 +32,8 @@
     "src",
     "test",
     "tests",
+    "README.md",
+    "package.json",
     "*.sh",
     "*.js"
   ]
