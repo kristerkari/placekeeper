@@ -46,7 +46,9 @@ I’d suggest sticking to the `#aaa` color for placeholder text, as it’s the d
 
 You can change Placekeeper settings by using `data-` attributes on your `<html>` or `<body>` tags. If you don't set any `data-` attributes, Placekeeper will run with default settings.
 
-```
+Example:
+
+```html
 <body data-placeholder-mode="input">
 ```
 
