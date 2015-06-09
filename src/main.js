@@ -65,6 +65,7 @@
 
   function checkForPlaceholder(element) {
     var placeholder = utils.getPlaceholderValue(element);
+    var clone;
 
     if (!placeholder) {
       return;
@@ -75,7 +76,7 @@
     } else {
 
       if (elems.hasPasswordClone(element)) {
-        var clone = elems.getPasswordClone(element);
+        clone = elems.getPasswordClone(element);
         if (element.disabled !== clone.disabled) {
           clone.disabled = element.disabled;
         }
@@ -89,7 +90,7 @@
       }
     }
 
-    if (!hasValueOrIsActive(element)) {
+    if (!clone && !hasValueOrIsActive(element)) {
       polyfill.showPlaceholder(element);
     }
 
