@@ -122,12 +122,12 @@
     }
     clearInterval(loopInterval);
     placekeeperLoop();
-    if (!mode.hasDisabledLiveUpdates()) {
-      mode.enableLive();
+    if (!mode.hasWatchingDisabled()) {
+      mode.enableWatching();
       // main loop
       loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
     } else {
-      mode.disableLive();
+      mode.disableWatching();
     }
   }
 
@@ -149,7 +149,7 @@
   placekeeper.enable = init;
   placekeeper.disable = disablePlacekeeper;
   placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-  placekeeper.isLiveUpdateEnabled = mode.isPlacekeeperLiveUpdateEnabled;
+  placekeeper.isWatchingEnabled = mode.isPlacekeeperWatchingEnabled;
 
   // Exposed private methods
   placekeeper.priv = {

@@ -4,7 +4,7 @@
 
   var isEnabled = false;
   var isFocusEnabled = true;
-  var isLiveUpdateEnabled = false;
+  var isWatchingEnabled = false;
 
   function isPlacekeeperEnabled() {
     return isEnabled;
@@ -14,13 +14,13 @@
     return isFocusEnabled;
   }
 
-  function isPlacekeeperLiveUpdateEnabled() {
-    return isLiveUpdateEnabled;
+  function isPlacekeeperWatchingEnabled() {
+    return isWatchingEnabled;
   }
 
-  function hasDisabledLiveUpdates() {
-    return data.hasLiveUpdatesAttrSetToFalse(document.documentElement) ||
-           data.hasLiveUpdatesAttrSetToFalse(document.body);
+  function hasWatchingDisabled() {
+    return data.hasWatchAttrSetToFalse(document.documentElement) ||
+           data.hasWatchAttrSetToFalse(document.body);
   }
 
   function hasFocusDisabled() {
@@ -36,12 +36,12 @@
     isFocusEnabled = false;
   }
 
-  function enableLive() {
-    isLiveUpdateEnabled = true;
+  function enableWatching() {
+    isWatchingEnabled = true;
   }
 
-  function disableLive() {
-    isLiveUpdateEnabled = false;
+  function disableWatching() {
+    isWatchingEnabled = false;
   }
 
   function disable() {
@@ -55,13 +55,13 @@
   placekeeper.mode = {
     isPlacekeeperEnabled: isPlacekeeperEnabled,
     isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
-    isPlacekeeperLiveUpdateEnabled: isPlacekeeperLiveUpdateEnabled,
-    hasDisabledLiveUpdates: hasDisabledLiveUpdates,
+    isPlacekeeperWatchingEnabled: isPlacekeeperWatchingEnabled,
+    hasWatchingDisabled: hasWatchingDisabled,
     hasFocusDisabled: hasFocusDisabled,
     enableFocus: enableFocus,
     disableFocus: disableFocus,
-    enableLive: enableLive,
-    disableLive: disableLive,
+    enableWatching: enableWatching,
+    disableWatching: disableWatching,
     disable: disable,
     enable: enable
   };
