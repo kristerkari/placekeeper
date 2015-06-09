@@ -95,10 +95,28 @@ describe("password inputs", function() {
       expect(clone.disabled).toEqual(true);
     });
 
-    describe("and when input is enabled", function() {
+    describe("and when input is enabled with prop", function() {
 
       beforeEach(function(done) {
-        element.removeAttribute("disabled");
+        clone.disabled = false;
+        placekeeper.priv.__setupPlaceholders();
+        setTimeout(done, helpers.loopDurationForTests);
+      });
+
+      it("should have element enabled", function() {
+        expect(element.disabled).toEqual(false);
+      });
+
+      it("should have clone enabled", function() {
+        expect(clone.disabled).toEqual(false);
+      });
+
+    });
+
+    describe("and when input is enabled with attribute", function() {
+
+      beforeEach(function(done) {
+        clone.removeAttribute("disabled");
         placekeeper.priv.__setupPlaceholders();
         setTimeout(done, helpers.loopDurationForTests);
       });
@@ -149,6 +167,24 @@ describe("password inputs", function() {
 
         it("should have called polyfill's hidePlaceholder method", function() {
           expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
+        });
+
+        describe("and when input is disabled", function() {
+
+          beforeEach(function(done) {
+            element.disabled = true;
+            placekeeper.priv.__setupPlaceholders();
+            setTimeout(done, helpers.loopDurationForTests);
+          });
+
+          it("should have element disabled", function() {
+            expect(element.disabled).toEqual(true);
+          });
+
+          it("should have clone disabled", function() {
+            expect(clone.disabled).toEqual(true);
+          });
+
         });
 
         describe("and when there is a value and input is blurred", function() {
@@ -232,7 +268,7 @@ describe("password inputs", function() {
       describe("and when input is disabled again", function() {
 
         beforeEach(function(done) {
-          element.disabled = true;
+          clone.disabled = true;
           placekeeper.priv.__setupPlaceholders();
           setTimeout(done, helpers.loopDurationForTests);
         });

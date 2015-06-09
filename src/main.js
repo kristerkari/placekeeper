@@ -78,7 +78,12 @@
       if (elems.hasPasswordClone(element)) {
         clone = elems.getPasswordClone(element);
         if (element.disabled !== clone.disabled) {
-          clone.disabled = element.disabled;
+          if (clone.style.display === "block") {
+            element.disabled = clone.disabled;
+          }
+          if (element.style.display === "block") {
+            clone.disabled = element.disabled;
+          }
         }
       }
 
