@@ -58,11 +58,11 @@ __data-placeholder-mode="input"__
 
 Does not hide placeholder on focus, but hides it after user types text to the input field.
 
-### data-placeholder-live
+### data-placeholder-watch
 
 Default: `true`
 
-__data-placeholder-live="false"__
+__data-placeholder-watch="false"__
 
 Disables Placekeeper's feature that watches for placeholder attribute changes on input fields that are currently on the page.
 

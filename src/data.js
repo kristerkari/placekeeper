@@ -1,7 +1,7 @@
 (function() {
 
-  function hasLiveUpdatesAttrSetToFalse(element) {
-    return element.getAttribute("data-placeholder-live") === "false";
+  function hasWatchAttrSetToFalse(element) {
+    return element.getAttribute("data-placeholder-watch") === "false";
   }
 
   function hasModeAttrSetToInput(element) {
@@ -89,7 +89,7 @@
   }
 
   placekeeper.data = {
-    hasLiveUpdatesAttrSetToFalse: hasLiveUpdatesAttrSetToFalse,
+    hasWatchAttrSetToFalse: hasWatchAttrSetToFalse,
     hasModeAttrSetToInput: hasModeAttrSetToInput,
     hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
     hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,

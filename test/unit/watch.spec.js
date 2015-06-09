@@ -1,9 +1,9 @@
-describe("live updates", function() {
+describe("watching for placeholder changes", function() {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("when live updates are enabled and there is an element with placeholder on the page", function() {
+  describe("when watching enabled and there is an element with placeholder on the page", function() {
     var element;
 
     beforeEach(function(done) {
@@ -22,8 +22,8 @@ describe("live updates", function() {
       expect(element.getAttribute("data-placeholder-value")).toEqual("Test");
     });
 
-    it("should have live updates enabled", function() {
-      expect(placekeeper.isLiveUpdateEnabled()).toEqual(true);
+    it("should have watching enabled", function() {
+      expect(placekeeper.isWatchingEnabled()).toEqual(true);
     });
 
     describe("and when placeholder value is changed", function() {

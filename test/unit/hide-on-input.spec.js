@@ -13,15 +13,15 @@ describe("hide on input mode", function() {
         helpers.spyOnFocusEnabledAndReturn(false);
         element = helpers.createInputElement(true);
         placekeeper.priv.__setupPlaceholders();
-        placekeeper.mode.enableLive();
+        placekeeper.mode.enableWatching();
       });
 
       afterEach(function() {
         element.parentNode.removeChild(element);
       });
 
-      it("should have live updates enabled", function() {
-        expect(placekeeper.isLiveUpdateEnabled()).toEqual(true);
+      it("should have watching enabled", function() {
+        expect(placekeeper.isWatchingEnabled()).toEqual(true);
       });
 
       it("should have called utils.addEventListener for keydown handler", function() {
