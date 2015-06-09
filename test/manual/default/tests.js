@@ -33,6 +33,9 @@ setTimeout(function() {
   document.getElementById("d1").disabled = false;
   document.getElementById("d2").disabled = false;
 
+  document.getElementById("e1").disabled = true;
+  document.getElementById("e2").disabled = true;
+
 }, 1000);
 
 // Bind a submit event handler to the test form
