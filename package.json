@@ -1,28 +1,11 @@
 {
   "name": "placekeeper",
+  "description": "HTML5 placeholder attribute polyfill",
   "version": "1.0.0-alpha",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "coveralls": "cat ./coverage/*/lcov.info | COVERALLS_SERVICE_NAME=\"travis-ci\" ./node_modules/.bin/coveralls",
-    "codeclimate": "cat ./coverage/*/lcov.info | ./node_modules/.bin/codeclimate",
-    "test": "./node_modules/karma/bin/karma start config/karma.conf.js",
-    "tdd": "./node_modules/karma/bin/karma start config/karma.conf.js --no-single-run --auto-watch",
-    "build": "./node_modules/.bin/gulp build",
-    "lint": "./node_modules/.bin/gulp lint",
-    "server": "./node_modules/.bin/gulp server",
-    "sauce": "./node_modules/karma/bin/karma start config/karma.sauce.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kristerkari/placekeeper.git"
-  },
   "author": "Krister Kari <krister@krister.fi>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kristerkari/placekeeper/issues"
   },
-  "homepage": "https://github.com/kristerkari/placekeeper",
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.4",
     "coveralls": "^2.11.2",
@@ -45,5 +28,32 @@
     "karma-sauce-launcher": "^0.2.11",
     "karma-wrap-preprocessor": "^0.1.0",
     "lodash.assign": "^3.2.0"
+  },
+  "files": [
+    "dist/placekeeper.js",
+    "dist/placekeeper.jquery.js",
+    "dist/placekeeper.prototype.js",
+    "dist/placekeeper.yui3.js"
+  ],
+  "homepage": "https://github.com/kristerkari/placekeeper",
+  "keywords": [
+    "placeholder",
+    "polyfill"
+  ],
+  "license": "MIT",
+  "main": "dist/placekeeper.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kristerkari/placekeeper.git"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/gulp build",
+    "codeclimate": "cat ./coverage/*/lcov.info | ./node_modules/.bin/codeclimate",
+    "coveralls": "cat ./coverage/*/lcov.info | COVERALLS_SERVICE_NAME=\"travis-ci\" ./node_modules/.bin/coveralls",
+    "lint": "./node_modules/.bin/gulp lint",
+    "sauce": "./node_modules/karma/bin/karma start config/karma.sauce.conf.js",
+    "server": "./node_modules/.bin/gulp server",
+    "tdd": "./node_modules/karma/bin/karma start config/karma.conf.js --no-single-run --auto-watch",
+    "test": "./node_modules/karma/bin/karma start config/karma.conf.js"
   }
 }
