@@ -5,6 +5,82 @@ describe("hide on input mode", function() {
 
   describe("hide on input mode", function() {
 
+    describe("when there is a password input on the page and input type can not be changed", function() {
+      var element;
+      var clone;
+
+      beforeEach(function(done) {
+        helpers.spyOnFocusEnabledAndReturn(false);
+        helpers.spyOnCanChangeToTypeAndReturn(false);
+        element = helpers.createInputElement(true, "password");
+        setTimeout(function() {
+          clone = document.getElementById("elem");
+          done();
+        }, helpers.loopDurationForTests);
+        placekeeper.priv.__setupPlaceholders();
+      });
+
+      afterEach(function() {
+        element.parentNode.removeChild(element);
+      });
+
+      describe("and when input is focused", function() {
+
+        beforeEach(function(done) {
+          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
+          spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+          helpers.retryFocus(clone, function() {
+            setTimeout(function() {
+              element = document.getElementById("elem");
+              done();
+            }, helpers.loopDurationForTests);
+          });
+        });
+
+        describe("and when user writes letter 'a' (keydown, value, keyup)", function() {
+
+          beforeEach(function(done) {
+            triggerEvent.keyboard(element, "keydown", 65);
+            element.value = "a";
+            triggerEvent.keyboard(element, "keyup", 65);
+            setTimeout(function() {
+              element = document.getElementById("elem");
+              done();
+            }, helpers.loopDurationForTests);
+          });
+
+          it("should have element value as 'a'", function() {
+            expect(element.value).toEqual("a");
+          });
+
+          it("should have clone value empty", function() {
+            expect(clone.value).toEqual("");
+          });
+
+          it("should have removed data-placeholder-active", function() {
+            expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+          });
+
+          it("should have removed placeholder class", function() {
+            expect(element).not.toHaveClass("placeholder");
+          });
+
+          it("should have called polyfill's hidePlaceholder method once", function() {
+            expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
+            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+          });
+
+          it("should not have called polyfill's showPlaceholder method", function() {
+            expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
+            expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+          });
+
+        });
+
+      });
+
+    });
+
     describe("when data-placeholder-focus is set to false and there is an input on the page", function() {
       var element;
 
