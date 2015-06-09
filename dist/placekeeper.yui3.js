@@ -516,6 +516,8 @@
 
     function swapElements(from, to) {
       swapId(from, to);
+      to.value = from.value;
+      from.value = "";
       from.style.display = "none";
       to.style.display = "block";
     }
