@@ -89,7 +89,7 @@ Placekeeper is tested with unit tests and manual testing using several browsers 
 - IE Mobile ✔
 - UC Browser for Android ✔
 
-ⓘ  Partial support in older Safari and Opera versions refers to lacking placeholder support otextarea elements.
+ⓘ  Partial support in older Safari and Opera versions refers to lacking placeholder support on textarea elements.
 
 ### Avoiding Internet Explorer compatibility mode with older IE versions
 
