@@ -74,7 +74,7 @@
     .pipe(gulp.dest("dist"));
   }
 
-  gulp.task("adapters", function() {
+  gulp.task("adapters", ["source"], function() {
     return adapters.forEach(buildAdapter);
   });
 
