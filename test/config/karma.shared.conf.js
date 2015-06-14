@@ -6,6 +6,7 @@ var sharedKarmaConfig = {
   autoWatch: false,
   exclude: [],
   files: [
+    "node_modules/jquery/dist/jquery.js",
     "src/data.js",
     "src/mode.js",
     "src/utils.js",
@@ -15,6 +16,7 @@ var sharedKarmaConfig = {
     "src/events.js",
     "src/main.js",
     "src/module.js",
+    "src/adapters/adapter.jquery.js",
     "test/utils/*.js",
     "test/**/*.spec.js"
   ],

@@ -146,6 +146,16 @@ var helpers = {
     document.body.innerHTML = element;
     return document.getElementById("elem");
   },
+  createInputElementWithNumericPlaceholder: function(hasPlaceholder, type) {
+    var element = "<input type=\"" + (type || "text") +
+                  "\" id=\"elem\" maxlength=\"12\"";
+    if (hasPlaceholder) {
+      element += " placeholder=\"123456\"";
+    }
+    element += ">";
+    document.body.innerHTML = element;
+    return document.getElementById("elem");
+  },
   createDisabledInputElement: function(hasPlaceholder, type) {
     var element = "<input type=\"" + (type || "text") +
                   "\" id=\"elem\" maxlength=\"12\"";
