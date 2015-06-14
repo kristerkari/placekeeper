@@ -1,6 +1,6 @@
 1.0.3
 
-- Fixed jQuery adapter for numeric inputs #24
+- Fixed jQuery adapter for numeric placeholder values #24
 
 1.0.2
 
