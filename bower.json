@@ -1,7 +1,6 @@
 {
   "name": "placekeeper",
   "description": "HTML5 placeholder attribute polyfill",
-  "version": "1.0.1",
   "homepage": "https://github.com/kristerkari/placekeeper",
   "authors": [
     "Krister Kari <krister@krister.fi>"
