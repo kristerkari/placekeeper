@@ -5,6 +5,10 @@
   var isEnabled = false;
   var isFocusEnabled = true;
   var isWatchingEnabled = false;
+  var modeElements = [
+    document.documentElement,
+    document.body
+  ];
 
   function isPlacekeeperEnabled() {
     return isEnabled;
@@ -18,14 +22,21 @@
     return isWatchingEnabled;
   }
 
+  function some(elems, boolFn) {
+    for (var i = 0; i < elems.length; i++) {
+      if (elems[i] != null & boolFn(elems[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function hasWatchingDisabled() {
-    return data.hasWatchAttrSetToFalse(document.documentElement) ||
-           data.hasWatchAttrSetToFalse(document.body);
+    return some(modeElements, data.hasWatchAttrSetToFalse);
   }
 
   function hasFocusDisabled() {
-    return data.hasModeAttrSetToInput(document.documentElement) ||
-           data.hasModeAttrSetToInput(document.body);
+    return some(modeElements, data.hasModeAttrSetToInput);
   }
 
   function enableFocus() {
