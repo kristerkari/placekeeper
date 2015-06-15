@@ -1,3 +1,7 @@
+1.0.4
+
+- Fixed an error that was thrown when `document.documentElement` or `document.body` was `null` or `undefined`.
+
 1.0.3
 
 - Fixed jQuery adapter for numeric placeholder values #24
