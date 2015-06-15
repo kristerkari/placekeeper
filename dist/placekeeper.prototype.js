@@ -145,7 +145,7 @@
 
     function some(elems, boolFn) {
       for (var i = 0; i < elems.length; i++) {
-        if (elems[i] != null & boolFn(elems[i])) {
+        if (elems[i] != null && boolFn(elems[i])) {
           return true;
         }
       }
