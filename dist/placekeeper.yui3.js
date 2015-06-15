@@ -126,6 +126,10 @@
     var isEnabled = false;
     var isFocusEnabled = true;
     var isWatchingEnabled = false;
+    var modeElements = [
+      document.documentElement,
+      document.body
+    ];
 
     function isPlacekeeperEnabled() {
       return isEnabled;
@@ -139,14 +143,21 @@
       return isWatchingEnabled;
     }
 
+    function some(elems, boolFn) {
+      for (var i = 0; i < elems.length; i++) {
+        if (elems[i] != null & boolFn(elems[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function hasWatchingDisabled() {
-      return data.hasWatchAttrSetToFalse(document.documentElement) ||
-             data.hasWatchAttrSetToFalse(document.body);
+      return some(modeElements, data.hasWatchAttrSetToFalse);
     }
 
     function hasFocusDisabled() {
-      return data.hasModeAttrSetToInput(document.documentElement) ||
-             data.hasModeAttrSetToInput(document.body);
+      return some(modeElements, data.hasModeAttrSetToInput);
     }
 
     function enableFocus() {
@@ -378,12 +389,16 @@
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
     var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
+    function isElementSupported(element) {
+      return "placeholder" in document.createElement(element) && !isOperaMini;
+    }
+
     function isInputSupported() {
-      return "placeholder" in document.createElement("input") && !isOperaMini;
+      return isElementSupported("input");
     }
 
     function isTextareaSupported() {
-      return "placeholder" in document.createElement("textarea") && !isOperaMini;
+      return isElementSupported("textarea");
     }
 
     function hasNativePlaceholderSupport() {
@@ -514,12 +529,20 @@
       to.id = id;
     }
 
-    function swapElements(from, to) {
-      swapId(from, to);
+    function swapValue(from, to) {
       to.value = from.value;
       from.value = "";
+    }
+
+    function swapVisibility(from, to) {
       from.style.display = "none";
       to.style.display = "block";
+    }
+
+    function swapElements(from, to) {
+      swapId(from, to);
+      swapValue(from, to);
+      swapVisibility(from, to);
     }
 
     function isClonedPasswordInput(element) {
