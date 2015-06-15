@@ -45,7 +45,7 @@
   var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
   function isElementSupported(element) {
-    return "placeholder" in document.createElement(element) && !isOperaMini
+    return "placeholder" in document.createElement(element) && !isOperaMini;
   }
 
   function isInputSupported() {
