@@ -69,12 +69,20 @@
     to.id = id;
   }
 
-  function swapElements(from, to) {
-    swapId(from, to);
+  function swapValue(from, to) {
     to.value = from.value;
     from.value = "";
+  }
+
+  function swapVisibility(from, to) {
     from.style.display = "none";
     to.style.display = "block";
+  }
+
+  function swapElements(from, to) {
+    swapId(from, to);
+    swapValue(from, to);
+    swapVisibility(from, to);
   }
 
   function isClonedPasswordInput(element) {
