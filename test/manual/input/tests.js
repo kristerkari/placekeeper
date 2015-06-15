@@ -34,7 +34,12 @@ setTimeout(function() {
 function submitHandler(e) {
   "use strict";
 
-  e.returnValue = false;
+  if (e.preventDefault) {
+    e.preventDefault();
+  } else {
+    e.returnValue = false;
+  }
+
   return false;
 }
 

@@ -29,7 +29,7 @@
     <input type="text" placeholder="Test maxlength" maxlength="4">
 
     <!-- Polyfill should not remove the wrong class name (see GH-25) -->
-    <input type="text" placeholder="My text colour should change on input" class="wrong-placeholdersjs">
+    <input type="text" placeholder="My text colour should change on input" class="wrong-placeholder">
 
     <!-- Polyfill should handle elements with a placeholder and an initial value -->
     <input type="text" placeholder="Test initial value" value="Initial value">
@@ -47,9 +47,10 @@
     <input type="text" id="handle4" placeholder="Placeholder removed">
 
     <!-- Polyfill should not allow placeholder text to be submitted as part of a form -->
-    <form method="get" action="" id="form1">
+    <form id="form1">
       <input type="text" placeholder="Test form submission">
       <input type="text" value="I should be submitted">
+      <input type="password" placeholder="Password">
       <button type="submit">Submit form</button>
       <button type="reset">Reset form</button>
     </form>
