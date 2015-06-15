@@ -127,7 +127,7 @@ Tests are written using [Jasmine](https://jasmine.github.io/2.3/introduction.htm
 
 ### Manual tests
 
-You can start a development server by running `npm run server`. Then open `http://localhost:8080` in your browser to see different plugin modes listed. Test files are located in `test/manual`.
+You can start a development server by running `npm start`. Then open `http://localhost:8080` in your browser to see different plugin modes listed. Test files are located in `test/manual`.
 
 ### Testing older Internet Explorer versions
 

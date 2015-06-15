@@ -53,7 +53,7 @@
     "coveralls": "cat ./coverage/*/lcov.info | COVERALLS_SERVICE_NAME=\"travis-ci\" ./node_modules/.bin/coveralls",
     "lint": "./node_modules/.bin/gulp lint",
     "sauce": "./node_modules/karma/bin/karma start test/config/karma.sauce.conf.js",
-    "server": "./node_modules/.bin/gulp server",
+    "start": "./node_modules/.bin/gulp server",
     "tdd": "./node_modules/karma/bin/karma start test/config/karma.conf.js --no-single-run --auto-watch",
     "test": "./node_modules/karma/bin/karma start test/config/karma.conf.js"
   }
