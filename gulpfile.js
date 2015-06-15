@@ -5,6 +5,8 @@
   var gulp = require("gulp");
   var concat = require("gulp-concat");
   var jscs = require("gulp-jscs");
+  var jshint = require("gulp-jshint");
+  var stylish = require("jshint-stylish");
   var eslint = require("gulp-eslint");
   var connect = require("gulp-connect");
   var indent = require("gulp-indent");
@@ -82,6 +84,9 @@
 
   gulp.task("lint", function() {
     return gulp.src("src/*.js")
+               .pipe(jshint())
+               .pipe(jshint.reporter(stylish))
+               .pipe(jshint.reporter("fail"))
                .pipe(eslint({
                  useEslintrc: true
                }))

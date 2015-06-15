@@ -72,6 +72,7 @@
         "wrap-iife": 2,
         "yoda": [2, "never"],
         "strict": 0,
+        "no-bitwise": 2,
         "no-underscore-dangle": 0,
         "no-unused-vars": 1
     }
