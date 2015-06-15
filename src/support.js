@@ -44,12 +44,16 @@
   // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
   var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
+  function isElementSupported(element) {
+    return "placeholder" in document.createElement(element) && !isOperaMini
+  }
+
   function isInputSupported() {
-    return "placeholder" in document.createElement("input") && !isOperaMini;
+    return isElementSupported("input");
   }
 
   function isTextareaSupported() {
-    return "placeholder" in document.createElement("textarea") && !isOperaMini;
+    return isElementSupported("textarea");
   }
 
   function hasNativePlaceholderSupport() {
