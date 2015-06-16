@@ -8,8 +8,8 @@ var sharedKarmaConfig = {
   files: [
     "node_modules/jquery/dist/jquery.js",
     "src/data.js",
-    "src/mode.js",
     "src/utils.js",
+    "src/mode.js",
     "src/support.js",
     "src/elements.js",
     "src/polyfill.js",

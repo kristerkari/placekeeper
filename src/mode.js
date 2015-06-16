@@ -1,6 +1,7 @@
 (function() {
 
   var data = placekeeper.data;
+  var utils = placekeeper.utils;
 
   var isEnabled = false;
   var isFocusEnabled = true;
@@ -22,21 +23,12 @@
     return isWatchingEnabled;
   }
 
-  function some(elems, boolFn) {
-    for (var i = 0; i < elems.length; i++) {
-      if (elems[i] != null && boolFn(elems[i])) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   function hasWatchingDisabled() {
-    return some(modeElements, data.hasWatchAttrSetToFalse);
+    return utils.some(modeElements, data.hasWatchAttrSetToFalse);
   }
 
   function hasFocusDisabled() {
-    return some(modeElements, data.hasModeAttrSetToInput);
+    return utils.some(modeElements, data.hasModeAttrSetToInput);
   }
 
   function enableFocus() {
