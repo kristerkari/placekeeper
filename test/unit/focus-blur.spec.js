@@ -72,6 +72,7 @@ describe("focusing and blurring an element with placeholder", function() {
     describe("and when element is focused", function() {
 
       beforeEach(function() {
+        spyOn(placekeeper.utils, "moveCaret");
         spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
         helpers.focus(element);
       });
@@ -99,6 +100,10 @@ describe("focusing and blurring an element with placeholder", function() {
 
       it("should have restored maxlength attribute", function() {
         expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
+      });
+
+      it("should have moved the caret to the beginning of the text field", function() {
+        expect(placekeeper.utils.moveCaret).toHaveBeenCalledWith(element, 0);
       });
 
       describe("and when a value is given to the element", function() {

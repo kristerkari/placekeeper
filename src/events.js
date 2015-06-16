@@ -38,6 +38,9 @@
         utils.moveCaret(element, 0);
       } else if (isActiveAndHasPlaceholderSet(element)) {
         polyfill.hidePlaceholder(element);
+        if (element.value === "") {
+          utils.moveCaret(element, 0);
+        }
       }
     };
   }
