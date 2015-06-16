@@ -28,6 +28,19 @@ describe("existing value", function() {
       expect(element).not.toHaveClass("placeholder");
     });
 
+    describe("and when element is focused", function() {
+
+      beforeEach(function() {
+        spyOn(placekeeper.utils, "moveCaret");
+        helpers.focus(element);
+      });
+
+      it("should not have moved the caret to the beginning of the text field", function() {
+        expect(placekeeper.utils.moveCaret).not.toHaveBeenCalled();
+      });
+
+    });
+
   });
 
   describe("when there is a textarea with placeholder and existing value on the page", function() {
