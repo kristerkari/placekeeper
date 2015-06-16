@@ -122,6 +122,15 @@
     return Boolean(getPlaceholderValue(element));
   }
 
+  function some(items, fn) {
+    for (var i = 0; i < items.length; i++) {
+      if (items[i] != null && fn(items[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   placekeeper.utils = {
     moveCaret: moveCaret,
     getPlaceholderValue: getPlaceholderValue,
@@ -135,6 +144,7 @@
     removeClass: removeClass,
     hasClass: hasClass,
     preventDefault: preventDefault,
+    some: some,
     getElementsByTagName: getElementsByTagName,
     inArray: inArray
   };

@@ -33,8 +33,8 @@
   gulp.task("source", function() {
     return gulp.src([
       "src/data.js",
-      "src/mode.js",
       "src/utils.js",
+      "src/mode.js",
       "src/support.js",
       "src/elements.js",
       "src/polyfill.js",
