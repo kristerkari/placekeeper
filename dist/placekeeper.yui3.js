@@ -57,6 +57,14 @@
       element.setAttribute("data-placeholder-value", value);
     }
 
+    function setElementValueAttr(element, value) {
+      element.setAttribute("data-placeholder-element-value", value);
+    }
+
+    function getElementValueAttr(element) {
+      return element.getAttribute("data-placeholder-element-value");
+    }
+
     function getValueAttr(element) {
       return element.getAttribute("data-placeholder-value");
     }
@@ -87,6 +95,7 @@
 
     function removeDataAttrs(element) {
       element.removeAttribute("data-placeholder-value");
+      element.removeAttribute("data-placeholder-element-value");
       element.removeAttribute("data-placeholder-has-events");
       element.removeAttribute("data-placeholder-active");
       element.removeAttribute("data-placeholder-maxlength");
@@ -103,7 +112,9 @@
       hasValueAttr: hasValueAttr,
       hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
       getMaxLengthAttr: getMaxLengthAttr,
+      getElementValueAttr: getElementValueAttr,
       getValueAttr: getValueAttr,
+      setElementValueAttr: setElementValueAttr,
       setValueAttr: setValueAttr,
       setActiveAttr: setActiveAttr,
       setSubmitAttr: setSubmitAttr,
@@ -485,6 +496,15 @@
     }
 
     function loopElements(inputs, textareas, callback) {
+
+      if (!inputs) {
+        inputs = [];
+      }
+
+      if (!textareas) {
+        textareas = [];
+      }
+
       var length = inputs.length + textareas.length;
       for (var i = 0; i < length; i++) {
         var element = i < inputs.length ?
@@ -748,6 +768,9 @@
           utils.moveCaret(element, 0);
         } else if (isActiveAndHasPlaceholderSet(element)) {
           polyfill.hidePlaceholder(element);
+          if (element.value === "") {
+            utils.moveCaret(element, 0);
+          }
         }
       };
     }
@@ -952,10 +975,32 @@
 
     function setupElement(element, placeholderValue) {
       data.setValueAttr(element, placeholderValue);
+      data.setElementValueAttr(element, element.value);
       data.setEventsAttr(element);
       elems.createPasswordCloneIfNeeded(element);
       events.addSubmitEvent(elems.getForm(element));
       events.addEventListeners(element);
+    }
+
+    function restoreValue(element) {
+      if (data.getElementValueAttr(element) != null) {
+        element.value = data.getElementValueAttr(element);
+      }
+    }
+
+    function cleanupElement(element, clone) {
+      if (element == null) {
+        return;
+      }
+      if (clone) {
+        element.removeAttribute("placeholder");
+        restoreValue(clone);
+      }
+      restoreValue(element);
+      events.removeEvents(element);
+      data.removeDataAttrs(element);
+      elems.removePasswordCloneIfExists(element);
+      utils.removeClass(element, "placeholder");
     }
 
     function needsSetup(element) {
@@ -980,7 +1025,14 @@
       var placeholder = utils.getPlaceholderValue(element);
       var clone;
 
-      if (!placeholder) {
+      if (elems.hasPasswordClone(element)) {
+        clone = elems.getPasswordClone(element);
+      }
+
+      if (!placeholder || clone && !utils.getPlaceholderValue(clone)) {
+        if (data.hasEventsAttrSetToTrue(element)) {
+          cleanupElement(element, clone);
+        }
         return;
       }
 
@@ -988,8 +1040,7 @@
         setupElement(element, placeholder);
       } else {
 
-        if (elems.hasPasswordClone(element)) {
-          clone = elems.getPasswordClone(element);
+        if (clone) {
           if (element.disabled !== clone.disabled) {
             if (clone.style.display === "block") {
               element.disabled = clone.disabled;
@@ -1002,6 +1053,9 @@
 
         if (hasPlaceholderValueChanged(element, placeholder)) {
           data.setValueAttr(element, placeholder);
+        }
+        if (data.getValueAttr(element) !== element.value) {
+          data.setElementValueAttr(element, element.value);
         }
         if (hasValueChanged(element, placeholder)) {
           polyfill.hidePlaceholder(element);
@@ -1029,6 +1083,9 @@
         mode.enable();
       } else {
         mode.disable();
+      }
+
+      if (support.hasNativePlaceholderSupport()) {
         return;
       }
 
@@ -1054,9 +1111,7 @@
       mode.disable();
       clearInterval(loopInterval);
       elems.forEachForm(events.removeSubmitEvent);
-      elems.forEachElement(events.removeEvents);
-      elems.forEachElement(data.removeDataAttrs);
-      elems.forEachElement(elems.removePasswordCloneIfExists);
+      elems.forEachElement(cleanupElement);
     }
 
     elems.getElements();
