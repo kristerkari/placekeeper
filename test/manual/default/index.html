@@ -8,7 +8,11 @@
   </head>
   <body>
 
+    <h3>Browser back button</h3>
+
     <p><a href="../">Link to previous page to test how polyfill works with browser back button</a></p>
+
+    <h3>Types</h3>
 
     <!-- Polyfill should handle input elements with no type attribute (it should default to "text" in all browsers) -->
     <input placeholder="Test no type">
@@ -25,26 +29,47 @@
     <!-- Polyfill should handle textarea elements -->
     <textarea placeholder="Test textarea"></textarea>
 
-    <!-- Polyfill should ignore the maxlength attribute if present -->
+    <h3>Maxlength</h3>
+
+    <!-- Polyfill should handle maxlength attribute if present -->
     <input type="text" placeholder="Test maxlength" maxlength="4">
 
-    <!-- Polyfill should not remove the wrong class name (see GH-25) -->
-    <input type="text" placeholder="My text colour should change on input" class="wrong-placeholder">
+    <h3>Similar CSS classes</h3>
+
+    <!-- Polyfill should not remove the wrong class name -->
+    <input type="text" placeholder="Placeholder should work normally" class="wrong-placeholder">
+
+    <h3>Initial value</h3>
 
     <!-- Polyfill should handle elements with a placeholder and an initial value -->
     <input type="text" placeholder="Test initial value" value="Initial value">
+    <input type="password" placeholder="Test initial value" value="Initial value">
+
+    <h3>Change value after page load</h3>
 
     <!-- Polyfill should handle placeholder values that change via script (this changes after 1s) -->
     <input type="text" placeholder="Test changing value" id="handle1">
+    <input type="password" placeholder="Test changing value" id="handle2">
+
+    <h3>Add placeholder after page load</h3>
 
     <!-- Polyfill should handle placeholder values are added via script (this gets one after 1s) -->
-    <input type="text" id="handle2">
+    <input type="text" id="handle3">
+    <input type="password" id="handle4">
+
+    <h3>Change input type (does not work in IE < 9)</h3>
 
     <!-- Polyfill should handle input types that change after page load e.g. text->password -->
-    <input type="text" id="handle3" placeholder="Change to password">
+    <input type="text" id="handle5" placeholder="Changed to password">
+    <input type="password" id="handle6" placeholder="Changed to text">
+
+    <h3>Remove placeholder attribute</h3>
 
     <!-- Polyfill should handle the dynamic removal of the placeholder attribute -->
-    <input type="text" id="handle4" placeholder="Placeholder removed">
+    <input type="text" id="handle7" placeholder="Placeholder removed">
+    <input type="password" id="handle8" placeholder="Placeholder removed">
+
+    <h3>Form</h3>
 
     <!-- Polyfill should not allow placeholder text to be submitted as part of a form -->
     <form id="form1">
@@ -55,37 +80,42 @@
       <button type="reset">Reset form</button>
     </form>
 
+    <h3>Input with form attribute</h3>
+
     <!-- Polyfill should handle input elements that specify their form with an attribute -->
-    <form method="get" action="" id="form2">
+    <form id="form2">
         <input type="text" form="form2" placeholder="Test form attribute">
     </form>
 
-    <!-- Polyfill should handle disabled text inputs -->
-    <input type="text" placeholder="Disabled text input" disabled>
+    <h3>Disabled inputs</h3>
 
-    <!-- Polyfill should handle disabled password inputs -->
+    <!-- Polyfill should handle disabled inputs -->
+    <input type="text" placeholder="Disabled text input" disabled>
     <input type="password" placeholder="Disabled password input" disabled>
 
-    <!-- Polyfill should handle disabled text input that gets enabled after 1s -->
-    <input id="d1" type="text" placeholder="Enabled text input" disabled>
+    <h3>Enabled after page load</h3>
 
-    <!-- Polyfill should handle disabled password input that gets enabled after 1s -->
+    <!-- Polyfill should handle disabled input that gets enabled after 1s -->
+    <input id="d1" type="text" placeholder="Enabled text input" disabled>
     <input id="d2" type="password" placeholder="Enabled password input" disabled>
+
+    <h3>Disabled after page load</h3>
 
     <!-- Polyfill should handle enabled text input that gets disabled after 1s -->
     <input id="e1" type="text" placeholder="Disabled text input">
-
-    <!-- Polyfill should handle enabled password input that gets disabled after 1s -->
     <input id="e2" type="password" placeholder="Disabled password input">
 
-    <!-- Polyfill should handle text inputs with labels -->
+    <h3>Labels</h3>
+
+    <!-- Polyfill should handle inputs with labels -->
     <label for="l1">Label for text input</label><br>
     <input id="l1" type="text" placeholder="Text input with label">
-
-    <!-- Polyfill should handle passwod inputs with labels -->
     <label for="l2">Label for password input</label><br>
     <input id="l2" type="password" placeholder="Password input with label">
 
+    <h3>A Link with "javascript:void(0)"</h3>
+
+    <!-- Polyfill should handle javascript links -->
     <p><a href="javascript:void(0)">A Link with "javascript:void(0)" as href</a></p>
 
     <script src="../../../dist/placekeeper.js"></script>

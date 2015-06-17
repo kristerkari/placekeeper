@@ -8,10 +8,16 @@ setTimeout(function() {
   document
   .getElementById("handle1")
   .setAttribute("placeholder", "This value has changed");
+  document
+  .getElementById("handle2")
+  .setAttribute("placeholder", "This value has changed");
 
   // Test created placeholder attribute value
   document
-  .getElementById("handle2")
+  .getElementById("handle3")
+  .setAttribute("placeholder", "This value has been added");
+  document
+  .getElementById("handle4")
   .setAttribute("placeholder", "This value has been added");
 
   // Test new input element added to the DOM after page load
@@ -22,13 +28,16 @@ setTimeout(function() {
   // Test input type changing after page load
   /*eslint-disable no-empty */
   try {
-    document.getElementById("handle3").type = "password";
+    document.getElementById("handle5").type = "password";
+    document.getElementById("handle6").type = "text";
   } catch (e) {
     // This will fail in IE < 9
   }
   /*eslint-enable no-empty */
 
-  document.getElementById("handle4").removeAttribute("placeholder");
+  // Test removed placeholder attribute value
+  document.getElementById("handle7").removeAttribute("placeholder");
+  document.getElementById("handle8").removeAttribute("placeholder");
 
   document.getElementById("d1").disabled = false;
   document.getElementById("d2").disabled = false;
