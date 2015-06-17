@@ -52,6 +52,14 @@
     element.setAttribute("data-placeholder-value", value);
   }
 
+  function setElementValueAttr(element, value) {
+    element.setAttribute("data-placeholder-element-value", value);
+  }
+
+  function getElementValueAttr(element) {
+    return element.getAttribute("data-placeholder-element-value");
+  }
+
   function getValueAttr(element) {
     return element.getAttribute("data-placeholder-value");
   }
@@ -82,6 +90,7 @@
 
   function removeDataAttrs(element) {
     element.removeAttribute("data-placeholder-value");
+    element.removeAttribute("data-placeholder-element-value");
     element.removeAttribute("data-placeholder-has-events");
     element.removeAttribute("data-placeholder-active");
     element.removeAttribute("data-placeholder-maxlength");
@@ -98,7 +107,9 @@
     hasValueAttr: hasValueAttr,
     hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
     getMaxLengthAttr: getMaxLengthAttr,
+    getElementValueAttr: getElementValueAttr,
     getValueAttr: getValueAttr,
+    setElementValueAttr: setElementValueAttr,
     setValueAttr: setValueAttr,
     setActiveAttr: setActiveAttr,
     setSubmitAttr: setSubmitAttr,
