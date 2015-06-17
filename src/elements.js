@@ -23,6 +23,15 @@
   }
 
   function loopElements(inputs, textareas, callback) {
+
+    if (!inputs) {
+      inputs = [];
+    }
+
+    if (!textareas) {
+      textareas = [];
+    }
+
     var length = inputs.length + textareas.length;
     for (var i = 0; i < length; i++) {
       var element = i < inputs.length ?
