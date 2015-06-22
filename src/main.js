@@ -149,6 +149,8 @@
 
       if (hasPlaceholderValueChanged(element, placeholder)) {
         data.setValueAttr(element, placeholder);
+        element.value = placeholder;
+        return;
       }
       if (data.getValueAttr(element) !== element.value) {
         data.setElementValueAttr(element, element.value);
