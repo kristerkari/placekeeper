@@ -47,27 +47,33 @@
 
     <h3>Change value after page load</h3>
 
-    <!-- Polyfill should handle placeholder values that change via script (this changes after 1s) -->
+    <!-- Polyfill should handle input values that change via script (this changes after 1s) -->
     <input type="text" placeholder="Test changing value" id="handle1">
     <input type="password" placeholder="Test changing value" id="handle2">
+
+    <h3>Change placeholder after page load</h3>
+
+    <!-- Polyfill should handle placeholder values that change via script (this changes after 1s) -->
+    <input type="text" placeholder="Test changing placeholder" id="handle3">
+    <input type="password" placeholder="Test changing placeholder" id="handle4">
 
     <h3>Add placeholder after page load</h3>
 
     <!-- Polyfill should handle placeholder values are added via script (this gets one after 1s) -->
-    <input type="text" id="handle3">
-    <input type="password" id="handle4">
+    <input type="text" id="handle5">
+    <input type="password" id="handle6">
 
     <h3>Change input type (does not work in IE < 9)</h3>
 
     <!-- Polyfill should handle input types that change after page load e.g. text->password -->
-    <input type="text" id="handle5" placeholder="Changed to password">
-    <input type="password" id="handle6" placeholder="Changed to text">
+    <input type="text" id="handle7" placeholder="Changed to password">
+    <input type="password" id="handle8" placeholder="Changed to text">
 
     <h3>Remove placeholder attribute</h3>
 
     <!-- Polyfill should handle the dynamic removal of the placeholder attribute -->
-    <input type="text" id="handle7" placeholder="Placeholder removed">
-    <input type="password" id="handle8" placeholder="Placeholder removed">
+    <input type="text" id="handle9" placeholder="Placeholder removed">
+    <input type="password" id="handle10" placeholder="Placeholder removed">
 
     <h3>Form</h3>
 

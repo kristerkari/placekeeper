@@ -4,21 +4,27 @@ var newInput = document.createElement("input");
 setTimeout(function() {
   "use strict";
 
+  // Test changing input value
+  document
+  .getElementById("handle1").value = "This value has changed";
+  document
+  .getElementById("handle2").value = "This value has changed";
+
   // Test changing placeholder attribute value
   document
-  .getElementById("handle1")
-  .setAttribute("placeholder", "This value has changed");
+  .getElementById("handle3")
+  .setAttribute("placeholder", "This placeholder has changed");
   document
-  .getElementById("handle2")
-  .setAttribute("placeholder", "This value has changed");
+  .getElementById("handle4")
+  .setAttribute("placeholder", "This placeholder has changed");
 
   // Test created placeholder attribute value
   document
-  .getElementById("handle3")
-  .setAttribute("placeholder", "This value has been added");
+  .getElementById("handle5")
+  .setAttribute("placeholder", "This placeholder has been added");
   document
-  .getElementById("handle4")
-  .setAttribute("placeholder", "This value has been added");
+  .getElementById("handle6")
+  .setAttribute("placeholder", "This placeholder has been added");
 
   // Test new input element added to the DOM after page load
   newInput.setAttribute("type", "text");
@@ -28,16 +34,16 @@ setTimeout(function() {
   // Test input type changing after page load
   /*eslint-disable no-empty */
   try {
-    document.getElementById("handle5").type = "password";
-    document.getElementById("handle6").type = "text";
+    document.getElementById("handle7").type = "password";
+    document.getElementById("handle8").type = "text";
   } catch (e) {
     // This will fail in IE < 9
   }
   /*eslint-enable no-empty */
 
   // Test removed placeholder attribute value
-  document.getElementById("handle7").removeAttribute("placeholder");
-  document.getElementById("handle8").removeAttribute("placeholder");
+  document.getElementById("handle9").removeAttribute("placeholder");
+  document.getElementById("handle10").removeAttribute("placeholder");
 
   document.getElementById("d1").disabled = false;
   document.getElementById("d2").disabled = false;
