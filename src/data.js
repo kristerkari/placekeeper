@@ -72,6 +72,10 @@
     element.setAttribute("data-placeholder-maxlength", element.maxLength);
   }
 
+  function getTypeAttr(element) {
+    return element.getAttribute("data-placeholder-type");
+  }
+
   function setTypeAttr(element, type) {
     element.setAttribute("data-placeholder-type", type);
   }
@@ -109,6 +113,7 @@
     getMaxLengthAttr: getMaxLengthAttr,
     getElementValueAttr: getElementValueAttr,
     getValueAttr: getValueAttr,
+    getTypeAttr: getTypeAttr,
     setElementValueAttr: setElementValueAttr,
     setValueAttr: setValueAttr,
     setActiveAttr: setActiveAttr,

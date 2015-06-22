@@ -42,7 +42,6 @@
       } else {
         element.type = "text";
       }
-      data.setTypeAttr(element, "password");
     }
 
     element.value = val;
