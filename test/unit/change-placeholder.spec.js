@@ -55,6 +55,31 @@ describe("changing placeholder", function() {
         expect(element.value).toEqual("Changed");
       });
 
+      describe("and when input is focused after that", function() {
+
+        beforeEach(function(done) {
+          helpers.retryFocus(element, function() {
+            setTimeout(function() {
+              element = document.getElementById("elem");
+              done();
+            }, helpers.loopDurationForTests);
+          });
+        });
+
+        it("should have removed element's value", function() {
+          expect(element.value).toEqual("");
+        });
+
+        it("should have removed data-placeholder-active", function() {
+          expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+        });
+
+        it("should have removed placeholder class", function() {
+          expect(element).not.toHaveClass("placeholder");
+        });
+
+      });
+
     });
 
   });

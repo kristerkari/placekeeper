@@ -150,7 +150,11 @@
       if (hasPlaceholderValueChanged(element, placeholder)) {
         data.setValueAttr(element, placeholder);
         element.value = placeholder;
-        return;
+        var original = elems.getPasswordOriginal(element);
+        if (original && original.nodeType === 1) {
+          original.setAttribute("placeholder", placeholder);
+          data.setValueAttr(original, placeholder);
+        }
       }
       if (data.getValueAttr(element) !== element.value) {
         data.setElementValueAttr(element, element.value);
