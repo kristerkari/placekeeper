@@ -77,6 +77,10 @@
       element.setAttribute("data-placeholder-maxlength", element.maxLength);
     }
 
+    function getTypeAttr(element) {
+      return element.getAttribute("data-placeholder-type");
+    }
+
     function setTypeAttr(element, type) {
       element.setAttribute("data-placeholder-type", type);
     }
@@ -114,6 +118,7 @@
       getMaxLengthAttr: getMaxLengthAttr,
       getElementValueAttr: getElementValueAttr,
       getValueAttr: getValueAttr,
+      getTypeAttr: getTypeAttr,
       setElementValueAttr: setElementValueAttr,
       setValueAttr: setValueAttr,
       setActiveAttr: setActiveAttr,
@@ -686,7 +691,6 @@
         } else {
           element.type = "text";
         }
-        data.setTypeAttr(element, "password");
       }
 
       element.value = val;
@@ -975,6 +979,7 @@
 
     function setupElement(element, placeholderValue) {
       data.setValueAttr(element, placeholderValue);
+      data.setTypeAttr(element, utils.getElementType(element));
       data.setElementValueAttr(element, element.value);
       data.setEventsAttr(element);
       elems.createPasswordCloneIfNeeded(element);
@@ -1021,7 +1026,36 @@
       return element.value !== "" || element === support.safeActiveElement();
     }
 
+    function isClone(element) {
+      return data.hasCloneAttrSetToTrue(element) && elems.getPasswordOriginal(element) != null;
+    }
+
+    function hasChangedType(element) {
+      var el = isClone(element) ? elems.getPasswordOriginal(element) : element;
+      return utils.getElementType(el) !== data.getTypeAttr(element);
+    }
+
+    function handleTypeChange(element) {
+
+      if (!hasChangedType(element)) {
+        return;
+      }
+
+      if (isClone(element)) {
+        var type = data.getTypeAttr(element);
+        element = elems.getPasswordOriginal(element);
+        element.setAttribute("type", type);
+      }
+
+      cleanupElement(element);
+    }
+
     function checkForPlaceholder(element) {
+
+      if (!element) {
+        return;
+      }
+
       var placeholder = utils.getPlaceholderValue(element);
       var clone;
 
@@ -1035,6 +1069,8 @@
         }
         return;
       }
+
+      handleTypeChange(element);
 
       if (needsSetup(element)) {
         setupElement(element, placeholder);
@@ -1053,6 +1089,12 @@
 
         if (hasPlaceholderValueChanged(element, placeholder)) {
           data.setValueAttr(element, placeholder);
+          element.value = placeholder;
+          var original = elems.getPasswordOriginal(element);
+          if (original && original.nodeType === 1) {
+            original.setAttribute("placeholder", placeholder);
+            data.setValueAttr(original, placeholder);
+          }
         }
         if (data.getValueAttr(element) !== element.value) {
           data.setElementValueAttr(element, element.value);
