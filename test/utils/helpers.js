@@ -128,7 +128,7 @@ var helpers = {
   },
   createInputElementWithValue: function(hasPlaceholder, type) {
     var element = "<input type=\"" + (type || "text") +
-                  "\" id=\"elem\" maxlength=\"12\"";
+                  "\" id=\"elem\"";
     if (hasPlaceholder) {
       element += " placeholder=\"Test\" value=\"MyVal\"";
     }

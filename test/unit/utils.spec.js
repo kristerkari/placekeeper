@@ -4,6 +4,18 @@ describe("utils", function() {
 
   beforeEach(helpers.initialSetup);
 
+  describe("getAttributes", function() {
+
+    it("should be able to copy element attributes", function() {
+      expect(placekeeper.utils.getAttributes(helpers.createInputElementWithValue(true))).toEqual({
+        id: "elem",
+        placeholder: "Test",
+        value: "MyVal"
+      });
+    });
+
+  });
+
   describe("hasPlaceholderAttrSet", function() {
 
     describe("when called with an element that has placeholder attribute set", function() {
