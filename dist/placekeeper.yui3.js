@@ -190,6 +190,13 @@
           copiedAttrs[attrs[i].name] = attrs[i].value;
         }
       }
+
+      // value attribute does not get copied in IE7
+      // so copy it manually
+      if (copiedAttrs.value == null && elem.value !== "") {
+        copiedAttrs.value = elem.value;
+      }
+
       return copiedAttrs;
     }
 
