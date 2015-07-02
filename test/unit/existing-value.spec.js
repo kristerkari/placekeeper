@@ -29,31 +29,35 @@ describe("existing value", function() {
     });
 
     it("should keep element value as it is", function() {
-      expect(clone.value).toEqual("MyVal");
+      expect(element.value).toEqual("MyVal");
     });
 
     it("should not have set data-placeholder-active", function() {
-      expect(clone.getAttribute("data-placeholder-active")).toEqual(null);
+      expect(element.getAttribute("data-placeholder-active")).toEqual(null);
     });
 
     it("should not have added placeholder class", function() {
-      expect(clone).not.toHaveClass("placeholder");
+      expect(element).not.toHaveClass("placeholder");
     });
 
-    it("should have element hidden", function() {
-      expect(element.style.display).toEqual("none");
+    it("should not have element hidden", function() {
+      expect(element.style.display).not.toEqual("none");
+    });
+
+    it("should have clone hidden", function() {
+      expect(clone.style.display).toEqual("none");
     });
 
     it("should have id set", function() {
-      expect(clone.id).toEqual("elem");
+      expect(element.id).toEqual("elem");
     });
 
-    it("should have removed id from element", function() {
-      expect(element.id).toEqual("");
+    it("should not have clone id set", function() {
+      expect(clone.id).toEqual("");
     });
 
-    it("should have changed password input type to text when there is no focus", function() {
-      expect(clone.getAttribute("type")).toEqual("text");
+    it("should have set password input type to password", function() {
+      expect(element.getAttribute("type")).toEqual("password");
     });
 
     describe("and when element is focused", function() {
@@ -68,7 +72,35 @@ describe("existing value", function() {
       });
 
       it("should keep element value as it is", function() {
-        expect(clone.value).toEqual("MyVal");
+        expect(element.value).toEqual("MyVal");
+      });
+
+      it("should keep type as it is", function() {
+        expect(element.getAttribute("type")).toEqual("password");
+      });
+
+      it("should not have set data-placeholder-active", function() {
+        expect(element.getAttribute("data-placeholder-active")).toEqual(null);
+      });
+
+      it("should not have added placeholder class", function() {
+        expect(element).not.toHaveClass("placeholder");
+      });
+
+      it("should not have element hidden", function() {
+        expect(element.style.display).not.toEqual("none");
+      });
+
+      it("should have clone hidden", function() {
+        expect(clone.style.display).toEqual("none");
+      });
+
+      it("should have id set", function() {
+        expect(element.id).toEqual("elem");
+      });
+
+      it("should not have clone id set", function() {
+        expect(clone.id).toEqual("");
       });
 
     });
