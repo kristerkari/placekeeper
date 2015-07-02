@@ -1032,9 +1032,10 @@
              data.getValueAttr(element) !== placeholder;
     }
 
-    function hasValueChanged(element, placeholder) {
-      return element.value !== "" && element.value !== placeholder;
-    }
+    function isActiveAndHasValueChanged(element, placeholder) {
+       return data.hasActiveAttrSetToTrue(element) &&
+              element.value !== "" && element.value !== placeholder;
+     }
 
     function hasValueOrIsActive(element) {
       return element.value !== "" || element === support.safeActiveElement();
@@ -1113,7 +1114,7 @@
         if (data.getValueAttr(element) !== element.value) {
           data.setElementValueAttr(element, element.value);
         }
-        if (hasValueChanged(element, placeholder)) {
+        if (isActiveAndHasValueChanged(element, placeholder)) {
           polyfill.hidePlaceholder(element);
         }
       }
