@@ -81,9 +81,16 @@
     return utils.inArray(badKeys, keyCode);
   }
 
+  function isIE9() {
+    return (/MSIE 9/i).test(window.navigator.userAgent);
+  }
+
   function canChangeToType(elem, type) {
     // IE9 can change type from password to text,
     // but not back from text to password.
+    if (isIE9()) {
+      return false;
+    }
     // Input type can not be changed in IE8 and below.
     try {
       var oldType = elem.type;
