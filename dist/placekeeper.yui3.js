@@ -186,7 +186,7 @@
       var attrs = elem.attributes;
       for (var i = 0; i < attrs.length; i++) {
         // old IEs will throw an error if you try to copy "type" attribute.
-        if (attrs[i].specified && attrs[i].name !== "type") {
+        if (attrs[i].specified && attrs[i].name !== "type" && attrs[i].name !== "id") {
           copiedAttrs[attrs[i].name] = attrs[i].value;
         }
       }
@@ -609,6 +609,7 @@
       utils.setAttributes(clone, utils.getAttributes(element));
       clone.type = "text";
       clone.removeAttribute("name");
+      clone.style.display = "none";
       data.setCloneAttr(clone);
       return clone;
     }
@@ -1119,7 +1120,7 @@
         }
       }
 
-      if (!clone && !hasValueOrIsActive(element)) {
+      if (!hasValueOrIsActive(element)) {
         polyfill.showPlaceholder(element);
       }
 
