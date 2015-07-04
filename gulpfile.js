@@ -112,7 +112,7 @@
     }, done);
   });
 
-  gulp.task("size", function () {
+  gulp.task("size", function() {
     return gulp.src("./dist/*")
                .pipe(sizereport({
                   gzip: true
