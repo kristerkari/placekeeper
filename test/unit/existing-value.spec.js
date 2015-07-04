@@ -13,13 +13,14 @@ describe("existing value", function() {
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElementWithValue(true, "password");
       setTimeout(function() {
-        clone = document.getElementById("elem");
+        clone = element.previousSibling;
         done();
       }, helpers.loopDurationForTests);
       placekeeper.priv.__init();
     });
 
     afterEach(function() {
+      clone.parentNode.removeChild(clone);
       element.parentNode.removeChild(element);
     });
 
@@ -64,7 +65,7 @@ describe("existing value", function() {
 
       beforeEach(function() {
         spyOn(placekeeper.utils, "moveCaret");
-        helpers.focus(clone);
+        helpers.focus(element);
       });
 
       it("should not have moved the caret to the beginning of the text field", function() {
@@ -108,11 +109,8 @@ describe("existing value", function() {
     describe("and when value is changed", function() {
 
       beforeEach(function(done) {
-        clone.value = "Changed";
-        setTimeout(function() {
-          element = document.getElementById("elem");
-          done();
-        }, helpers.loopDurationForTests);
+        element.value = "Changed";
+        setTimeout(done, helpers.loopDurationForTests);
       });
 
       it("should have kept element's value", function() {
@@ -132,23 +130,39 @@ describe("existing value", function() {
     describe("and when value is removed", function() {
 
       beforeEach(function(done) {
-        clone.value = "";
+        element.value = "";
         setTimeout(function() {
-          element = document.getElementById("elem");
+          clone = element.previousSibling;
           done();
         }, helpers.loopDurationForTests);
       });
 
-      it("should have set element's value to placeholder value (Test)", function() {
-        expect(element.value).toEqual("Test");
+      it("should have set clone's value to placeholder value (Test)", function() {
+        expect(clone.value).toEqual("Test");
       });
 
       it("should have set data-placeholder-active to true", function() {
-        expect(element.getAttribute("data-placeholder-active")).toEqual("true");
+        expect(clone.getAttribute("data-placeholder-active")).toEqual("true");
       });
 
       it("should have added placeholder class", function() {
-        expect(element).toHaveClass("placeholder");
+        expect(clone).toHaveClass("placeholder");
+      });
+
+      it("should not have id set", function() {
+        expect(element.id).toEqual("");
+      });
+
+      it("should have clone id set", function() {
+        expect(clone.id).toEqual("elem");
+      });
+
+      it("should have element hidden", function() {
+        expect(element.style.display).toEqual("none");
+      });
+
+      it("should not have clone hidden", function() {
+        expect(clone.style.display).not.toEqual("none");
       });
 
     });
