@@ -1,3 +1,13 @@
+1.0.5
+
+- Fixed clone password inputs to no clone id attribute #46
+- Fixed password inputs not working in IE9 #38
+- Fixed handling of password inputs that have intial values #37, #44
+- Fixed chaning placeholder attribute after page load #34
+- Fixed changing input type after page load #30
+- Fixed removing placeholder attribute #29
+- Fixed caret jumping to the beginning and end when input was focused. This was because `hidePlaceholder` method was getting called even if value did not change. #28
+
 1.0.4
 
 - Fixed an error that was thrown when `document.documentElement` or `document.body` was `null` or `undefined`.
