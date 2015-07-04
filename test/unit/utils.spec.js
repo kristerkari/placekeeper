@@ -8,7 +8,6 @@ describe("utils", function() {
 
     it("should be able to copy element attributes", function() {
       expect(placekeeper.utils.getAttributes(helpers.createInputElementWithValue(true))).toEqual({
-        id: "elem",
         placeholder: "Test",
         value: "MyVal"
       });
