@@ -165,7 +165,7 @@
       }
     }
 
-    if (!clone && !hasValueOrIsActive(element)) {
+    if (!hasValueOrIsActive(element)) {
       polyfill.showPlaceholder(element);
     }
 

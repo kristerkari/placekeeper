@@ -117,6 +117,7 @@
     utils.setAttributes(clone, utils.getAttributes(element));
     clone.type = "text";
     clone.removeAttribute("name");
+    clone.style.display = "none";
     data.setCloneAttr(clone);
     return clone;
   }
