@@ -39,6 +39,8 @@
     "requireSemicolons": true,
     "disallowMultipleSpaces": true,
     "requirePaddingNewLinesAfterUseStrict": true,
+    "disallowSpaceBeforeComma": true,
+    "requireObjectKeysOnNewLine": true,
     "validateNewlineAfterArrayElements": {
       "maximum": 4
     },
