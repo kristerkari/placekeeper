@@ -12,7 +12,7 @@
   var indent = require("gulp-indent");
   var trimlines = require("gulp-trimlines");
   var wrap = require("gulp-wrap");
-  var karma = require("karma").server;
+  var Server = require('karma').Server;
   var uglify = require("gulp-uglify");
   var rename = require("gulp-rename");
   var sizereport = require("gulp-sizereport");
@@ -98,18 +98,18 @@
   gulp.task("default", ["lint"]);
 
   gulp.task("test", function(done) {
-    karma.start({
+    new Server({
       configFile: path.join(__dirname, "/config/karma.conf.js"),
       singleRun: true
-    }, done);
+    }, done).start();
   });
 
   gulp.task("tdd", function(done) {
-    karma.start({
+    new Server({
       configFile: path.join(__dirname, "/config/karma.conf.js"),
       singleRun: false,
       autoWatch: true
-    }, done);
+    }, done).start();
   });
 
   gulp.task("size", function() {
