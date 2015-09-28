@@ -37,11 +37,11 @@ module.exports = function(config) {
       platform: "Windows XP",
       version: "11"
     },
-    safari5: {
+    safari6: {
       base: "SauceLabs",
       browserName: "safari",
-      platform: "OS X 10.6",
-      version: "5"
+      platform: "OS X 10.8",
+      version: "6"
     }
   };
 
