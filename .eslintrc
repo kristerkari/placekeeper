@@ -39,7 +39,7 @@
         "no-unreachable": 2,
         "use-isnan": 2,
         "valid-typeof": 2,
-        "eqeqeq": 2,
+        "eqeqeq": [2, "smart"],
         "no-alert": 2,
         "no-div-regex": 2,
         "no-else-return": 2,
