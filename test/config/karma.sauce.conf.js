@@ -25,11 +25,11 @@ module.exports = function(config) {
       browserName: "internet explorer",
       version: "9.0"
     },
-    ff3dot6: {
+    ff4: {
       base: "SauceLabs",
       browserName: "firefox",
       platform: "Windows XP",
-      version: "3.6"
+      version: "4"
     },
     opera11: {
       base: "SauceLabs",
