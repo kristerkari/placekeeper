@@ -28,8 +28,12 @@ describe("public methods", function() {
       });
 
       describe("and when disable is called", function() {
+        var focusHandler;
+        var blurHandler;
 
         beforeEach(function(done) {
+          focusHandler = placekeeper.events.handlers.focus;
+          blurHandler = placekeeper.events.handlers.blur;
           spyOn(placekeeper.utils, "removeEventListener");
           placekeeper.disable();
           setTimeout(function() {
@@ -64,8 +68,13 @@ describe("public methods", function() {
         if (clone != null) {
           it("should have called utils.removeEventListener for focus handler", function() {
             expect(placekeeper.utils.removeEventListener)
-            .toHaveBeenCalledWith(clone, "focus", placekeeper.events.handlers.focus);
+            .toHaveBeenCalledWith(clone, "focus", focusHandler);
           });
+
+          it("should have deleted the focus handler", function() {
+            expect(placekeeper.events.handlers.focus).not.toBeDefined();
+          });
+
         }
 
         // In IE7 element is `null`
@@ -74,8 +83,13 @@ describe("public methods", function() {
         if (element != null) {
           it("should have called utils.removeEventListener for blur handler", function() {
             expect(placekeeper.utils.removeEventListener)
-            .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
+            .toHaveBeenCalledWith(element, "blur", blurHandler);
           });
+
+          it("should have deleted the blur handler", function() {
+            expect(placekeeper.events.handlers.blur).not.toBeDefined();
+          });
+
         }
 
       });
@@ -103,8 +117,12 @@ describe("public methods", function() {
         });
 
         describe("and when disable is called", function() {
+          var focusHandler;
+          var blurHandler;
 
           beforeEach(function() {
+            focusHandler = placekeeper.events.handlers.focus;
+            blurHandler = placekeeper.events.handlers.blur;
             spyOn(placekeeper.utils, "removeEventListener");
             placekeeper.disable();
           });
@@ -115,12 +133,20 @@ describe("public methods", function() {
 
           it("should have called utils.removeEventListener for focus handler", function() {
             expect(placekeeper.utils.removeEventListener)
-            .toHaveBeenCalledWith(element, "focus", placekeeper.events.handlers.focus);
+            .toHaveBeenCalledWith(element, "focus", focusHandler);
           });
 
           it("should have called utils.removeEventListener for blur handler", function() {
             expect(placekeeper.utils.removeEventListener)
-            .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
+            .toHaveBeenCalledWith(element, "blur", blurHandler);
+          });
+
+          it("should have deleted the focus handler", function() {
+            expect(placekeeper.events.handlers.focus).not.toBeDefined();
+          });
+
+          it("should have deleted the blur handler", function() {
+            expect(placekeeper.events.handlers.blur).not.toBeDefined();
           });
 
         });

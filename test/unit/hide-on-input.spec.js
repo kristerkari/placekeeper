@@ -128,25 +128,43 @@ describe("hide on input mode", function() {
       });
 
       describe("and when disable is called", function() {
+        var keyupHandler;
+        var keydownHandler;
+        var clickHandler;
 
         beforeEach(function() {
+          keyupHandler = placekeeper.events.handlers.keyup;
+          keydownHandler = placekeeper.events.handlers.keydown;
+          clickHandler = placekeeper.events.handlers.click;
           spyOn(placekeeper.utils, "removeEventListener").and.callThrough();
           placekeeper.disable();
         });
 
         it("should have called utils.removeEventListener for keydown handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "keydown", placekeeper.events.handlers.keydown);
+          .toHaveBeenCalledWith(element, "keydown", keydownHandler);
         });
 
         it("should have called utils.removeEventListener for keyup handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "keyup", placekeeper.events.handlers.keyup);
+          .toHaveBeenCalledWith(element, "keyup", keyupHandler);
         });
 
         it("should have called utils.removeEventListener for click handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "click", placekeeper.events.handlers.click);
+          .toHaveBeenCalledWith(element, "click", clickHandler);
+        });
+
+        it("should have deleted the keyup handler", function() {
+          expect(placekeeper.events.handlers.keyup).not.toBeDefined();
+        });
+
+        it("should have deleted the keydown handler", function() {
+          expect(placekeeper.events.handlers.keydown).not.toBeDefined();
+        });
+
+        it("should have deleted the click handler", function() {
+          expect(placekeeper.events.handlers.click).not.toBeDefined();
         });
 
       });
@@ -295,8 +313,14 @@ describe("hide on input mode", function() {
       });
 
       describe("and when disable is called", function() {
+        var keyupHandler;
+        var keydownHandler;
+        var clickHandler;
 
         beforeEach(function() {
+          keyupHandler = placekeeper.events.handlers.keyup;
+          keydownHandler = placekeeper.events.handlers.keydown;
+          clickHandler = placekeeper.events.handlers.click;
           spyOn(placekeeper.utils, "removeEventListener").and.callThrough();
           placekeeper.disable();
         });
@@ -307,17 +331,29 @@ describe("hide on input mode", function() {
 
         it("should have called utils.removeEventListener for keydown handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "keydown", placekeeper.events.handlers.keydown);
+          .toHaveBeenCalledWith(element, "keydown", keydownHandler);
         });
 
         it("should have called utils.removeEventListener for keyup handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "keyup", placekeeper.events.handlers.keyup);
+          .toHaveBeenCalledWith(element, "keyup", keyupHandler);
         });
 
         it("should have called utils.removeEventListener for click handler", function() {
           expect(placekeeper.utils.removeEventListener)
-          .toHaveBeenCalledWith(element, "click", placekeeper.events.handlers.click);
+          .toHaveBeenCalledWith(element, "click", clickHandler);
+        });
+
+        it("should have deleted the keyup handler", function() {
+          expect(placekeeper.events.handlers.keyup).not.toBeDefined();
+        });
+
+        it("should have deleted the keydown handler", function() {
+          expect(placekeeper.events.handlers.keydown).not.toBeDefined();
+        });
+
+        it("should have deleted the click handler", function() {
+          expect(placekeeper.events.handlers.click).not.toBeDefined();
         });
 
       });

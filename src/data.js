@@ -1,4 +1,5 @@
 (function() {
+  var utils = placekeeper.utils;
 
   function hasWatchAttrSetToFalse(element) {
     return element.getAttribute("data-placeholder-watch") === "false";
@@ -93,12 +94,18 @@
   }
 
   function removeDataAttrs(element) {
-    element.removeAttribute("data-placeholder-value");
-    element.removeAttribute("data-placeholder-element-value");
-    element.removeAttribute("data-placeholder-has-events");
-    element.removeAttribute("data-placeholder-active");
-    element.removeAttribute("data-placeholder-maxlength");
-    element.removeAttribute("data-placeholder-type");
+    var attrs = [
+      "value",
+      "element-value",
+      "has-events",
+      "active",
+      "maxlength",
+      "type"
+    ];
+
+    utils.each(attrs, function(attr) {
+      element.removeAttribute("data-placeholder-" + attr);
+    });
   }
 
   placekeeper.data = {

@@ -56,19 +56,25 @@ describe("forms", function() {
     });
 
     describe("and when disable method is called", function() {
+      var submitHandler;
 
       beforeEach(function() {
+        submitHandler = placekeeper.events.handlers.submit;
         spyOn(placekeeper.utils, "removeEventListener");
         placekeeper.disable();
       });
 
       it("should have called utils.removeEventListener for submit handler", function() {
         expect(placekeeper.utils.removeEventListener)
-        .toHaveBeenCalledWith(form, "submit", placekeeper.events.handlers.submit);
+        .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
       it("should not have data-placeholder-submit set to the from", function() {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
+      });
+
+      it("should have deleted the submit handler", function() {
+        expect(placekeeper.events.handlers.submit).not.toBeDefined();
       });
 
     });
@@ -169,19 +175,25 @@ describe("forms", function() {
     });
 
     describe("and when disable method is called", function() {
+      var submitHandler;
 
       beforeEach(function() {
+        submitHandler = placekeeper.events.handlers.submit;
         spyOn(placekeeper.utils, "removeEventListener");
         placekeeper.disable();
       });
 
       it("should have called utils.removeEventListener for submit handler", function() {
         expect(placekeeper.utils.removeEventListener)
-        .toHaveBeenCalledWith(form, "submit", placekeeper.events.handlers.submit);
+        .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
       it("should not have data-placeholder-submit set to the from", function() {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
+      });
+
+      it("should have deleted the submit handler", function() {
+        expect(placekeeper.events.handlers.submit).not.toBeDefined();
       });
 
     });

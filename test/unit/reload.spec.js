@@ -135,20 +135,32 @@ describe("reload", function() {
     });
 
     describe("and when disable method is called", function() {
+      var focusHandler;
+      var blurHandler;
 
       beforeEach(function() {
+        focusHandler = placekeeper.events.handlers.focus;
+        blurHandler = placekeeper.events.handlers.blur;
         spyOn(placekeeper.utils, "removeEventListener");
         placekeeper.disable();
       });
 
       it("should have called utils.removeEventListener for focus handler", function() {
         expect(placekeeper.utils.removeEventListener)
-        .toHaveBeenCalledWith(element, "focus", placekeeper.events.handlers.focus);
+        .toHaveBeenCalledWith(element, "focus", focusHandler);
       });
 
       it("should have called utils.removeEventListener for blur handler", function() {
         expect(placekeeper.utils.removeEventListener)
-        .toHaveBeenCalledWith(element, "blur", placekeeper.events.handlers.blur);
+        .toHaveBeenCalledWith(element, "blur", blurHandler);
+      });
+
+      it("should have deleted the focus handler", function() {
+        expect(placekeeper.events.handlers.focus).not.toBeDefined();
+      });
+
+      it("should have deleted the blur handler", function() {
+        expect(placekeeper.events.handlers.blur).not.toBeDefined();
       });
 
       it("should not have data-placeholder-has-events attribute", function() {

@@ -100,24 +100,44 @@
     };
   }
 
+  var create = {
+    keydown: createKeydownHandler,
+    keyup: createKeyupHandler,
+    click: createClickHandler,
+    blur: createBlurHandler,
+    focus: createFocusHandler,
+    submit: createSubmitHandler
+  };
+
+  var hideOnInputEvents = [
+    "keydown",
+    "keyup",
+    "click"
+  ];
+
+  function createEventListener(element, evt) {
+    handlers[evt] = create[evt](element);
+    utils.addEventListener(element, evt, handlers[evt]);
+  }
+
+  function destroyEventListener(element, evt) {
+    utils.removeEventListener(element, evt, handlers[evt]);
+    delete handlers[evt];
+  }
+
   function addEventListeners(element) {
-    handlers.blur = createBlurHandler(element);
-    utils.addEventListener(element, "blur", handlers.blur);
+    createEventListener(element, "blur");
     if (elems.hasPasswordClone(element)) {
       element = elems.getPasswordClone(element);
     }
-    handlers.focus = createFocusHandler(element);
-    utils.addEventListener(element, "focus", handlers.focus);
+    createEventListener(element, "focus");
 
     // If the placeholder should hide on input rather than on focus we need
     // additional event handlers
     if (!mode.isPlacekeeperFocusEnabled()) {
-      handlers.keydown = createKeydownHandler(element);
-      handlers.keyup = createKeyupHandler(element);
-      handlers.click = createClickHandler(element);
-      utils.addEventListener(element, "keydown", handlers.keydown);
-      utils.addEventListener(element, "keyup", handlers.keyup);
-      utils.addEventListener(element, "click", handlers.click);
+      utils.each(hideOnInputEvents, function(evt) {
+        createEventListener(element, evt);
+      });
     }
 
   }
@@ -129,25 +149,24 @@
   }
 
   function removeEventListeners(element) {
-    utils.removeEventListener(element, "blur", handlers.blur);
+    destroyEventListener(element, "blur");
     if (elems.hasPasswordClone(element)) {
       element = elems.getPasswordClone(element);
     }
-    utils.removeEventListener(element, "focus", handlers.focus);
+    destroyEventListener(element, "focus");
     if (hasHideOnInputHandlers()) {
-      utils.removeEventListener(element, "keydown", handlers.keydown);
-      utils.removeEventListener(element, "keyup", handlers.keyup);
-      utils.removeEventListener(element, "click", handlers.click);
+      utils.each(hideOnInputEvents, function(evt) {
+        destroyEventListener(element, evt);
+      });
     }
   }
 
   function addSubmitListener(form) {
-    handlers.submit = createSubmitHandler(form);
-    utils.addEventListener(form, "submit", handlers.submit);
+    createEventListener(form, "submit");
   }
 
   function removeSubmitListener(form) {
-    utils.removeEventListener(form, "submit", handlers.submit);
+    destroyEventListener(form, "submit");
   }
 
   function hidePlaceholder(element) {

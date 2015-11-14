@@ -7,8 +7,8 @@ var sharedKarmaConfig = {
   exclude: [],
   files: [
     "node_modules/jquery/dist/jquery.js",
-    "src/data.js",
     "src/utils.js",
+    "src/data.js",
     "src/mode.js",
     "src/support.js",
     "src/elements.js",
