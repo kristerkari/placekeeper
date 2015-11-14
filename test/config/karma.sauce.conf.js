@@ -31,12 +31,12 @@ module.exports = function(config) {
       platform: "Windows XP",
       version: "4"
     },
-    // opera11: {
-    //   base: "SauceLabs",
-    //   browserName: "opera",
-    //   platform: "Windows XP",
-    //   version: "11"
-    // },
+    opera11: {
+      base: "SauceLabs",
+      browserName: "opera",
+      platform: "Windows XP",
+      version: "12"
+    },
     safari6: {
       base: "SauceLabs",
       browserName: "safari",
