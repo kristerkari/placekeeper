@@ -12,7 +12,7 @@
   var indent = require("gulp-indent");
   var trimlines = require("gulp-trimlines");
   var wrap = require("gulp-wrap");
-  var Server = require('karma').Server;
+  var Server = require("karma").Server;
   var uglify = require("gulp-uglify");
   var rename = require("gulp-rename");
   var sizereport = require("gulp-sizereport");
@@ -82,18 +82,29 @@
 
   gulp.task("build", ["source", "adapters"]);
 
-  gulp.task("lint", function() {
+  gulp.task("jshint", function() {
     return gulp.src("src/*.js")
-               .pipe(jshint())
-               .pipe(jshint.reporter(stylish))
-               .pipe(jshint.reporter("fail"))
+              .pipe(jshint())
+              .pipe(jshint.reporter(stylish))
+              .pipe(jshint.reporter("fail"));
+  });
+
+  gulp.task("eslint", function() {
+    return gulp.src("src/*.js")
                .pipe(eslint({
                  useEslintrc: true
                }))
                .pipe(eslint.format())
-               .pipe(eslint.failAfterError())
-               .pipe(jscs());
+               .pipe(eslint.failAfterError());
   });
+
+  gulp.task("jscs", function() {
+    return gulp.src("src/*.js")
+               .pipe(jscs())
+               .pipe(jscs.reporter());
+  });
+
+  gulp.task("lint", ["eslint", "jshint", "jscs"]);
 
   gulp.task("default", ["lint"]);
 
