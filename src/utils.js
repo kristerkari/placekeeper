@@ -1,6 +1,9 @@
 (function() {
 
   function addEventListener(elem, event, fn) {
+    if (fn == null) {
+      return;
+    }
     if (elem.addEventListener) {
       return elem.addEventListener(event, fn, false);
     }
@@ -18,6 +21,9 @@
   }
 
   function removeEventListener(elem, event, fn) {
+    if (fn == null) {
+      return;
+    }
     if (elem.removeEventListener) {
       return elem.removeEventListener(event, fn, false);
     }
@@ -44,15 +50,22 @@
     elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
   }
 
+  function each(collection, iter, ctx) {
+    for (var i = 0; i < collection.length; i++) {
+      iter.call(ctx, collection[i], i, collection);
+    }
+  }
+
   function getAttributes(elem) {
     var copiedAttrs = {};
     var attrs = elem.attributes;
-    for (var i = 0; i < attrs.length; i++) {
+
+    each(elem.attributes, function(attr) {
       // old IEs will throw an error if you try to copy "type" attribute.
-      if (attrs[i].specified && attrs[i].name !== "type" && attrs[i].name !== "id") {
-        copiedAttrs[attrs[i].name] = attrs[i].value;
+      if (attr.specified && attr.name !== "type" && attr.name !== "id") {
+        copiedAttrs[attr.name] = attr.value;
       }
-    }
+    });
 
     // value attribute does not get copied in IE7
     // so copy it manually
@@ -96,8 +109,7 @@
   // so we don't clobber any existing polyfills
   // - this is a really simple alternative)
   function inArray(arr, item) {
-    var len = arr.length;
-    for (var i = 0; i < len; i++) {
+    for (var i = 0; i < arr.length; i++) {
       if (arr[i] === item) {
         return true;
       }
@@ -151,6 +163,7 @@
     removeClass: removeClass,
     hasClass: hasClass,
     preventDefault: preventDefault,
+    each: each,
     some: some,
     getElementsByTagName: getElementsByTagName,
     inArray: inArray

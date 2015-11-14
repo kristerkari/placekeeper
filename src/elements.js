@@ -22,40 +22,25 @@
     return form;
   }
 
-  function loopElements(inputs, textareas, callback) {
-
-    if (!inputs) {
-      inputs = [];
-    }
-
-    if (!textareas) {
-      textareas = [];
-    }
-
-    var length = inputs.length + textareas.length;
-    for (var i = 0; i < length; i++) {
-      var element = i < inputs.length ?
-      inputs[i] :
-      textareas[i - inputs.length];
-      callback(element);
-    }
-  }
-
   function forEachForm(callback) {
     var forms = document.getElementsByTagName("form");
-    for (var i = 0; i < forms.length; i++) {
-      callback(forms[i]);
-    }
+    utils.each(forms, callback);
   }
 
   function forEachChildInput(element, callback) {
     var inputs = element.getElementsByTagName("input");
     var textareas = element.getElementsByTagName("textarea");
-    loopElements(inputs, textareas, callback);
+    utils.each(inputs, callback);
+    utils.each(textareas, callback);
   }
 
   function forEachElement(callback) {
-    loopElements(inputElements, textareaElements, callback);
+    utils.each(inputElements, function(element) {
+      callback(element);
+    });
+    utils.each(textareaElements, function(element) {
+      callback(element);
+    });
   }
 
   function getElements() {
