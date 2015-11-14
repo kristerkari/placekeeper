@@ -113,7 +113,7 @@ Best way of stopping your page from going to compatibility mode and telling Inte
 
 ## Development
 
-To start developing make sure that you have [Node.js](https://nodejs.org/) or [io.js](https://iojs.org/) installed.
+To start developing make sure that you have [Node.js](https://nodejs.org/) installed.
 
 ### Install dependencies
 
