@@ -1,13 +1,10 @@
 (function() {
 
   function addEventListener(elem, event, fn) {
-    if (fn == null) {
-      return;
-    }
     if (elem.addEventListener) {
       return elem.addEventListener(event, fn, false);
     }
-    if (elem.attachEvent) {
+    if (elem.attachEvent && fn != null) {
       return elem.attachEvent("on" + event, function(e) {
         e.preventDefault = function() {
           e.returnValue = false;
@@ -21,13 +18,10 @@
   }
 
   function removeEventListener(elem, event, fn) {
-    if (fn == null) {
-      return;
-    }
     if (elem.removeEventListener) {
       return elem.removeEventListener(event, fn, false);
     }
-    if (elem.detachEvent) {
+    if (elem.detachEvent && fn != null) {
       return elem.detachEvent("on" + event, fn);
     }
   }
