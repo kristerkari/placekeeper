@@ -3,14 +3,14 @@
   var utils = placekeeper.utils;
 
   var supportedElementTypes = [
-      "text",
-      "search",
-      "url",
-      "tel",
-      "email",
-      "password",
-      "number",
-      "textarea"
+    "text",
+    "search",
+    "url",
+    "tel",
+    "email",
+    "password",
+    "number",
+    "textarea"
   ];
 
   // The list of keycodes that are not allowed when the polyfill is configured
