@@ -58,7 +58,6 @@
 
   function getAttributes(elem) {
     var copiedAttrs = {};
-    var attrs = elem.attributes;
 
     each(elem.attributes, function(attr) {
       // old IEs will throw an error if you try to copy "type" attribute.
