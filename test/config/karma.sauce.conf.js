@@ -5,16 +5,16 @@ module.exports = function(config) {
   "use strict";
 
   var customLaunchers = {
-    iOSSafari: {
-      base: "SauceLabs",
-      browserName: "iphone",
-      version: "5.1"
-    },
-    ie7: {
-      base: "SauceLabs",
-      browserName: "internet explorer",
-      version: "7.0"
-    },
+    // iOSSafari: {
+    //   base: "SauceLabs",
+    //   browserName: "iphone",
+    //   version: "5.1"
+    // },
+    // ie7: {
+    //   base: "SauceLabs",
+    //   browserName: "internet explorer",
+    //   version: "7.0"
+    // },
     ie8: {
       base: "SauceLabs",
       browserName: "internet explorer",
@@ -31,12 +31,12 @@ module.exports = function(config) {
       platform: "Windows XP",
       version: "4"
     },
-    opera11: {
-      base: "SauceLabs",
-      browserName: "opera",
-      platform: "Windows XP",
-      version: "11"
-    },
+    // opera11: {
+    //   base: "SauceLabs",
+    //   browserName: "opera",
+    //   platform: "Windows XP",
+    //   version: "11"
+    // },
     safari6: {
       base: "SauceLabs",
       browserName: "safari",
