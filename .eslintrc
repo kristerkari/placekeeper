@@ -4,7 +4,11 @@
       "jquery": true,
       "node": true,
       "amd": true,
+      "es6": true,
       "jasmine": true
+    },
+    "ecmaFeatures": {
+      "modules": true
     },
     "globals": {
       "YUI": false,

@@ -11,6 +11,7 @@
     "define",
     "triggerEvent"
   ],
+  "esnext": true,
   "forin": false,
   "browser": true,
   "prototypejs": true,
