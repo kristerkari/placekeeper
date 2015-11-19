@@ -11,6 +11,7 @@
     "define",
     "triggerEvent"
   ],
+  "esversion": 6,
   "esnext": true,
   "forin": false,
   "browser": true,
