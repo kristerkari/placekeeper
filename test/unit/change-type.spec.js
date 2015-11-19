@@ -18,10 +18,10 @@ describe("changing element type", function() {
       describe("when a password input with placeholder exists on the page", function() {
         var element;
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           element = helpers.createInputElement(true, "password");
           setTimeout(done, helpers.loopDurationForTests);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
         afterEach(function() {
@@ -30,7 +30,7 @@ describe("changing element type", function() {
 
         describe("and when its type is changed to text with a data attribute", function() {
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element.setAttribute("data-placeholder-type", "text");
             setTimeout(done, helpers.loopDurationForTests);
           });
@@ -50,10 +50,10 @@ describe("changing element type", function() {
       describe("when a text input with placeholder exists on the page", function() {
         var element;
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           element = helpers.createInputElement(true);
           setTimeout(done, helpers.loopDurationForTests);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
         afterEach(function() {
@@ -62,7 +62,7 @@ describe("changing element type", function() {
 
         describe("and when its type is changed to password", function() {
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element.type = "password";
             setTimeout(done, helpers.loopDurationForTests);
           });
@@ -79,7 +79,7 @@ describe("changing element type", function() {
              TODO: find out why
           describe("and when the element is focused", function() {
 
-            beforeEach(function(done) {
+            beforeEach((done) => {
               helpers.retryFocus(element, function() {
                 setTimeout(done, helpers.loopDurationForTests);
               });
@@ -108,13 +108,13 @@ describe("changing element type", function() {
       describe("when a password input with placeholder exists on the page", function() {
         var element;
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           element = helpers.createInputElement(true, "password");
           setTimeout(function() {
             element = document.getElementById("elem");
             done();
           }, helpers.loopDurationForTests);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
         afterEach(function() {
@@ -123,7 +123,7 @@ describe("changing element type", function() {
 
         describe("and when its type is changed to text with a data attribute", function() {
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element.setAttribute("data-placeholder-type", "text");
             setTimeout(function() {
               element = document.getElementById("elem");
@@ -146,9 +146,9 @@ describe("changing element type", function() {
       describe("when a text input with placeholder exists on the page", function() {
         var element;
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           element = helpers.createInputElement(true);
-          placekeeper.priv.__init();
+          placekeeper.init();
           setTimeout(done, helpers.loopDurationForTests);
         });
 
@@ -158,7 +158,7 @@ describe("changing element type", function() {
 
         describe("and when its type is changed to password", function() {
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element.type = "password";
             setTimeout(function() {
               element = document.getElementById("elem");
@@ -176,7 +176,7 @@ describe("changing element type", function() {
 
           describe("and when the element is focused", function() {
 
-            beforeEach(function(done) {
+            beforeEach((done) => {
               helpers.retryFocus(element, function() {
                 setTimeout(function() {
                   element = document.getElementById("elem");

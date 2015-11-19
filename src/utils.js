@@ -3,11 +3,11 @@ export function addEventListener(elem, event, fn) {
     return elem.addEventListener(event, fn, false);
   }
   if (elem.attachEvent && fn != null) {
-    return elem.attachEvent("on" + event, function(e) {
-      e.preventDefault = function() {
+    return elem.attachEvent("on" + event, (e) => {
+      e.preventDefault = () => {
         e.returnValue = false;
       };
-      e.stopPropagation = function() {
+      e.stopPropagation = () => {
         e.cancelBubble = true;
       };
       fn.call(elem, e);
@@ -48,15 +48,15 @@ export function each(collection, iter, ctx) {
     return;
   }
 
-  for (var i = 0; i < collection.length; i++) {
+  for (let i = 0; i < collection.length; i++) {
     iter.call(ctx, collection[i], i, collection);
   }
 }
 
 export function getAttributes(elem) {
-  var copiedAttrs = {};
+  let copiedAttrs = {};
 
-  each(elem.attributes, function(attr) {
+  each(elem.attributes, (attr) => {
     // old IEs will throw an error if you try to copy "type" attribute.
     if (attr.specified && attr.name !== "type" && attr.name !== "id") {
       copiedAttrs[attr.name] = attr.value;
@@ -73,7 +73,7 @@ export function getAttributes(elem) {
 }
 
 export function setAttributes(elem, attrs) {
-  for (var key in attrs) {
+  for (let key in attrs) {
     elem.setAttribute(key, attrs[key]);
   }
 }
@@ -105,7 +105,7 @@ export function preventDefault(evt) {
 // so we don't clobber any existing polyfills
 // - this is a really simple alternative)
 export function inArray(arr, item) {
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (arr[i] === item) {
       return true;
     }
@@ -115,7 +115,7 @@ export function inArray(arr, item) {
 
 export function moveCaret(elem, index) {
   if (elem.createTextRange) {
-    var range = elem.createTextRange();
+    const range = elem.createTextRange();
     range.move("character", index);
     range.select();
   } else if (elem.selectionStart) {
@@ -138,7 +138,7 @@ export function hasPlaceholderAttrSet(element) {
 }
 
 export function some(items, fn) {
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     if (items[i] != null && fn(items[i])) {
       return true;
     }

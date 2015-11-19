@@ -6,18 +6,18 @@ import * as elems from "./elements.js";
 import * as events from "./events.js";
 import * as polyfill from "./polyfill.js";
 
-var settings = {
+export let settings = {
   defaultLoopDuration: 100
 };
-var loopInterval = null;
+let loopInterval = null;
 
-function hasElementsThatNeedPlaceholder(elements) {
+export function hasElementsThatNeedPlaceholder(elements) {
 
   if (!elements) {
     return false;
   }
 
-  for (var i = 0; i < elements.length; i++) {
+  for (let i = 0; i < elements.length; i++) {
     if (support.needsToShowPlaceHolder(elements[i])) {
       return true;
     }
@@ -27,7 +27,7 @@ function hasElementsThatNeedPlaceholder(elements) {
 }
 
 function needsToSetPlaceholder() {
-  var needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
+  let needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
 
   if (needsPlaceholder === false) {
     needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
@@ -91,7 +91,7 @@ function isClone(element) {
 }
 
 function hasChangedType(element) {
-  var el = isClone(element) ? elems.getPasswordOriginal(element) : element;
+  const el = isClone(element) ? elems.getPasswordOriginal(element) : element;
   return utils.getElementType(el) !== data.getTypeAttr(element);
 }
 
@@ -102,7 +102,7 @@ function handleTypeChange(element) {
   }
 
   if (isClone(element)) {
-    var type = data.getTypeAttr(element);
+    const type = data.getTypeAttr(element);
     element = elems.getPasswordOriginal(element);
     element.setAttribute("type", type);
   }
@@ -116,8 +116,8 @@ function checkForPlaceholder(element) {
     return;
   }
 
-  var placeholder = utils.getPlaceholderValue(element);
-  var clone;
+  const placeholder = utils.getPlaceholderValue(element);
+  let clone;
 
   if (elems.hasPasswordClone(element)) {
     clone = elems.getPasswordClone(element);
@@ -150,7 +150,7 @@ function checkForPlaceholder(element) {
     if (hasPlaceholderValueChanged(element, placeholder)) {
       data.setValueAttr(element, placeholder);
       element.value = placeholder;
-      var original = elems.getPasswordOriginal(element);
+      const original = elems.getPasswordOriginal(element);
       if (original && original.nodeType === 1) {
         original.setAttribute("placeholder", placeholder);
         data.setValueAttr(original, placeholder);
@@ -170,7 +170,7 @@ function checkForPlaceholder(element) {
 
 }
 
-function setupPlaceholders() {
+export function setupPlaceholders() {
   elems.forEachElement(checkForPlaceholder);
 }
 
@@ -194,7 +194,7 @@ function placekeeperLoop() {
   setupPlaceholders();
 }
 
-function init() {
+export function init() {
   if (support.hasNativePlaceholderSupport()) {
     return;
   }
@@ -232,12 +232,3 @@ export const enable = init;
 export const disable = disablePlacekeeper;
 export const isFocusEnabled = mode.isPlacekeeperFocusEnabled;
 export const isWatchingEnabled = mode.isPlacekeeperWatchingEnabled;
-
-// Exposed private methods
-export const priv = {
-  __global: window,
-  __init: init,
-  __settings: settings,
-  __setupPlaceholders: setupPlaceholders,
-  __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
-};

@@ -2,8 +2,8 @@ import * as utils from "./utils.js";
 import * as support from "./support.js";
 import * as data from "./data.js";
 
-var inputElements = [];
-var textareaElements = [];
+let inputElements = [];
+let textareaElements = [];
 
 export function getInputElements() {
   return inputElements;
@@ -14,7 +14,7 @@ export function getTextareaElements() {
 }
 
 export function getForm(element) {
-  var form = element.form;
+  let form = element.form;
   if (typeof form === "string") {
     form = document.getElementById(form);
   }
@@ -22,22 +22,22 @@ export function getForm(element) {
 }
 
 export function forEachForm(callback) {
-  var forms = document.getElementsByTagName("form");
+  const forms = document.getElementsByTagName("form");
   utils.each(forms, callback);
 }
 
 export function forEachChildInput(element, callback) {
-  var inputs = element.getElementsByTagName("input");
-  var textareas = element.getElementsByTagName("textarea");
+  const inputs = element.getElementsByTagName("input");
+  const textareas = element.getElementsByTagName("textarea");
   utils.each(inputs, callback);
   utils.each(textareas, callback);
 }
 
 export function forEachElement(callback) {
-  utils.each(inputElements, function(element) {
+  utils.each(inputElements, (element) => {
     callback(element);
   });
-  utils.each(textareaElements, function(element) {
+  utils.each(textareaElements, (element) => {
     callback(element);
   });
 }
@@ -54,7 +54,7 @@ export function getElements() {
 }
 
 function swapId(from, to) {
-  var id = from.id;
+  const id = from.id;
   if (id === "") {
     return;
   }
@@ -97,7 +97,7 @@ export function hasPasswordClone(element) {
 }
 
 function createCloneElement(element) {
-  var clone = document.createElement("input");
+  let clone = document.createElement("input");
   utils.setAttributes(clone, utils.getAttributes(element));
   clone.type = "text";
   clone.removeAttribute("name");
@@ -107,12 +107,12 @@ function createCloneElement(element) {
 }
 
 function createClone(element) {
-  var clone = createCloneElement(element);
+  const clone = createCloneElement(element);
   element.parentNode.insertBefore(clone, element);
 }
 
 function removeClone(element) {
-  var clone = getPasswordClone(element);
+  const clone = getPasswordClone(element);
   swapElements(clone, element);
   element.style.display = "";
   clone.parentNode.removeChild(clone);

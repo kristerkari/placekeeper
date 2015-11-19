@@ -4,67 +4,67 @@ import * as utils from "../../src/utils.js";
 import * as events from "../../src/events.js";
 import * as support from "../../src/support.js";
 
-describe("public methods", function() {
+describe("public methods", () => {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("disable method", function() {
+  describe("disable method", () => {
 
-    describe("when there is a password input on the page and input type can not be changed", function() {
+    describe("when there is a password input on the page and input type can not be changed", () => {
       var element;
       var clone;
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         helpers.spyOnCanChangeToTypeAndReturn(false);
         element = helpers.createInputElement(true, "password");
-        placekeeper.priv.__setupPlaceholders();
-        setTimeout(function() {
+        placekeeper.setupPlaceholders();
+        setTimeout(() => {
           clone = document.getElementById("elem");
           done();
         }, helpers.loopDurationForTests);
       });
 
-      afterEach(function() {
+      afterEach(() => {
         element.parentNode.removeChild(element);
       });
 
-      it("should have two inputs on the page", function() {
+      it("should have two inputs on the page", () => {
         expect(document.getElementsByTagName("input").length).toEqual(2);
       });
 
-      describe("and when disable is called", function() {
+      describe("and when disable is called", () => {
         var focusHandler;
         var blurHandler;
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           focusHandler = events.handlers.focus;
           blurHandler = events.handlers.blur;
           spyOn(utils, "removeEventListener");
           placekeeper.disable();
-          setTimeout(function() {
+          setTimeout(() => {
             element = document.getElementById("elem");
             done();
           }, helpers.loopDurationForTests);
         });
 
-        it("should have one input on the page", function() {
+        it("should have one input on the page", () => {
           expect(document.getElementsByTagName("input").length).toEqual(1);
         });
 
-        it("should have changed element type back to password", function() {
+        it("should have changed element type back to password", () => {
           expect(element.getAttribute("type")).toEqual("password");
         });
 
-        it("should have elem id back to element", function() {
+        it("should have elem id back to element", () => {
           expect(element.id).toEqual("elem");
         });
 
-        it("should not have element display attribute set to anything", function() {
+        it("should not have element display attribute set to anything", () => {
           expect(element.style.display).toEqual("");
         });
 
-        it("should have remove all data-attributes from element", function() {
+        it("should have remove all data-attributes from element", () => {
           expect(element).toHaveNoDataAttributes();
         });
 
@@ -72,12 +72,12 @@ describe("public methods", function() {
         // for some reason.
         // TODO: find out why
         if (clone != null) {
-          it("should have called utils.removeEventListener for focus handler", function() {
+          it("should have called utils.removeEventListener for focus handler", () => {
             expect(utils.removeEventListener)
             .toHaveBeenCalledWith(clone, "focus", focusHandler);
           });
 
-          it("should have deleted the focus handler", function() {
+          it("should have deleted the focus handler", () => {
             expect(events.handlers.focus).not.toBeDefined();
           });
 
@@ -87,12 +87,12 @@ describe("public methods", function() {
         // for some reason.
         // TODO: find out why
         if (element != null) {
-          it("should have called utils.removeEventListener for blur handler", function() {
+          it("should have called utils.removeEventListener for blur handler", () => {
             expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "blur", blurHandler);
           });
 
-          it("should have deleted the blur handler", function() {
+          it("should have deleted the blur handler", () => {
             expect(events.handlers.blur).not.toBeDefined();
           });
 
@@ -102,56 +102,56 @@ describe("public methods", function() {
 
     });
 
-    describe("when there is a password input on the page and input type can be changed", function() {
+    describe("when there is a password input on the page and input type can be changed", () => {
       var element;
 
       if (helpers.canActuallyChangeType) {
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           helpers.spyOnCanChangeToTypeAndReturn(true);
           element = helpers.createInputElement(true, "password");
-          placekeeper.priv.__setupPlaceholders();
+          placekeeper.setupPlaceholders();
           setTimeout(done, helpers.loopDurationForTests);
         });
 
-        afterEach(function() {
+        afterEach(() => {
           element.parentNode.removeChild(element);
         });
 
-        it("should have one on the page", function() {
+        it("should have one on the page", () => {
           expect(document.getElementsByTagName("input").length).toEqual(1);
         });
 
-        describe("and when disable is called", function() {
+        describe("and when disable is called", () => {
           var focusHandler;
           var blurHandler;
 
-          beforeEach(function() {
+          beforeEach(() => {
             focusHandler = events.handlers.focus;
             blurHandler = events.handlers.blur;
             spyOn(utils, "removeEventListener");
             placekeeper.disable();
           });
 
-          it("should have remove all data-attributes from element", function() {
+          it("should have remove all data-attributes from element", () => {
             expect(element).toHaveNoDataAttributes();
           });
 
-          it("should have called utils.removeEventListener for focus handler", function() {
+          it("should have called utils.removeEventListener for focus handler", () => {
             expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "focus", focusHandler);
           });
 
-          it("should have called utils.removeEventListener for blur handler", function() {
+          it("should have called utils.removeEventListener for blur handler", () => {
             expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "blur", blurHandler);
           });
 
-          it("should have deleted the focus handler", function() {
+          it("should have deleted the focus handler", () => {
             expect(events.handlers.focus).not.toBeDefined();
           });
 
-          it("should have deleted the blur handler", function() {
+          it("should have deleted the blur handler", () => {
             expect(events.handlers.blur).not.toBeDefined();
           });
 
@@ -161,61 +161,61 @@ describe("public methods", function() {
 
   });
 
-  describe("enable public method", function() {
+  describe("enable public method", () => {
 
-    afterEach(function() {
+    afterEach(() => {
       placekeeper.disable();
     });
 
-    it("should be a function", function() {
+    it("should be a function", () => {
       expect(typeof placekeeper.enable).toEqual("function");
     });
 
-    describe("when called and there are no inputs or textareas on the page", function() {
+    describe("when called and there are no inputs or textareas on the page", () => {
 
-      beforeEach(function() {
+      beforeEach(() => {
         helpers.spyOnNativeSupportAndReturn(false);
         placekeeper.enable();
       });
 
-      it("should have called hasNativePlaceholderSupport method", function() {
+      it("should have called hasNativePlaceholderSupport method", () => {
         expect(support.hasNativePlaceholderSupport).toHaveBeenCalled();
       });
 
-      it("should have placekeeper disabled", function() {
+      it("should have placekeeper disabled", () => {
         expect(placekeeper.isEnabled()).toEqual(false);
       });
 
     });
 
-    describe("when called and there is one input with placeholder attribute", function() {
+    describe("when called and there is one input with placeholder attribute", () => {
       var element;
 
-      beforeEach(function() {
+      beforeEach(() => {
         element = helpers.createInputElement(true);
         helpers.spyOnNativeSupportAndReturn(false);
         placekeeper.enable();
       });
 
-      afterEach(function() {
+      afterEach(() => {
         element.parentNode.removeChild(element);
       });
 
-      it("should have called hasNativePlaceholderSupport method", function() {
+      it("should have called hasNativePlaceholderSupport method", () => {
         expect(support.hasNativePlaceholderSupport).toHaveBeenCalled();
       });
 
-      it("should have placekeeper enabled", function() {
+      it("should have placekeeper enabled", () => {
         expect(placekeeper.isEnabled()).toEqual(true);
       });
 
-      describe("when placekeeper is disabled", function() {
+      describe("when placekeeper is disabled", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           placekeeper.disable();
         });
 
-        it("should have placekeeper disabled", function() {
+        it("should have placekeeper disabled", () => {
           expect(placekeeper.isEnabled()).toEqual(false);
         });
 
@@ -225,54 +225,54 @@ describe("public methods", function() {
 
   });
 
-  describe("isEnabled public method", function() {
+  describe("isEnabled public method", () => {
 
-    afterEach(function() {
+    afterEach(() => {
       placekeeper.disable();
     });
 
-    it("should be a function", function() {
+    it("should be a function", () => {
       expect(typeof placekeeper.isEnabled).toEqual("function");
     });
 
-    describe("when there are no inputs or textareas on the page", function() {
+    describe("when there are no inputs or textareas on the page", () => {
 
-      it("should not have any inputs on the page", function() {
+      it("should not have any inputs on the page", () => {
         expect(document.getElementsByTagName("input").length).toEqual(0);
       });
 
-      it("should not have any textareas on the page", function() {
+      it("should not have any textareas on the page", () => {
         expect(document.getElementsByTagName("textarea").length).toEqual(0);
       });
 
-      describe("when HTML5 placeholder is supported for both inputs and textareas", function() {
+      describe("when HTML5 placeholder is supported for both inputs and textareas", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           helpers.spyOnNativeSupportAndReturn(true);
           placekeeper.enable();
         });
 
-        it("should have placekeeper disabled because of native support", function() {
+        it("should have placekeeper disabled because of native support", () => {
           expect(placekeeper.isEnabled()).toEqual(false);
         });
 
-        describe("and when a text input element with placeholder attribute is inserted to the page", function() {
+        describe("and when a text input element with placeholder attribute is inserted to the page", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createInputElement(true);
             setTimeout(done, helpers.loopDurationForTests);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
           });
 
-          it("should have one input on the page", function() {
+          it("should have one input on the page", () => {
             expect(document.getElementsByTagName("input").length).toEqual(1);
           });
 
-          it("should have placekeeper disabled because of native support", function() {
+          it("should have placekeeper disabled because of native support", () => {
             expect(placekeeper.isEnabled()).toEqual(false);
           });
 
@@ -280,82 +280,82 @@ describe("public methods", function() {
 
       });
 
-      describe("when HTML5 placeholder is not supported for both inputs and textareas", function() {
+      describe("when HTML5 placeholder is not supported for both inputs and textareas", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           helpers.spyOnNativeSupportAndReturn(false);
           placekeeper.enable();
         });
 
-        it("should have placekeeper disabled since there are no inputs or textareas", function() {
+        it("should have placekeeper disabled since there are no inputs or textareas", () => {
           expect(placekeeper.isEnabled()).toEqual(false);
         });
 
-        describe("and when a text input element without placeholder attribute is inserted to the page", function() {
+        describe("and when a text input element without placeholder attribute is inserted to the page", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createInputElement(false);
             setTimeout(done, helpers.loopDurationForTests);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
           });
 
-          it("should have one input on the page", function() {
+          it("should have one input on the page", () => {
             expect(document.getElementsByTagName("input").length).toEqual(1);
           });
 
-          it("should have placekeeper disabled since there is no placeholder attribute on the input", function() {
+          it("should have placekeeper disabled since there is no placeholder attribute on the input", () => {
             expect(placekeeper.isEnabled()).toEqual(false);
           });
 
         });
 
-        describe("and when a text input element with placeholder attribute is inserted to the page", function() {
+        describe("and when a text input element with placeholder attribute is inserted to the page", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createInputElement(true);
             setTimeout(done, helpers.loopDurationForTests);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
           });
 
-          it("should have one input on the page", function() {
+          it("should have one input on the page", () => {
             expect(document.getElementsByTagName("input").length).toEqual(1);
           });
 
-          it("should have placekeeper enabled", function() {
+          it("should have placekeeper enabled", () => {
             expect(placekeeper.isEnabled()).toEqual(true);
           });
 
         });
 
-        describe("and when a textarea element with placeholder attribute is inserted to the page", function() {
+        describe("and when a textarea element with placeholder attribute is inserted to the page", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createTextareaElement(true);
             setTimeout(done, helpers.loopDurationForTests);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
           });
 
-          it("should have one textarea on the page", function() {
+          it("should have one textarea on the page", () => {
             expect(document.getElementsByTagName("textarea").length).toEqual(1);
           });
 
-          it("should have 0 inputs on the page", function() {
+          it("should have 0 inputs on the page", () => {
             expect(document.getElementsByTagName("input").length).toEqual(0);
           });
 
-          it("should have placekeeper enabled", function() {
+          it("should have placekeeper enabled", () => {
             expect(placekeeper.isEnabled()).toEqual(true);
           });
 

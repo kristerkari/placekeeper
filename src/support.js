@@ -1,6 +1,6 @@
 import * as utils from "./utils.js";
 
-var supportedElementTypes = [
+const supportedElementTypes = [
   "text",
   "search",
   "url",
@@ -13,7 +13,7 @@ var supportedElementTypes = [
 
 // The list of keycodes that are not allowed when the polyfill is configured
 // to hide-on-input.
-var badKeys = [
+const badKeys = [
 
   // The following keys all cause the caret to jump to the end of the input
   // value.
@@ -40,7 +40,7 @@ var badKeys = [
 ];
 
 // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
-var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
+const isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
 function isElementSupported(element) {
   return "placeholder" in document.createElement(element) && !isOperaMini;
@@ -92,7 +92,7 @@ export function canChangeToType(elem, type) {
   }
   // Input type can not be changed in IE8 and below.
   try {
-    var oldType = elem.type;
+    const oldType = elem.type;
     elem.type = type;
     elem.type = oldType;
     return true;

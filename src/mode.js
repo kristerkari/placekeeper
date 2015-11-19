@@ -1,10 +1,10 @@
 import * as data from "./data.js";
 import * as utils from "./utils.js";
 
-var isEnabled = false;
-var isFocusEnabled = true;
-var isWatchingEnabled = false;
-var modeElements = [
+let isEnabled = false;
+let isFocusEnabled = true;
+let isWatchingEnabled = false;
+const modeElements = [
   document.documentElement,
   document.body
 ];

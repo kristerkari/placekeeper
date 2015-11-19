@@ -93,7 +93,7 @@ export function removeSubmitAttr(element) {
 }
 
 export function removeDataAttrs(element) {
-  var attrs = [
+  const attrs = [
     "value",
     "element-value",
     "has-events",
@@ -102,7 +102,7 @@ export function removeDataAttrs(element) {
     "type"
   ];
 
-  utils.each(attrs, function(attr) {
+  utils.each(attrs, (attr) => {
     element.removeAttribute("data-placeholder-" + attr);
   });
 }

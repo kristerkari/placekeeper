@@ -10,12 +10,12 @@ describe("changing value", function() {
   describe("when there is an input with placeholder and existing value on the page", function() {
     var element;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElementWithValue(true);
       setTimeout(done, helpers.loopDurationForTests);
-      placekeeper.priv.__init();
+      placekeeper.init();
     });
 
     afterEach(function() {
@@ -24,7 +24,7 @@ describe("changing value", function() {
 
     describe("when input value does not change", function() {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         spyOn(polyfill, "hidePlaceholder").and.callThrough();
         setTimeout(done, helpers.loopDurationForTests);
       });
@@ -38,7 +38,7 @@ describe("changing value", function() {
 
     describe("when input value changes", function() {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         spyOn(polyfill, "hidePlaceholder").and.callThrough();
         element.value = "Changed";
         setTimeout(done, helpers.loopDurationForTests);

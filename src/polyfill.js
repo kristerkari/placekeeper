@@ -7,7 +7,7 @@ function hasMaxLength(element) {
 }
 
 export function restoreMaxlength(element) {
-  var maxLength = data.getMaxLengthAttr(element);
+  const maxLength = data.getMaxLengthAttr(element);
   if (!maxLength) {
     return;
   }
@@ -26,7 +26,7 @@ export function storeMaxlength(element) {
 }
 
 export function showPlaceholder(element) {
-  var val = data.getValueAttr(element);
+  const val = data.getValueAttr(element);
 
   if (element.value !== "" || val == null) {
     return;

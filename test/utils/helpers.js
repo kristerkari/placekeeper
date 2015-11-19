@@ -51,7 +51,7 @@ export const initialSetup = function() {
   .and.callFake(function() {
     return false;
   });
-  placekeeper.priv.__settings.defaultLoopDuration = 6;
+  placekeeper.settings.defaultLoopDuration = 6;
   elements.getElements();
 };
 export const spyOnNativeSupportAndReturn = function(bool) {
@@ -78,12 +78,12 @@ export const triggerFakePageReload = function() {
 export const setupFakeWindow = function() {
   spyOn(utils, "addEventListener")
   .and.callFake(fakeUtils.addEventListener);
-  placekeeper.priv.__global = fakeWindow;
+  // placekeeper.priv.__global = fakeWindow;
   events.addUnloadListener();
-  placekeeper.priv.__setupPlaceholders();
+  placekeeper.setupPlaceholders();
 };
 export const restoreRealWindow = function() {
-  placekeeper.priv.__global = window;
+  // placekeeper.priv.__global = window;
 };
 export const focus = function(element) {
   triggerEvent.html(element, "focus");
