@@ -1,3 +1,8 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+
 describe("watching for placeholder changes", function() {
   "use strict";
 
@@ -7,7 +12,7 @@ describe("watching for placeholder changes", function() {
     var element;
 
     beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+      spyOn(polyfill, "showPlaceholder").and.callThrough();
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true, "password");
@@ -21,8 +26,8 @@ describe("watching for placeholder changes", function() {
     });
 
     it("should have called polyfill's showPlaceholder method once", function() {
-      expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalled();
-      // expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+      expect(polyfill.showPlaceholder).toHaveBeenCalled();
+      // expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
     });
 
   });
@@ -31,7 +36,7 @@ describe("watching for placeholder changes", function() {
     var element;
 
     beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+      spyOn(polyfill, "showPlaceholder").and.callThrough();
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true);
       placekeeper.priv.__init();
@@ -44,8 +49,8 @@ describe("watching for placeholder changes", function() {
     });
 
     it("should have called polyfill's showPlaceholder method once", function() {
-      expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalled();
-      expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+      expect(polyfill.showPlaceholder).toHaveBeenCalled();
+      expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
     });
 
     it("should have set data-placeholder-value to the element", function() {
@@ -64,7 +69,7 @@ describe("watching for placeholder changes", function() {
       });
 
       it("should correctly be able to get changed placeholder value", function() {
-        expect(placekeeper.utils.getPlaceholderValue(element)).toEqual("TestChanged");
+        expect(utils.getPlaceholderValue(element)).toEqual("TestChanged");
       });
 
       it("should have changed data-placeholder-value to the element", function() {

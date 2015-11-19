@@ -1,3 +1,7 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+
 describe("changing value", function() {
   "use strict";
 
@@ -21,13 +25,13 @@ describe("changing value", function() {
     describe("when input value does not change", function() {
 
       beforeEach(function(done) {
-        spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
+        spyOn(polyfill, "hidePlaceholder").and.callThrough();
         setTimeout(done, helpers.loopDurationForTests);
       });
 
       it("should not have called hidePlaceholder", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
     });
@@ -35,14 +39,14 @@ describe("changing value", function() {
     describe("when input value changes", function() {
 
       beforeEach(function(done) {
-        spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
+        spyOn(polyfill, "hidePlaceholder").and.callThrough();
         element.value = "Changed";
         setTimeout(done, helpers.loopDurationForTests);
       });
 
       it("should not have called hidePlaceholder", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
       it("should have changed element value", function() {

@@ -1,3 +1,9 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+import * as events from "../../src/events.js";
+
 describe("forms", function() {
   "use strict";
 
@@ -21,8 +27,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -31,13 +37,13 @@ describe("forms", function() {
       });
 
       it("should have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+        expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
       it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
       describe("and after 10ms (when form is submitted)", function() {
@@ -47,8 +53,8 @@ describe("forms", function() {
         });
 
         it("should have called polyfill's showPlaceholder method", function() {
-          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+          expect(polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });
@@ -59,13 +65,13 @@ describe("forms", function() {
       var submitHandler;
 
       beforeEach(function() {
-        submitHandler = placekeeper.events.handlers.submit;
-        spyOn(placekeeper.utils, "removeEventListener");
+        submitHandler = events.handlers.submit;
+        spyOn(utils, "removeEventListener");
         placekeeper.disable();
       });
 
       it("should have called utils.removeEventListener for submit handler", function() {
-        expect(placekeeper.utils.removeEventListener)
+        expect(utils.removeEventListener)
         .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
@@ -74,7 +80,7 @@ describe("forms", function() {
       });
 
       it("should have deleted the submit handler", function() {
-        expect(placekeeper.events.handlers.submit).not.toBeDefined();
+        expect(events.handlers.submit).not.toBeDefined();
       });
 
     });
@@ -99,8 +105,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -109,13 +115,13 @@ describe("forms", function() {
       });
 
       it("should not have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
       it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
     });
@@ -140,8 +146,8 @@ describe("forms", function() {
     describe("and when that form is submitted", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
@@ -150,13 +156,13 @@ describe("forms", function() {
       });
 
       it("should have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+        expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
       it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
       describe("and after 10ms (when form is submitted)", function() {
@@ -166,8 +172,8 @@ describe("forms", function() {
         });
 
         it("should have called polyfill's showPlaceholder method", function() {
-          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+          expect(polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });
@@ -178,13 +184,13 @@ describe("forms", function() {
       var submitHandler;
 
       beforeEach(function() {
-        submitHandler = placekeeper.events.handlers.submit;
-        spyOn(placekeeper.utils, "removeEventListener");
+        submitHandler = events.handlers.submit;
+        spyOn(utils, "removeEventListener");
         placekeeper.disable();
       });
 
       it("should have called utils.removeEventListener for submit handler", function() {
-        expect(placekeeper.utils.removeEventListener)
+        expect(utils.removeEventListener)
         .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
@@ -193,7 +199,7 @@ describe("forms", function() {
       });
 
       it("should have deleted the submit handler", function() {
-        expect(placekeeper.events.handlers.submit).not.toBeDefined();
+        expect(events.handlers.submit).not.toBeDefined();
       });
 
     });

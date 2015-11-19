@@ -1,23 +1,18 @@
-(function(YUI) {
-  "use strict";
+YUI.add("placekeeper", function(Y) {
 
-  YUI.add("placekeeper", function(Y) {
+  var originalGetFn = Y.Node.prototype.get;
 
-    var originalGetFn = Y.Node.prototype.get;
+  Y.Node.prototype.get = function(attr) {
 
-    Y.Node.prototype.get = function(attr) {
+    if (attr === "value" && this.getAttribute("data-placeholder-active")) {
+      return "";
+    }
 
-      if (attr === "value" && this.getAttribute("data-placeholder-active")) {
-        return "";
-      }
+    return originalGetFn.apply(this, arguments);
+  };
 
-      return originalGetFn.apply(this, arguments);
-    };
-
-  }, "3.0.0", {
-    requires: [
-      "node"
-    ]
-  });
-
-}(this.YUI));
+}, "3.0.0", {
+  requires: [
+    "node"
+  ]
+});

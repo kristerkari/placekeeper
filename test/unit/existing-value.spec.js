@@ -1,3 +1,8 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+
 describe("existing value", function() {
   "use strict";
 
@@ -8,7 +13,7 @@ describe("existing value", function() {
     var clone;
 
     beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+      spyOn(polyfill, "showPlaceholder").and.callThrough();
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElementWithValue(true, "password");
@@ -25,8 +30,8 @@ describe("existing value", function() {
     });
 
     it("should not have called polyfill's showPlaceholder method", function() {
-      expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-      expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+      expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+      expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
     });
 
     it("should keep element value as it is", function() {
@@ -64,12 +69,12 @@ describe("existing value", function() {
     describe("and when element is focused", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.utils, "moveCaret");
+        spyOn(utils, "moveCaret");
         helpers.focus(element);
       });
 
       it("should not have moved the caret to the beginning of the text field", function() {
-        expect(placekeeper.utils.moveCaret).not.toHaveBeenCalled();
+        expect(utils.moveCaret).not.toHaveBeenCalled();
       });
 
       it("should keep element value as it is", function() {
@@ -197,12 +202,12 @@ describe("existing value", function() {
     describe("and when element is focused", function() {
 
       beforeEach(function() {
-        spyOn(placekeeper.utils, "moveCaret");
+        spyOn(utils, "moveCaret");
         helpers.focus(element);
       });
 
       it("should not have moved the caret to the beginning of the text field", function() {
-        expect(placekeeper.utils.moveCaret).not.toHaveBeenCalled();
+        expect(utils.moveCaret).not.toHaveBeenCalled();
       });
 
     });
