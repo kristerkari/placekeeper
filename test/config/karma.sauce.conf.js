@@ -15,11 +15,11 @@ module.exports = function(config) {
     //   browserName: "internet explorer",
     //   version: "7.0"
     // },
-    ie8: {
-      base: "SauceLabs",
-      browserName: "internet explorer",
-      version: "8.0"
-    },
+    // ie8: {
+    //   base: "SauceLabs",
+    //   browserName: "internet explorer",
+    //   version: "8.0"
+    // },
     ie9: {
       base: "SauceLabs",
       browserName: "internet explorer",
@@ -48,9 +48,6 @@ module.exports = function(config) {
   config.set(extend(shared, {
     captureTimeout: 120000,
     browserNoActivityTimeout: 60000,
-    preprocessors: {
-      "src/*.js": ["wrap"]
-    },
     sauceLabs: {
       testName: "HTML5 placeholder polyfill"
     },

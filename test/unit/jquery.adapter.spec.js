@@ -1,10 +1,14 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as jq from "../../src/adapters/adapter.jquery.js";
+
 describe("jQuery adapter", function() {
   "use strict";
 
   beforeEach(helpers.initialSetup);
   beforeEach(function() {
     helpers.spyOnNativeSupportAndReturn(false);
-    placekeeper.jQuery.setup();
+    jq.setup();
   });
 
   describe("when there is an input with a placeholder on the page", function() {

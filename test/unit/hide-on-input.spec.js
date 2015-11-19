@@ -1,3 +1,11 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+import * as events from "../../src/events.js";
+import * as mode from "../../src/mode.js";
+import * as support from "../../src/support.js";
+
 describe("hide on input mode", function() {
   "use strict";
 
@@ -27,8 +35,8 @@ describe("hide on input mode", function() {
       describe("and when input is focused", function() {
 
         beforeEach(function(done) {
-          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
-          spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+          spyOn(polyfill, "hidePlaceholder").and.callThrough();
+          spyOn(polyfill, "showPlaceholder").and.callThrough();
           helpers.retryFocus(clone, function() {
             setTimeout(function() {
               element = document.getElementById("elem");
@@ -66,13 +74,13 @@ describe("hide on input mode", function() {
           });
 
           it("should have called polyfill's hidePlaceholder method once", function() {
-            expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
-            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+            expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(clone);
+            expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
           });
 
           it("should not have called polyfill's showPlaceholder method", function() {
-            expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-            expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+            expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+            expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
           });
 
         });
@@ -85,11 +93,11 @@ describe("hide on input mode", function() {
       var element;
 
       beforeEach(function() {
-        spyOn(placekeeper.utils, "addEventListener").and.callThrough();
+        spyOn(utils, "addEventListener").and.callThrough();
         helpers.spyOnFocusEnabledAndReturn(false);
         element = helpers.createInputElement(true);
         placekeeper.priv.__setupPlaceholders();
-        placekeeper.mode.enableWatching();
+        mode.enableWatching();
       });
 
       afterEach(function() {
@@ -101,18 +109,18 @@ describe("hide on input mode", function() {
       });
 
       it("should have called utils.addEventListener for keydown handler", function() {
-        expect(placekeeper.utils.addEventListener)
-        .toHaveBeenCalledWith(element, "keydown", placekeeper.events.handlers.keydown);
+        expect(utils.addEventListener)
+        .toHaveBeenCalledWith(element, "keydown", events.handlers.keydown);
       });
 
       it("should have called utils.addEventListener for keyup handler", function() {
-        expect(placekeeper.utils.addEventListener)
-        .toHaveBeenCalledWith(element, "keyup", placekeeper.events.handlers.keyup);
+        expect(utils.addEventListener)
+        .toHaveBeenCalledWith(element, "keyup", events.handlers.keyup);
       });
 
       it("should have called utils.addEventListener for click handler", function() {
-        expect(placekeeper.utils.addEventListener)
-        .toHaveBeenCalledWith(element, "click", placekeeper.events.handlers.click);
+        expect(utils.addEventListener)
+        .toHaveBeenCalledWith(element, "click", events.handlers.click);
       });
 
       it("should have set element's value to placeholder value (Test)", function() {
@@ -133,38 +141,38 @@ describe("hide on input mode", function() {
         var clickHandler;
 
         beforeEach(function() {
-          keyupHandler = placekeeper.events.handlers.keyup;
-          keydownHandler = placekeeper.events.handlers.keydown;
-          clickHandler = placekeeper.events.handlers.click;
-          spyOn(placekeeper.utils, "removeEventListener").and.callThrough();
+          keyupHandler = events.handlers.keyup;
+          keydownHandler = events.handlers.keydown;
+          clickHandler = events.handlers.click;
+          spyOn(utils, "removeEventListener").and.callThrough();
           placekeeper.disable();
         });
 
         it("should have called utils.removeEventListener for keydown handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "keydown", keydownHandler);
         });
 
         it("should have called utils.removeEventListener for keyup handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "keyup", keyupHandler);
         });
 
         it("should have called utils.removeEventListener for click handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "click", clickHandler);
         });
 
         it("should have deleted the keyup handler", function() {
-          expect(placekeeper.events.handlers.keyup).not.toBeDefined();
+          expect(events.handlers.keyup).not.toBeDefined();
         });
 
         it("should have deleted the keydown handler", function() {
-          expect(placekeeper.events.handlers.keydown).not.toBeDefined();
+          expect(events.handlers.keydown).not.toBeDefined();
         });
 
         it("should have deleted the click handler", function() {
-          expect(placekeeper.events.handlers.click).not.toBeDefined();
+          expect(events.handlers.click).not.toBeDefined();
         });
 
       });
@@ -172,13 +180,13 @@ describe("hide on input mode", function() {
       describe("and when a click event is triggered on the element", function() {
 
         beforeEach(function() {
-          spyOn(placekeeper.utils, "moveCaret");
+          spyOn(utils, "moveCaret");
           triggerEvent.html(element, "click");
         });
 
         it("should not have called moveCaret method", function() {
-          expect(placekeeper.utils.moveCaret).not.toHaveBeenCalled();
-          expect(placekeeper.utils.moveCaret.calls.count()).toEqual(0);
+          expect(utils.moveCaret).not.toHaveBeenCalled();
+          expect(utils.moveCaret.calls.count()).toEqual(0);
         });
 
       });
@@ -188,17 +196,17 @@ describe("hide on input mode", function() {
         beforeEach(function() {
           triggerEvent.html(element, "focus");
           element.focus();
-          spyOn(placekeeper.utils, "moveCaret");
+          spyOn(utils, "moveCaret");
           triggerEvent.html(element, "click");
         });
 
         it("element should be activeElement", function() {
-          expect(element).toEqual(placekeeper.support.safeActiveElement());
+          expect(element).toEqual(support.safeActiveElement());
         });
 
         it("should have called moveCaret method", function() {
-          expect(placekeeper.utils.moveCaret).toHaveBeenCalledWith(element, 0);
-          expect(placekeeper.utils.moveCaret.calls.count()).toEqual(1);
+          expect(utils.moveCaret).toHaveBeenCalledWith(element, 0);
+          expect(utils.moveCaret.calls.count()).toEqual(1);
         });
 
       });
@@ -206,23 +214,23 @@ describe("hide on input mode", function() {
       describe("and when input is focused", function() {
 
         beforeEach(function() {
-          spyOn(placekeeper.utils, "moveCaret").and.callThrough();
-          spyOn(placekeeper.polyfill, "hidePlaceholder").and.callThrough();
+          spyOn(utils, "moveCaret").and.callThrough();
+          spyOn(polyfill, "hidePlaceholder").and.callThrough();
           triggerEvent.html(element, "focus");
           element.focus();
         });
 
         it("element should be activeElement", function() {
-          expect(element).toEqual(placekeeper.support.safeActiveElement());
+          expect(element).toEqual(support.safeActiveElement());
         });
 
         it("should not have called polyfill's hidePlaceholder method", function() {
-          expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-          expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+          expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+          expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
         });
 
         it("should have moved caret to the beginning", function() {
-          expect(placekeeper.utils.moveCaret).toHaveBeenCalledWith(element, 0);
+          expect(utils.moveCaret).toHaveBeenCalledWith(element, 0);
         });
 
         it("should not have emptied the placeholder value", function() {
@@ -245,8 +253,8 @@ describe("hide on input mode", function() {
           });
 
           it("should not have called polyfill's hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+            expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+            expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
           });
 
           it("should not have emptied the placeholder value", function() {
@@ -272,8 +280,8 @@ describe("hide on input mode", function() {
           });
 
           it("should have called polyfill's hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
-            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+            expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+            expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
           });
 
           it("should have element value as 'a'", function() {
@@ -293,19 +301,19 @@ describe("hide on input mode", function() {
         describe("and when user presses backspace on the input (keyup, keydown)", function() {
 
           beforeEach(function() {
-            spyOn(placekeeper.utils, "preventDefault");
+            spyOn(utils, "preventDefault");
             triggerEvent.keyboard(element, "keydown", 8);
             triggerEvent.keyboard(element, "keyup", 8);
           });
 
           it("should have called utils.preventDefault method", function() {
-            expect(placekeeper.utils.preventDefault).toHaveBeenCalled();
-            expect(placekeeper.utils.preventDefault.calls.count()).toEqual(1);
+            expect(utils.preventDefault).toHaveBeenCalled();
+            expect(utils.preventDefault.calls.count()).toEqual(1);
           });
 
           it("should not have called polyfill's hidePlaceholder method", function() {
-            expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-            expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+            expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+            expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
           });
 
         });
@@ -318,10 +326,10 @@ describe("hide on input mode", function() {
         var clickHandler;
 
         beforeEach(function() {
-          keyupHandler = placekeeper.events.handlers.keyup;
-          keydownHandler = placekeeper.events.handlers.keydown;
-          clickHandler = placekeeper.events.handlers.click;
-          spyOn(placekeeper.utils, "removeEventListener").and.callThrough();
+          keyupHandler = events.handlers.keyup;
+          keydownHandler = events.handlers.keydown;
+          clickHandler = events.handlers.click;
+          spyOn(utils, "removeEventListener").and.callThrough();
           placekeeper.disable();
         });
 
@@ -330,30 +338,30 @@ describe("hide on input mode", function() {
         });
 
         it("should have called utils.removeEventListener for keydown handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "keydown", keydownHandler);
         });
 
         it("should have called utils.removeEventListener for keyup handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "keyup", keyupHandler);
         });
 
         it("should have called utils.removeEventListener for click handler", function() {
-          expect(placekeeper.utils.removeEventListener)
+          expect(utils.removeEventListener)
           .toHaveBeenCalledWith(element, "click", clickHandler);
         });
 
         it("should have deleted the keyup handler", function() {
-          expect(placekeeper.events.handlers.keyup).not.toBeDefined();
+          expect(events.handlers.keyup).not.toBeDefined();
         });
 
         it("should have deleted the keydown handler", function() {
-          expect(placekeeper.events.handlers.keydown).not.toBeDefined();
+          expect(events.handlers.keydown).not.toBeDefined();
         });
 
         it("should have deleted the click handler", function() {
-          expect(placekeeper.events.handlers.click).not.toBeDefined();
+          expect(events.handlers.click).not.toBeDefined();
         });
 
       });

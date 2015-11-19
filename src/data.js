@@ -1,138 +1,108 @@
-(function() {
-  var utils = placekeeper.utils;
+import * as utils from "./utils.js";
 
-  function hasWatchAttrSetToFalse(element) {
-    return element.getAttribute("data-placeholder-watch") === "false";
-  }
+export function hasWatchAttrSetToFalse(element) {
+  return element.getAttribute("data-placeholder-watch") === "false";
+}
 
-  function hasModeAttrSetToInput(element) {
-    return element.getAttribute("data-placeholder-mode") === "input";
-  }
+export function hasModeAttrSetToInput(element) {
+  return element.getAttribute("data-placeholder-mode") === "input";
+}
 
-  function hasEventsAttrSetToTrue(element) {
-    return element.getAttribute("data-placeholder-has-events") === "true";
-  }
+export function hasEventsAttrSetToTrue(element) {
+  return element.getAttribute("data-placeholder-has-events") === "true";
+}
 
-  function hasActiveAttrSetToTrue(element) {
-    return element.getAttribute("data-placeholder-active") === "true";
-  }
+export function hasActiveAttrSetToTrue(element) {
+  return element.getAttribute("data-placeholder-active") === "true";
+}
 
-  function hasSubmitAttrSetToTrue(element) {
-    return element.getAttribute("data-placeholder-submit") === "true";
-  }
+export function hasSubmitAttrSetToTrue(element) {
+  return element.getAttribute("data-placeholder-submit") === "true";
+}
 
-  function hasCloneAttrSetToTrue(element) {
-    return element.getAttribute("data-placeholder-clone") === "true";
-  }
+export function hasCloneAttrSetToTrue(element) {
+  return element.getAttribute("data-placeholder-clone") === "true";
+}
 
-  function hasValueAttr(element) {
-    return element.getAttribute("data-placeholder-value") != null;
-  }
+export function hasValueAttr(element) {
+  return element.getAttribute("data-placeholder-value") != null;
+}
 
-  function hasTypeAttrSetToPassword(element) {
-    return element.getAttribute("data-placeholder-type") === "password";
-  }
+export function hasTypeAttrSetToPassword(element) {
+  return element.getAttribute("data-placeholder-type") === "password";
+}
 
-  function setSubmitAttr(element) {
-    element.setAttribute("data-placeholder-submit", "true");
-  }
+export function setSubmitAttr(element) {
+  element.setAttribute("data-placeholder-submit", "true");
+}
 
-  function setCloneAttr(element) {
-    element.setAttribute("data-placeholder-clone", "true");
-  }
+export function setCloneAttr(element) {
+  element.setAttribute("data-placeholder-clone", "true");
+}
 
-  function setActiveAttr(element) {
-    element.setAttribute("data-placeholder-active", "true");
-  }
+export function setActiveAttr(element) {
+  element.setAttribute("data-placeholder-active", "true");
+}
 
-  function setEventsAttr(element) {
-    element.setAttribute("data-placeholder-has-events", "true");
-  }
+export function setEventsAttr(element) {
+  element.setAttribute("data-placeholder-has-events", "true");
+}
 
-  function setValueAttr(element, value) {
-    element.setAttribute("data-placeholder-value", value);
-  }
+export function setValueAttr(element, value) {
+  element.setAttribute("data-placeholder-value", value);
+}
 
-  function setElementValueAttr(element, value) {
-    element.setAttribute("data-placeholder-element-value", value);
-  }
+export function setElementValueAttr(element, value) {
+  element.setAttribute("data-placeholder-element-value", value);
+}
 
-  function getElementValueAttr(element) {
-    return element.getAttribute("data-placeholder-element-value");
-  }
+export function getElementValueAttr(element) {
+  return element.getAttribute("data-placeholder-element-value");
+}
 
-  function getValueAttr(element) {
-    return element.getAttribute("data-placeholder-value");
-  }
+export function getValueAttr(element) {
+  return element.getAttribute("data-placeholder-value");
+}
 
-  function getMaxLengthAttr(element) {
-    return element.getAttribute("data-placeholder-maxlength");
-  }
+export function getMaxLengthAttr(element) {
+  return element.getAttribute("data-placeholder-maxlength");
+}
 
-  function setMaxLengthAttr(element) {
-    element.setAttribute("data-placeholder-maxlength", element.maxLength);
-  }
+export function setMaxLengthAttr(element) {
+  element.setAttribute("data-placeholder-maxlength", element.maxLength);
+}
 
-  function getTypeAttr(element) {
-    return element.getAttribute("data-placeholder-type");
-  }
+export function getTypeAttr(element) {
+  return element.getAttribute("data-placeholder-type");
+}
 
-  function setTypeAttr(element, type) {
-    element.setAttribute("data-placeholder-type", type);
-  }
+export function setTypeAttr(element, type) {
+  element.setAttribute("data-placeholder-type", type);
+}
 
-  function removeMaxLengthAttr(element) {
-    element.removeAttribute("data-placeholder-maxlength");
-  }
+export function removeMaxLengthAttr(element) {
+  element.removeAttribute("data-placeholder-maxlength");
+}
 
-  function removeActiveAttr(element) {
-    element.removeAttribute("data-placeholder-active");
-  }
+export function removeActiveAttr(element) {
+  element.removeAttribute("data-placeholder-active");
+}
 
-  function removeSubmitAttr(element) {
-    element.removeAttribute("data-placeholder-submit");
-  }
+export function removeSubmitAttr(element) {
+  element.removeAttribute("data-placeholder-submit");
+}
 
-  function removeDataAttrs(element) {
-    var attrs = [
-      "value",
-      "element-value",
-      "has-events",
-      "active",
-      "maxlength",
-      "type"
-    ];
+export function removeDataAttrs(element) {
+  var attrs = [
+    "value",
+    "element-value",
+    "has-events",
+    "active",
+    "maxlength",
+    "type"
+  ];
 
-    utils.each(attrs, function(attr) {
-      element.removeAttribute("data-placeholder-" + attr);
-    });
-  }
-
-  placekeeper.data = {
-    hasWatchAttrSetToFalse: hasWatchAttrSetToFalse,
-    hasModeAttrSetToInput: hasModeAttrSetToInput,
-    hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
-    hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
-    hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,
-    hasCloneAttrSetToTrue: hasCloneAttrSetToTrue,
-    hasValueAttr: hasValueAttr,
-    hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
-    getMaxLengthAttr: getMaxLengthAttr,
-    getElementValueAttr: getElementValueAttr,
-    getValueAttr: getValueAttr,
-    getTypeAttr: getTypeAttr,
-    setElementValueAttr: setElementValueAttr,
-    setValueAttr: setValueAttr,
-    setActiveAttr: setActiveAttr,
-    setSubmitAttr: setSubmitAttr,
-    setCloneAttr: setCloneAttr,
-    setMaxLengthAttr: setMaxLengthAttr,
-    setTypeAttr: setTypeAttr,
-    setEventsAttr: setEventsAttr,
-    removeSubmitAttr: removeSubmitAttr,
-    removeMaxLengthAttr: removeMaxLengthAttr,
-    removeActiveAttr: removeActiveAttr,
-    removeDataAttrs: removeDataAttrs
-  };
-
-}());
+  utils.each(attrs, function(attr) {
+    element.removeAttribute("data-placeholder-" + attr);
+  });
+}
