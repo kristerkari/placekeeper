@@ -1,3 +1,7 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+
 describe("private methods", function() {
   "use strict";
 
@@ -10,7 +14,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength(10);
-        placekeeper.polyfill.storeMaxlength(element);
+        polyfill.storeMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -33,7 +37,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength();
-        placekeeper.polyfill.storeMaxlength(element);
+        polyfill.storeMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -56,7 +60,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength(false, 10);
-        placekeeper.polyfill.restoreMaxlength(element);
+        polyfill.restoreMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 
@@ -79,7 +83,7 @@ describe("private methods", function() {
 
       beforeEach(function(done) {
         element = helpers.createInputElementWithMaxLength();
-        placekeeper.polyfill.restoreMaxlength(element);
+        polyfill.restoreMaxlength(element);
         setTimeout(done, helpers.loopDurationForTests);
       });
 

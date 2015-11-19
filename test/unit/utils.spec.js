@@ -1,13 +1,14 @@
+import * as helpers from "../utils/helpers.js";
+import * as utils from "../../src/utils.js";
+
 describe("utils", function() {
 
   "use strict";
 
-  beforeEach(helpers.initialSetup);
-
   describe("getAttributes", function() {
 
     it("should be able to copy element attributes", function() {
-      expect(placekeeper.utils.getAttributes(helpers.createInputElementWithValue(true))).toEqual({
+      expect(utils.getAttributes(helpers.createInputElementWithValue(true))).toEqual({
         placeholder: "Test",
         value: "MyVal"
       });
@@ -30,7 +31,7 @@ describe("utils", function() {
       });
 
       it("should return true", function() {
-        expect(placekeeper.utils.hasPlaceholderAttrSet(element)).toEqual(true);
+        expect(utils.hasPlaceholderAttrSet(element)).toEqual(true);
       });
 
     });
@@ -48,7 +49,7 @@ describe("utils", function() {
       });
 
       it("should return false", function() {
-        expect(placekeeper.utils.hasPlaceholderAttrSet(element)).toEqual(false);
+        expect(utils.hasPlaceholderAttrSet(element)).toEqual(false);
       });
 
     });
@@ -69,7 +70,7 @@ describe("utils", function() {
       });
 
       it("should return text for the type", function() {
-        expect(placekeeper.utils.getElementType(element)).toEqual("text");
+        expect(utils.getElementType(element)).toEqual("text");
       });
 
     });
@@ -86,7 +87,7 @@ describe("utils", function() {
       });
 
       it("should return text for the type", function() {
-        expect(placekeeper.utils.getElementType(element)).toEqual("text");
+        expect(utils.getElementType(element)).toEqual("text");
       });
 
     });
@@ -103,7 +104,7 @@ describe("utils", function() {
       });
 
       it("should return text for the type", function() {
-        expect(placekeeper.utils.getElementType(element)).toEqual("email");
+        expect(utils.getElementType(element)).toEqual("email");
       });
 
     });
@@ -120,7 +121,7 @@ describe("utils", function() {
       });
 
       it("should return text for the type", function() {
-        expect(placekeeper.utils.getElementType(element)).toEqual("textarea");
+        expect(utils.getElementType(element)).toEqual("textarea");
       });
 
     });

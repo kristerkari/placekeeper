@@ -1,3 +1,9 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as utils from "../../src/utils.js";
+import * as events from "../../src/events.js";
+import * as support from "../../src/support.js";
+
 describe("public methods", function() {
   "use strict";
 
@@ -32,9 +38,9 @@ describe("public methods", function() {
         var blurHandler;
 
         beforeEach(function(done) {
-          focusHandler = placekeeper.events.handlers.focus;
-          blurHandler = placekeeper.events.handlers.blur;
-          spyOn(placekeeper.utils, "removeEventListener");
+          focusHandler = events.handlers.focus;
+          blurHandler = events.handlers.blur;
+          spyOn(utils, "removeEventListener");
           placekeeper.disable();
           setTimeout(function() {
             element = document.getElementById("elem");
@@ -67,12 +73,12 @@ describe("public methods", function() {
         // TODO: find out why
         if (clone != null) {
           it("should have called utils.removeEventListener for focus handler", function() {
-            expect(placekeeper.utils.removeEventListener)
+            expect(utils.removeEventListener)
             .toHaveBeenCalledWith(clone, "focus", focusHandler);
           });
 
           it("should have deleted the focus handler", function() {
-            expect(placekeeper.events.handlers.focus).not.toBeDefined();
+            expect(events.handlers.focus).not.toBeDefined();
           });
 
         }
@@ -82,12 +88,12 @@ describe("public methods", function() {
         // TODO: find out why
         if (element != null) {
           it("should have called utils.removeEventListener for blur handler", function() {
-            expect(placekeeper.utils.removeEventListener)
+            expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "blur", blurHandler);
           });
 
           it("should have deleted the blur handler", function() {
-            expect(placekeeper.events.handlers.blur).not.toBeDefined();
+            expect(events.handlers.blur).not.toBeDefined();
           });
 
         }
@@ -121,9 +127,9 @@ describe("public methods", function() {
           var blurHandler;
 
           beforeEach(function() {
-            focusHandler = placekeeper.events.handlers.focus;
-            blurHandler = placekeeper.events.handlers.blur;
-            spyOn(placekeeper.utils, "removeEventListener");
+            focusHandler = events.handlers.focus;
+            blurHandler = events.handlers.blur;
+            spyOn(utils, "removeEventListener");
             placekeeper.disable();
           });
 
@@ -132,21 +138,21 @@ describe("public methods", function() {
           });
 
           it("should have called utils.removeEventListener for focus handler", function() {
-            expect(placekeeper.utils.removeEventListener)
+            expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "focus", focusHandler);
           });
 
           it("should have called utils.removeEventListener for blur handler", function() {
-            expect(placekeeper.utils.removeEventListener)
+            expect(utils.removeEventListener)
             .toHaveBeenCalledWith(element, "blur", blurHandler);
           });
 
           it("should have deleted the focus handler", function() {
-            expect(placekeeper.events.handlers.focus).not.toBeDefined();
+            expect(events.handlers.focus).not.toBeDefined();
           });
 
           it("should have deleted the blur handler", function() {
-            expect(placekeeper.events.handlers.blur).not.toBeDefined();
+            expect(events.handlers.blur).not.toBeDefined();
           });
 
         });
@@ -173,7 +179,7 @@ describe("public methods", function() {
       });
 
       it("should have called hasNativePlaceholderSupport method", function() {
-        expect(placekeeper.support.hasNativePlaceholderSupport).toHaveBeenCalled();
+        expect(support.hasNativePlaceholderSupport).toHaveBeenCalled();
       });
 
       it("should have placekeeper disabled", function() {
@@ -196,7 +202,7 @@ describe("public methods", function() {
       });
 
       it("should have called hasNativePlaceholderSupport method", function() {
-        expect(placekeeper.support.hasNativePlaceholderSupport).toHaveBeenCalled();
+        expect(support.hasNativePlaceholderSupport).toHaveBeenCalled();
       });
 
       it("should have placekeeper enabled", function() {

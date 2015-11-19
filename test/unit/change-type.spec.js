@@ -1,3 +1,6 @@
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+
 describe("changing element type", function() {
   "use strict";
 
