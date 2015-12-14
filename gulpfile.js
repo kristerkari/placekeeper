@@ -14,6 +14,7 @@
   var sizereport = require("gulp-sizereport");
   var rollup = require("gulp-rollup");
   var babel = require("rollup-plugin-babel");
+  var dereserve = require("gulp-dereserve");
 
   var adapters = [
     "jquery",
@@ -39,6 +40,7 @@
       format: "iife",
       sourceMap: false
     }))
+    .pipe(dereserve())
     .pipe(rename({
       basename: "placekeeper"
     }))
@@ -63,6 +65,7 @@
       format: "iife",
       sourceMap: false
     }))
+    .pipe(dereserve())
     .pipe(rename({
       basename: "placekeeper." + adapter
     }))

@@ -7,20 +7,7 @@ var sharedKarmaConfig = {
   browserify: {
     debug: true,
     transform: [
-      [
-        "babelify",
-        {
-          presets: ["es2015-loose"],
-          plugins: [
-            "transform-es2015-arrow-functions",
-            "transform-es2015-constants",
-            "transform-es2015-literals",
-            "transform-es2015-block-scoping",
-            "transform-es3-member-expression-literals",
-            "transform-es3-property-literals"
-          ]
-        }
-      ]
+      "babelify"
     ]
   },
   basePath: "../../",
