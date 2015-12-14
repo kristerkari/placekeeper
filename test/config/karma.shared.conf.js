@@ -10,7 +10,15 @@ var sharedKarmaConfig = {
       [
         "babelify",
         {
-          presets: ["es2015"]
+          presets: ["es2015-loose"],
+          plugins: [
+            "transform-es2015-arrow-functions",
+            "transform-es2015-constants",
+            "transform-es2015-literals",
+            "transform-es2015-block-scoping",
+            "transform-es3-member-expression-literals",
+            "transform-es3-property-literals"
+          ]
         }
       ]
     ]
@@ -25,7 +33,7 @@ var sharedKarmaConfig = {
     "node_modules/jquery/dist/jquery.js",
     "test/utils/matchers.js",
     "test/utils/trigger-event.js",
-    "test/**/*.spec.js"
+    "test/unit/**/*.spec.js"
   ]
 };
 

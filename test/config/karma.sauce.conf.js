@@ -15,11 +15,11 @@ module.exports = function(config) {
     //   browserName: "internet explorer",
     //   version: "7.0"
     // },
-    // ie8: {
-    //   base: "SauceLabs",
-    //   browserName: "internet explorer",
-    //   version: "8.0"
-    // },
+    ie8: {
+      base: "SauceLabs",
+      browserName: "internet explorer",
+      version: "8.0"
+    },
     ie9: {
       base: "SauceLabs",
       browserName: "internet explorer",
