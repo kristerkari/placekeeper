@@ -1,80 +1,83 @@
-describe("changing placeholder", function() {
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+
+describe("changing placeholder", () => {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("when a password input with placeholder exists on the page", function() {
+  describe("when a password input with placeholder exists on the page", () => {
     var element;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true, "password");
-      setTimeout(function() {
+      setTimeout(() => {
         element = document.getElementById("elem");
         done();
       }, helpers.loopDurationForTests);
-      placekeeper.priv.__init();
+      placekeeper.init();
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
     });
 
-    it("should have data-placeholder-active set to true", function() {
+    it("should have data-placeholder-active set to true", () => {
       expect(element.getAttribute("data-placeholder-active")).toEqual("true");
     });
 
-    it("should have placeholder class", function() {
+    it("should have placeholder class", () => {
       expect(element).toHaveClass("placeholder");
     });
 
-    it("should have placeholder as value", function() {
+    it("should have placeholder as value", () => {
       expect(element.value).toEqual("Test");
     });
 
-    describe("and when placeholder is changed", function() {
+    describe("and when placeholder is changed", () => {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         element.setAttribute("placeholder", "Changed");
-        setTimeout(function() {
+        setTimeout(() => {
           element = document.getElementById("elem");
           done();
         }, helpers.loopDurationForTests);
       });
 
-      it("should have data-placeholder-active set to true", function() {
+      it("should have data-placeholder-active set to true", () => {
         expect(element.getAttribute("data-placeholder-active")).toEqual("true");
       });
 
-      it("should have placeholder class", function() {
+      it("should have placeholder class", () => {
         expect(element).toHaveClass("placeholder");
       });
 
-      it("should have placeholder as value", function() {
+      it("should have placeholder as value", () => {
         expect(element.value).toEqual("Changed");
       });
 
-      describe("and when input is focused after that", function() {
+      describe("and when input is focused after that", () => {
 
-        beforeEach(function(done) {
-          helpers.retryFocus(element, function() {
-            setTimeout(function() {
+        beforeEach((done) => {
+          helpers.retryFocus(element, () => {
+            setTimeout(() => {
               element = document.getElementById("elem");
               done();
             }, helpers.loopDurationForTests);
           });
         });
 
-        it("should have removed element's value", function() {
+        it("should have removed element's value", () => {
           expect(element.value).toEqual("");
         });
 
-        it("should have removed data-placeholder-active", function() {
+        it("should have removed data-placeholder-active", () => {
           expect(element.getAttribute("data-placeholder-active")).toEqual(null);
         });
 
-        it("should have removed placeholder class", function() {
+        it("should have removed placeholder class", () => {
           expect(element).not.toHaveClass("placeholder");
         });
 
@@ -84,49 +87,49 @@ describe("changing placeholder", function() {
 
   });
 
-  describe("when a text input with placeholder exists on the page", function() {
+  describe("when a text input with placeholder exists on the page", () => {
     var element;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true);
       setTimeout(done, helpers.loopDurationForTests);
-      placekeeper.priv.__init();
+      placekeeper.init();
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
     });
 
-    it("should have data-placeholder-active set to true", function() {
+    it("should have data-placeholder-active set to true", () => {
       expect(element.getAttribute("data-placeholder-active")).toEqual("true");
     });
 
-    it("should have placeholder class", function() {
+    it("should have placeholder class", () => {
       expect(element).toHaveClass("placeholder");
     });
 
-    it("should have placeholder as value", function() {
+    it("should have placeholder as value", () => {
       expect(element.value).toEqual("Test");
     });
 
-    describe("and when placeholder is changed", function() {
+    describe("and when placeholder is changed", () => {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         element.setAttribute("placeholder", "Changed");
         setTimeout(done, helpers.loopDurationForTests);
       });
 
-      it("should have data-placeholder-active set to true", function() {
+      it("should have data-placeholder-active set to true", () => {
         expect(element.getAttribute("data-placeholder-active")).toEqual("true");
       });
 
-      it("should have placeholder class", function() {
+      it("should have placeholder class", () => {
         expect(element).toHaveClass("placeholder");
       });
 
-      it("should have placeholder as value", function() {
+      it("should have placeholder as value", () => {
         expect(element.value).toEqual("Changed");
       });
 

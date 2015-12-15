@@ -1,13 +1,16 @@
 var extend = require("lodash.assign");
 var shared = require("./karma.shared.conf.js");
+var istanbul = require("browserify-istanbul");
 
 module.exports = function(config) {
   "use strict";
 
   config.set(extend(shared, {
     preprocessors: {
-      "src/**/!(support).js": ["coverage"],
-      "src/*.js": ["wrap"]
+      "src/*.js": ["browserify"],
+      "test/utils/helpers.js": ["browserify"],
+      "test/unit/*.spec.js": ["browserify"],
+      "src/**/!(support).js": ["coverage"]
     },
     coverageReporter: {
       dir: "coverage/",
@@ -21,7 +24,23 @@ module.exports = function(config) {
       ]
     },
     reporters: ["progress", "coverage"],
-    logLevel: config.LOG_INFO,
+    browserify: {
+      transform: [
+        [
+          "babelify"
+        ],
+        [
+          istanbul({
+            ignore: [
+              "**/node_modules/**",
+              "**/test/**"
+            ]
+          })
+        ]
+      ],
+      debug: true
+    },
+    logLevel: config.LOG_DISABLE,
     browsers: ["PhantomJS"]
   }));
 };

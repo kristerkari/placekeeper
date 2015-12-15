@@ -1,199 +1,205 @@
-describe("forms", function() {
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+import * as events from "../../src/events.js";
+
+describe("forms", () => {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("when there is an element with placeholder and form attribute inside a form on the page", function() {
+  describe("when there is an element with placeholder and form attribute inside a form on the page", () => {
     var element;
     var form;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       element = helpers.createInputElementWithFormAttribute(true);
       form = document.getElementsByTagName("form")[0];
-      placekeeper.priv.__setupPlaceholders();
+      placekeeper.setupPlaceholders();
       setTimeout(done, helpers.loopDurationForTests);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
     });
 
-    describe("and when that form is submitted", function() {
+    describe("and when that form is submitted", () => {
 
-      beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+      beforeEach(() => {
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
-      it("should have added data-placeholder-submit to the form", function() {
+      it("should have added data-placeholder-submit to the form", () => {
         expect(form.getAttribute("data-placeholder-submit")).toEqual("true");
       });
 
-      it("should have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", () => {
+        expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
-      it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", () => {
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
-      describe("and after 10ms (when form is submitted)", function() {
+      describe("and after 10ms (when form is submitted)", () => {
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           setTimeout(done, 10);
         });
 
-        it("should have called polyfill's showPlaceholder method", function() {
-          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's showPlaceholder method", () => {
+          expect(polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });
 
     });
 
-    describe("and when disable method is called", function() {
+    describe("and when disable method is called", () => {
       var submitHandler;
 
-      beforeEach(function() {
-        submitHandler = placekeeper.events.handlers.submit;
-        spyOn(placekeeper.utils, "removeEventListener");
+      beforeEach(() => {
+        submitHandler = events.handlers.submit;
+        spyOn(utils, "removeEventListener");
         placekeeper.disable();
       });
 
-      it("should have called utils.removeEventListener for submit handler", function() {
-        expect(placekeeper.utils.removeEventListener)
+      it("should have called utils.removeEventListener for submit handler", () => {
+        expect(utils.removeEventListener)
         .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
-      it("should not have data-placeholder-submit set to the from", function() {
+      it("should not have data-placeholder-submit set to the from", () => {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
       });
 
-      it("should have deleted the submit handler", function() {
-        expect(placekeeper.events.handlers.submit).not.toBeDefined();
+      it("should have deleted the submit handler", () => {
+        expect(events.handlers.submit).not.toBeDefined();
       });
 
     });
 
   });
 
-  describe("when there is an element without placeholder inside a form on the page", function() {
+  describe("when there is an element without placeholder inside a form on the page", () => {
     var element;
     var form;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       element = helpers.createInputElementWithForm(false);
       form = document.getElementsByTagName("form")[0];
-      placekeeper.priv.__setupPlaceholders();
+      placekeeper.setupPlaceholders();
       setTimeout(done, helpers.loopDurationForTests);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
     });
 
-    describe("and when that form is submitted", function() {
+    describe("and when that form is submitted", () => {
 
-      beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+      beforeEach(() => {
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
-      it("should not have added data-placeholder-submit to the form", function() {
+      it("should not have added data-placeholder-submit to the form", () => {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
       });
 
-      it("should not have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's hidePlaceholder method", () => {
+        expect(polyfill.hidePlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(0);
       });
 
-      it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", () => {
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
     });
 
   });
 
-  describe("when there is an element with placeholder inside a form on the page", function() {
+  describe("when there is an element with placeholder inside a form on the page", () => {
     var element;
     var form;
 
-    beforeEach(function(done) {
+    beforeEach((done) => {
       element = helpers.createInputElementWithForm(true);
       form = document.getElementsByTagName("form")[0];
-      placekeeper.priv.__setupPlaceholders();
+      placekeeper.setupPlaceholders();
       setTimeout(done, helpers.loopDurationForTests);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
     });
 
-    describe("and when that form is submitted", function() {
+    describe("and when that form is submitted", () => {
 
-      beforeEach(function() {
-        spyOn(placekeeper.polyfill, "hidePlaceholder");
-        spyOn(placekeeper.polyfill, "showPlaceholder");
+      beforeEach(() => {
+        spyOn(polyfill, "hidePlaceholder");
+        spyOn(polyfill, "showPlaceholder");
         triggerEvent.html(form, "submit");
       });
 
-      it("should have added data-placeholder-submit to the form", function() {
+      it("should have added data-placeholder-submit to the form", () => {
         expect(form.getAttribute("data-placeholder-submit")).toEqual("true");
       });
 
-      it("should have called polyfill's hidePlaceholder method", function() {
-        expect(placekeeper.polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
-        expect(placekeeper.polyfill.hidePlaceholder.calls.count()).toEqual(1);
+      it("should have called polyfill's hidePlaceholder method", () => {
+        expect(polyfill.hidePlaceholder).toHaveBeenCalledWith(element);
+        expect(polyfill.hidePlaceholder.calls.count()).toEqual(1);
       });
 
-      it("should not have called polyfill's showPlaceholder method", function() {
-        expect(placekeeper.polyfill.showPlaceholder).not.toHaveBeenCalled();
-        expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(0);
+      it("should not have called polyfill's showPlaceholder method", () => {
+        expect(polyfill.showPlaceholder).not.toHaveBeenCalled();
+        expect(polyfill.showPlaceholder.calls.count()).toEqual(0);
       });
 
-      describe("and after 10ms (when form is submitted)", function() {
+      describe("and after 10ms (when form is submitted)", () => {
 
-        beforeEach(function(done) {
+        beforeEach((done) => {
           setTimeout(done, 10);
         });
 
-        it("should have called polyfill's showPlaceholder method", function() {
-          expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalledWith(element);
-          expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+        it("should have called polyfill's showPlaceholder method", () => {
+          expect(polyfill.showPlaceholder).toHaveBeenCalledWith(element);
+          expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
         });
 
       });
 
     });
 
-    describe("and when disable method is called", function() {
+    describe("and when disable method is called", () => {
       var submitHandler;
 
-      beforeEach(function() {
-        submitHandler = placekeeper.events.handlers.submit;
-        spyOn(placekeeper.utils, "removeEventListener");
+      beforeEach(() => {
+        submitHandler = events.handlers.submit;
+        spyOn(utils, "removeEventListener");
         placekeeper.disable();
       });
 
-      it("should have called utils.removeEventListener for submit handler", function() {
-        expect(placekeeper.utils.removeEventListener)
+      it("should have called utils.removeEventListener for submit handler", () => {
+        expect(utils.removeEventListener)
         .toHaveBeenCalledWith(form, "submit", submitHandler);
       });
 
-      it("should not have data-placeholder-submit set to the from", function() {
+      it("should not have data-placeholder-submit set to the from", () => {
         expect(form.getAttribute("data-placeholder-submit")).toEqual(null);
       });
 
-      it("should have deleted the submit handler", function() {
-        expect(placekeeper.events.handlers.submit).not.toBeDefined();
+      it("should have deleted the submit handler", () => {
+        expect(events.handlers.submit).not.toBeDefined();
       });
 
     });

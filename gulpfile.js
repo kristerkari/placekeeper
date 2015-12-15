@@ -3,19 +3,18 @@
 
   var path = require("path");
   var gulp = require("gulp");
-  var concat = require("gulp-concat");
   var jscs = require("gulp-jscs");
   var jshint = require("gulp-jshint");
   var stylish = require("jshint-stylish");
   var eslint = require("gulp-eslint");
   var connect = require("gulp-connect");
-  var indent = require("gulp-indent");
-  var trimlines = require("gulp-trimlines");
-  var wrap = require("gulp-wrap");
   var Server = require("karma").Server;
   var uglify = require("gulp-uglify");
   var rename = require("gulp-rename");
   var sizereport = require("gulp-sizereport");
+  var rollup = require("gulp-rollup");
+  var babel = require("rollup-plugin-babel");
+  var dereserve = require("gulp-dereserve");
 
   var adapters = [
     "jquery",
@@ -32,23 +31,18 @@
 
   gulp.task("source", function() {
     return gulp.src([
-      "src/utils.js",
-      "src/data.js",
-      "src/mode.js",
-      "src/support.js",
-      "src/elements.js",
-      "src/polyfill.js",
-      "src/events.js",
-      "src/main.js",
       "src/module.js"
     ])
-    .pipe(indent({
-      amount: 2
+    .pipe(rollup({
+      plugins: [
+        babel()
+      ],
+      format: "iife",
+      sourceMap: false
     }))
-    .pipe(concat("placekeeper.js"))
-    .pipe(wrap("(function(global) {\n  \"use strict\";\n\n  var placekeeper = {};\n\n<%= contents %>\n}(this));\n\n"))
-    .pipe(trimlines({
-      leading: false
+    .pipe(dereserve())
+    .pipe(rename({
+      basename: "placekeeper"
     }))
     .pipe(gulp.dest("dist"))
     .pipe(uglify({
@@ -62,10 +56,19 @@
 
   function buildAdapter(adapter) {
     return gulp.src([
-      "dist/placekeeper.js",
-      "src/adapters/adapter." + adapter + ".js"
+      "src/adapters/module." + adapter + ".js"
     ])
-    .pipe(concat("placekeeper." + adapter + ".js"))
+    .pipe(rollup({
+      plugins: [
+        babel()
+      ],
+      format: "iife",
+      sourceMap: false
+    }))
+    .pipe(dereserve())
+    .pipe(rename({
+      basename: "placekeeper." + adapter
+    }))
     .pipe(gulp.dest("dist"))
     .pipe(uglify({
       mangle: true

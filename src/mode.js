@@ -1,72 +1,54 @@
-(function() {
+import * as data from "./data.js";
+import * as utils from "./utils.js";
 
-  var data = placekeeper.data;
-  var utils = placekeeper.utils;
+let isEnabled = false;
+let isFocusEnabled = true;
+let isWatchingEnabled = false;
+const modeElements = [
+  document.documentElement,
+  document.body
+];
 
-  var isEnabled = false;
-  var isFocusEnabled = true;
-  var isWatchingEnabled = false;
-  var modeElements = [
-    document.documentElement,
-    document.body
-  ];
+export function isPlacekeeperEnabled() {
+  return isEnabled;
+}
 
-  function isPlacekeeperEnabled() {
-    return isEnabled;
-  }
+export function isPlacekeeperFocusEnabled() {
+  return isFocusEnabled;
+}
 
-  function isPlacekeeperFocusEnabled() {
-    return isFocusEnabled;
-  }
+export function isPlacekeeperWatchingEnabled() {
+  return isWatchingEnabled;
+}
 
-  function isPlacekeeperWatchingEnabled() {
-    return isWatchingEnabled;
-  }
+export function hasWatchingDisabled() {
+  return utils.some(modeElements, data.hasWatchAttrSetToFalse);
+}
 
-  function hasWatchingDisabled() {
-    return utils.some(modeElements, data.hasWatchAttrSetToFalse);
-  }
+export function hasFocusDisabled() {
+  return utils.some(modeElements, data.hasModeAttrSetToInput);
+}
 
-  function hasFocusDisabled() {
-    return utils.some(modeElements, data.hasModeAttrSetToInput);
-  }
+export function enableFocus() {
+  isFocusEnabled = true;
+}
 
-  function enableFocus() {
-    isFocusEnabled = true;
-  }
+export function disableFocus() {
+  isFocusEnabled = false;
+}
 
-  function disableFocus() {
-    isFocusEnabled = false;
-  }
+export function enableWatching() {
+  isWatchingEnabled = true;
+}
 
-  function enableWatching() {
-    isWatchingEnabled = true;
-  }
+export function disableWatching() {
+  isWatchingEnabled = false;
+}
 
-  function disableWatching() {
-    isWatchingEnabled = false;
-  }
+export function disable() {
+  isEnabled = false;
+}
 
-  function disable() {
-    isEnabled = false;
-  }
-
-  function enable() {
-    isEnabled = true;
-  }
-
-  placekeeper.mode = {
-    isPlacekeeperEnabled: isPlacekeeperEnabled,
-    isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
-    isPlacekeeperWatchingEnabled: isPlacekeeperWatchingEnabled,
-    hasWatchingDisabled: hasWatchingDisabled,
-    hasFocusDisabled: hasFocusDisabled,
-    enableFocus: enableFocus,
-    disableFocus: disableFocus,
-    enableWatching: enableWatching,
-    disableWatching: disableWatching,
-    disable: disable,
-    enable: enable
-  };
-
-}());
+export function enable() {
+  isEnabled = true;
+}

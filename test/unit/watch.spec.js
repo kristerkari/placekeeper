@@ -1,102 +1,107 @@
-describe("watching for placeholder changes", function() {
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+import * as polyfill from "../../src/polyfill.js";
+import * as utils from "../../src/utils.js";
+
+describe("watching for placeholder changes", () => {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("when watching enabled and there is a password input with placeholder on the page", function() {
+  describe("when watching enabled and there is a password input with placeholder on the page", () => {
     var element;
 
-    beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+    beforeEach((done) => {
+      spyOn(polyfill, "showPlaceholder").and.callThrough();
       helpers.spyOnCanChangeToTypeAndReturn(false);
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true, "password");
-      placekeeper.priv.__init();
+      placekeeper.init();
       setTimeout(done, helpers.loopDurationForTests);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
       placekeeper.disable();
     });
 
-    it("should have called polyfill's showPlaceholder method once", function() {
-      expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalled();
-      // expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+    it("should have called polyfill's showPlaceholder method once", () => {
+      expect(polyfill.showPlaceholder).toHaveBeenCalled();
+      // expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
     });
 
   });
 
-  describe("when watching enabled and there is an element with placeholder on the page", function() {
+  describe("when watching enabled and there is an element with placeholder on the page", () => {
     var element;
 
-    beforeEach(function(done) {
-      spyOn(placekeeper.polyfill, "showPlaceholder").and.callThrough();
+    beforeEach((done) => {
+      spyOn(polyfill, "showPlaceholder").and.callThrough();
       helpers.spyOnNativeSupportAndReturn(false);
       element = helpers.createInputElement(true);
-      placekeeper.priv.__init();
+      placekeeper.init();
       setTimeout(done, helpers.loopDurationForTests);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       element.parentNode.removeChild(element);
       placekeeper.disable();
     });
 
-    it("should have called polyfill's showPlaceholder method once", function() {
-      expect(placekeeper.polyfill.showPlaceholder).toHaveBeenCalled();
-      expect(placekeeper.polyfill.showPlaceholder.calls.count()).toEqual(1);
+    it("should have called polyfill's showPlaceholder method once", () => {
+      expect(polyfill.showPlaceholder).toHaveBeenCalled();
+      expect(polyfill.showPlaceholder.calls.count()).toEqual(1);
     });
 
-    it("should have set data-placeholder-value to the element", function() {
+    it("should have set data-placeholder-value to the element", () => {
       expect(element.getAttribute("data-placeholder-value")).toEqual("Test");
     });
 
-    it("should have watching enabled", function() {
+    it("should have watching enabled", () => {
       expect(placekeeper.isWatchingEnabled()).toEqual(true);
     });
 
-    describe("and when placeholder value is changed", function() {
+    describe("and when placeholder value is changed", () => {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         element.placeholder = "TestChanged";
         setTimeout(done, helpers.loopDurationForTests);
       });
 
-      it("should correctly be able to get changed placeholder value", function() {
-        expect(placekeeper.utils.getPlaceholderValue(element)).toEqual("TestChanged");
+      it("should correctly be able to get changed placeholder value", () => {
+        expect(utils.getPlaceholderValue(element)).toEqual("TestChanged");
       });
 
-      it("should have changed data-placeholder-value to the element", function() {
+      it("should have changed data-placeholder-value to the element", () => {
         expect(element.getAttribute("data-placeholder-value")).toEqual("TestChanged");
       });
 
     });
 
-    describe("and when element value is changed", function() {
+    describe("and when element value is changed", () => {
 
-      beforeEach(function(done) {
+      beforeEach((done) => {
         element.value = "Changed";
         setTimeout(done, helpers.loopDurationForTests);
       });
 
-      it("should have set element's value to changed value (Changed)", function() {
+      it("should have set element's value to changed value (Changed)", () => {
         expect(element.value).toEqual("Changed");
       });
 
-      it("should have removed data-placeholder-active", function() {
+      it("should have removed data-placeholder-active", () => {
         expect(element.getAttribute("data-placeholder-active")).toEqual(null);
       });
 
-      it("should have removed placeholder class", function() {
+      it("should have removed placeholder class", () => {
         expect(element).not.toHaveClass("placeholder");
       });
 
-      it("should have removed data-placeholder-maxlength", function() {
+      it("should have removed data-placeholder-maxlength", () => {
         expect(element.getAttribute("data-placeholder-maxlength")).toEqual(null);
       });
 
-      it("should have restored maxlength attribute", function() {
+      it("should have restored maxlength attribute", () => {
         expect(parseInt(element.getAttribute("maxLength"), 10)).toEqual(12);
       });
 

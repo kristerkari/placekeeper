@@ -48,9 +48,6 @@ module.exports = function(config) {
   config.set(extend(shared, {
     captureTimeout: 120000,
     browserNoActivityTimeout: 60000,
-    preprocessors: {
-      "src/*.js": ["wrap"]
-    },
     sauceLabs: {
       testName: "HTML5 placeholder polyfill"
     },

@@ -1,79 +1,82 @@
-describe("plugin options", function() {
+import * as helpers from "../utils/helpers.js";
+import * as placekeeper from "../../src/main.js";
+
+describe("plugin options", () => {
   "use strict";
 
   beforeEach(helpers.initialSetup);
 
-  describe("root element data attributes", function() {
+  describe("root element data attributes", () => {
 
-    describe("data-placeholder-mode attribute", function() {
+    describe("data-placeholder-mode attribute", () => {
 
-      describe("when set to \"input\" in html element", function() {
+      describe("when set to \"input\" in html element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.documentElement.setAttribute("data-placeholder-mode", "input");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.documentElement.removeAttribute("data-placeholder-mode");
         });
 
-        it("should have focus mode disabled", function() {
+        it("should have focus mode disabled", () => {
           expect(placekeeper.isFocusEnabled()).toEqual(false);
         });
 
       });
 
-      describe("when set to \"input\" in body element", function() {
+      describe("when set to \"input\" in body element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.body.setAttribute("data-placeholder-mode", "input");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.body.removeAttribute("data-placeholder-mode");
         });
 
-        it("should have focus mode disabled", function() {
+        it("should have focus mode disabled", () => {
           expect(placekeeper.isFocusEnabled()).toEqual(false);
         });
 
       });
 
-      describe("when set to \"focus\" in html element", function() {
+      describe("when set to \"focus\" in html element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.documentElement.setAttribute("data-placeholder-mode", "focus");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.documentElement.removeAttribute("data-placeholder-mode");
         });
 
-        it("should have focus mode enabled", function() {
+        it("should have focus mode enabled", () => {
           expect(placekeeper.isFocusEnabled()).toEqual(true);
         });
 
       });
 
-      describe("when set to \"focus\" in body element", function() {
+      describe("when set to \"focus\" in body element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.body.setAttribute("data-placeholder-mode", "focus");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.body.removeAttribute("data-placeholder-mode");
         });
 
-        it("should have focus mode enabled", function() {
+        it("should have focus mode enabled", () => {
           expect(placekeeper.isFocusEnabled()).toEqual(true);
         });
 
@@ -81,33 +84,33 @@ describe("plugin options", function() {
 
     });
 
-    describe("data-placeholder-live attribute", function() {
+    describe("data-placeholder-live attribute", () => {
 
-      describe("when set to false in html element", function() {
+      describe("when set to false in html element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.documentElement.setAttribute("data-placeholder-live", "false");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.documentElement.removeAttribute("data-placeholder-live");
         });
 
-        describe("and when an element with placeholder is added", function() {
+        describe("and when an element with placeholder is added", () => {
           var element;
 
-          beforeEach(function() {
+          beforeEach(() => {
             element = helpers.createInputElement(true);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
             placekeeper.disable();
           });
 
-          it("should have placekeeper disabled", function() {
+          it("should have placekeeper disabled", () => {
             expect(placekeeper.isEnabled()).toEqual(false);
           });
 
@@ -115,32 +118,32 @@ describe("plugin options", function() {
 
       });
 
-      describe("when set to true in html element", function() {
+      describe("when set to true in html element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.documentElement.setAttribute("data-placeholder-live", "true");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.documentElement.removeAttribute("data-placeholder-live");
         });
 
-        describe("and when an element with placeholder is added", function() {
+        describe("and when an element with placeholder is added", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createInputElement(true);
             setTimeout(done, 110);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
             placekeeper.disable();
           });
 
-          it("should have placekeeper enabled", function() {
+          it("should have placekeeper enabled", () => {
             expect(placekeeper.isEnabled()).toEqual(true);
           });
 
@@ -148,31 +151,31 @@ describe("plugin options", function() {
 
       });
 
-      describe("when set to false in body element", function() {
+      describe("when set to false in body element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.body.setAttribute("data-placeholder-live", "false");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.body.removeAttribute("data-placeholder-live");
         });
 
-        describe("and when an element with placeholder is added", function() {
+        describe("and when an element with placeholder is added", () => {
           var element;
 
-          beforeEach(function() {
+          beforeEach(() => {
             element = helpers.createInputElement(true);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
             placekeeper.disable();
           });
 
-          it("should have placekeeper disabled", function() {
+          it("should have placekeeper disabled", () => {
             expect(placekeeper.isEnabled()).toEqual(false);
           });
 
@@ -180,32 +183,32 @@ describe("plugin options", function() {
 
       });
 
-      describe("when set to true in body element", function() {
+      describe("when set to true in body element", () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           document.body.setAttribute("data-placeholder-live", "true");
           helpers.spyOnNativeSupportAndReturn(false);
-          placekeeper.priv.__init();
+          placekeeper.init();
         });
 
-        afterEach(function() {
+        afterEach(() => {
           document.body.removeAttribute("data-placeholder-live");
         });
 
-        describe("and when an element with placeholder is added", function() {
+        describe("and when an element with placeholder is added", () => {
           var element;
 
-          beforeEach(function(done) {
+          beforeEach((done) => {
             element = helpers.createInputElement(true);
             setTimeout(done, 110);
           });
 
-          afterEach(function() {
+          afterEach(() => {
             element.parentNode.removeChild(element);
             placekeeper.disable();
           });
 
-          it("should have placekeeper enabled", function() {
+          it("should have placekeeper enabled", () => {
             expect(placekeeper.isEnabled()).toEqual(true);
           });
 
