@@ -1,1238 +1,1050 @@
-(function(global) {
-  "use strict";
+(function () { 'use strict';
 
-  var placekeeper = {};
+  var babelHelpers = {};
 
-  (function() {
+  babelHelpers["typeof"] = function (obj) {
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  };
 
-    function addEventListener(elem, event, fn) {
-      if (elem.addEventListener) {
-        return elem.addEventListener(event, fn, false);
-      }
-      if (elem.attachEvent && fn != null) {
-        return elem.attachEvent("on" + event, function(e) {
-          e.preventDefault = function() {
-            e.returnValue = false;
-          };
-          e.stopPropagation = function() {
-            e.cancelBubble = true;
-          };
-          fn.call(elem, e);
-        });
-      }
+  babelHelpers;
+  function addEventListener(elem, event, fn) {
+    if (elem.addEventListener) {
+      return elem.addEventListener(event, fn, false);
     }
-
-    function removeEventListener(elem, event, fn) {
-      if (elem.removeEventListener) {
-        return elem.removeEventListener(event, fn, false);
-      }
-      if (elem.detachEvent && fn != null) {
-        return elem.detachEvent("on" + event, fn);
-      }
-    }
-
-    function trim(str) {
-      return str.replace(/^\s+|\s+$/g, "");
-    }
-
-    function hasClass(elem, className) {
-      return (" " + elem.className + " ").indexOf(" " + className + " ") !== -1;
-    }
-
-    function addClass(elem, className) {
-      if (!hasClass(elem, className)) {
-        elem.className = elem.className === "" ? className : elem.className + " " + className;
-      }
-    }
-
-    function removeClass(elem, className) {
-      elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
-    }
-
-    function each(collection, iter, ctx) {
-      for (var i = 0; i < collection.length; i++) {
-        iter.call(ctx, collection[i], i, collection);
-      }
-    }
-
-    function getAttributes(elem) {
-      var copiedAttrs = {};
-
-      each(elem.attributes, function(attr) {
-        // old IEs will throw an error if you try to copy "type" attribute.
-        if (attr.specified && attr.name !== "type" && attr.name !== "id") {
-          copiedAttrs[attr.name] = attr.value;
-        }
-      });
-
-      // value attribute does not get copied in IE7
-      // so copy it manually
-      if (copiedAttrs.value == null && elem.value !== "") {
-        copiedAttrs.value = elem.value;
-      }
-
-      return copiedAttrs;
-    }
-
-    function setAttributes(elem, attrs) {
-      for (var key in attrs) {
-        elem.setAttribute(key, attrs[key]);
-      }
-    }
-
-    function getElementType(element) {
-      if (element.type === "textarea") {
-        return element.type;
-      }
-      if (!element.getAttribute("type") &&
-          element.tagName.toLowerCase() === "input") {
-        return "text";
-      }
-      return element.getAttribute("type");
-    }
-
-    // wrap `document.getElementsByTagName`
-    // so that unit tests can correctly spy
-    // on it in all browsers
-    function getElementsByTagName(type) {
-      return document.getElementsByTagName(type);
-    }
-
-    function preventDefault(evt) {
-      evt.preventDefault();
-    }
-
-    // Check whether an item is in an array
-    // (we don't use Array.prototype.indexOf
-    // so we don't clobber any existing polyfills
-    // - this is a really simple alternative)
-    function inArray(arr, item) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] === item) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function moveCaret(elem, index) {
-      if (elem.createTextRange) {
-        var range = elem.createTextRange();
-        range.move("character", index);
-        range.select();
-      } else if (elem.selectionStart) {
-        elem.focus();
-        elem.setSelectionRange(index, index);
-      }
-    }
-
-    function getPlaceholderValue(element) {
-      return "placeholder" in element &&
-             element.placeholder ||
-             // IE10 emulating IE7 fails with getAttribute, hence the use of the attributes node
-             // IE returns an empty object instead of undefined if the attribute is not present
-             element.attributes.placeholder &&
-             element.attributes.placeholder.nodeValue;
-    }
-
-    function hasPlaceholderAttrSet(element) {
-      return Boolean(getPlaceholderValue(element));
-    }
-
-    function some(items, fn) {
-      for (var i = 0; i < items.length; i++) {
-        if (items[i] != null && fn(items[i])) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    placekeeper.utils = {
-      moveCaret: moveCaret,
-      getPlaceholderValue: getPlaceholderValue,
-      hasPlaceholderAttrSet: hasPlaceholderAttrSet,
-      getAttributes: getAttributes,
-      setAttributes: setAttributes,
-      getElementType: getElementType,
-      addEventListener: addEventListener,
-      removeEventListener: removeEventListener,
-      addClass: addClass,
-      removeClass: removeClass,
-      hasClass: hasClass,
-      preventDefault: preventDefault,
-      each: each,
-      some: some,
-      getElementsByTagName: getElementsByTagName,
-      inArray: inArray
-    };
-
-  }());
-
-  (function() {
-    var utils = placekeeper.utils;
-
-    function hasWatchAttrSetToFalse(element) {
-      return element.getAttribute("data-placeholder-watch") === "false";
-    }
-
-    function hasModeAttrSetToInput(element) {
-      return element.getAttribute("data-placeholder-mode") === "input";
-    }
-
-    function hasEventsAttrSetToTrue(element) {
-      return element.getAttribute("data-placeholder-has-events") === "true";
-    }
-
-    function hasActiveAttrSetToTrue(element) {
-      return element.getAttribute("data-placeholder-active") === "true";
-    }
-
-    function hasSubmitAttrSetToTrue(element) {
-      return element.getAttribute("data-placeholder-submit") === "true";
-    }
-
-    function hasCloneAttrSetToTrue(element) {
-      return element.getAttribute("data-placeholder-clone") === "true";
-    }
-
-    function hasValueAttr(element) {
-      return element.getAttribute("data-placeholder-value") != null;
-    }
-
-    function hasTypeAttrSetToPassword(element) {
-      return element.getAttribute("data-placeholder-type") === "password";
-    }
-
-    function setSubmitAttr(element) {
-      element.setAttribute("data-placeholder-submit", "true");
-    }
-
-    function setCloneAttr(element) {
-      element.setAttribute("data-placeholder-clone", "true");
-    }
-
-    function setActiveAttr(element) {
-      element.setAttribute("data-placeholder-active", "true");
-    }
-
-    function setEventsAttr(element) {
-      element.setAttribute("data-placeholder-has-events", "true");
-    }
-
-    function setValueAttr(element, value) {
-      element.setAttribute("data-placeholder-value", value);
-    }
-
-    function setElementValueAttr(element, value) {
-      element.setAttribute("data-placeholder-element-value", value);
-    }
-
-    function getElementValueAttr(element) {
-      return element.getAttribute("data-placeholder-element-value");
-    }
-
-    function getValueAttr(element) {
-      return element.getAttribute("data-placeholder-value");
-    }
-
-    function getMaxLengthAttr(element) {
-      return element.getAttribute("data-placeholder-maxlength");
-    }
-
-    function setMaxLengthAttr(element) {
-      element.setAttribute("data-placeholder-maxlength", element.maxLength);
-    }
-
-    function getTypeAttr(element) {
-      return element.getAttribute("data-placeholder-type");
-    }
-
-    function setTypeAttr(element, type) {
-      element.setAttribute("data-placeholder-type", type);
-    }
-
-    function removeMaxLengthAttr(element) {
-      element.removeAttribute("data-placeholder-maxlength");
-    }
-
-    function removeActiveAttr(element) {
-      element.removeAttribute("data-placeholder-active");
-    }
-
-    function removeSubmitAttr(element) {
-      element.removeAttribute("data-placeholder-submit");
-    }
-
-    function removeDataAttrs(element) {
-      var attrs = [
-        "value",
-        "element-value",
-        "has-events",
-        "active",
-        "maxlength",
-        "type"
-      ];
-
-      utils.each(attrs, function(attr) {
-        element.removeAttribute("data-placeholder-" + attr);
+    if (elem.attachEvent && fn != null) {
+      return elem.attachEvent("on" + event, function (e) {
+        e.preventDefault = function () {
+          e.returnValue = false;
+        };
+        e.stopPropagation = function () {
+          e.cancelBubble = true;
+        };
+        fn.call(elem, e);
       });
     }
+  }
 
-    placekeeper.data = {
-      hasWatchAttrSetToFalse: hasWatchAttrSetToFalse,
-      hasModeAttrSetToInput: hasModeAttrSetToInput,
-      hasEventsAttrSetToTrue: hasEventsAttrSetToTrue,
-      hasActiveAttrSetToTrue: hasActiveAttrSetToTrue,
-      hasSubmitAttrSetToTrue: hasSubmitAttrSetToTrue,
-      hasCloneAttrSetToTrue: hasCloneAttrSetToTrue,
-      hasValueAttr: hasValueAttr,
-      hasTypeAttrSetToPassword: hasTypeAttrSetToPassword,
-      getMaxLengthAttr: getMaxLengthAttr,
-      getElementValueAttr: getElementValueAttr,
-      getValueAttr: getValueAttr,
-      getTypeAttr: getTypeAttr,
-      setElementValueAttr: setElementValueAttr,
-      setValueAttr: setValueAttr,
-      setActiveAttr: setActiveAttr,
-      setSubmitAttr: setSubmitAttr,
-      setCloneAttr: setCloneAttr,
-      setMaxLengthAttr: setMaxLengthAttr,
-      setTypeAttr: setTypeAttr,
-      setEventsAttr: setEventsAttr,
-      removeSubmitAttr: removeSubmitAttr,
-      removeMaxLengthAttr: removeMaxLengthAttr,
-      removeActiveAttr: removeActiveAttr,
-      removeDataAttrs: removeDataAttrs
-    };
+  function removeEventListener(elem, event, fn) {
+    if (elem.removeEventListener) {
+      return elem.removeEventListener(event, fn, false);
+    }
+    if (elem.detachEvent && fn != null) {
+      return elem.detachEvent("on" + event, fn);
+    }
+  }
 
-  }());
+  function trim(str) {
+    return str.replace(/^\s+|\s+$/g, "");
+  }
 
-  (function() {
+  function hasClass(elem, className) {
+    return (" " + elem.className + " ").indexOf(" " + className + " ") !== -1;
+  }
 
-    var data = placekeeper.data;
-    var utils = placekeeper.utils;
+  function addClass(elem, className) {
+    if (!hasClass(elem, className)) {
+      elem.className = elem.className === "" ? className : elem.className + " " + className;
+    }
+  }
 
-    var isEnabled = false;
-    var isFocusEnabled = true;
-    var isWatchingEnabled = false;
-    var modeElements = [
-      document.documentElement,
-      document.body
-    ];
+  function removeClass(elem, className) {
+    elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
+  }
 
-    function isPlacekeeperEnabled() {
-      return isEnabled;
+  function each(collection, iter, ctx) {
+
+    if (!collection) {
+      return;
     }
 
-    function isPlacekeeperFocusEnabled() {
-      return isFocusEnabled;
+    for (var i = 0; i < collection.length; i++) {
+      iter.call(ctx, collection[i], i, collection);
     }
+  }
 
-    function isPlacekeeperWatchingEnabled() {
-      return isWatchingEnabled;
-    }
+  function getAttributes(elem) {
+    var copiedAttrs = {};
 
-    function hasWatchingDisabled() {
-      return utils.some(modeElements, data.hasWatchAttrSetToFalse);
-    }
-
-    function hasFocusDisabled() {
-      return utils.some(modeElements, data.hasModeAttrSetToInput);
-    }
-
-    function enableFocus() {
-      isFocusEnabled = true;
-    }
-
-    function disableFocus() {
-      isFocusEnabled = false;
-    }
-
-    function enableWatching() {
-      isWatchingEnabled = true;
-    }
-
-    function disableWatching() {
-      isWatchingEnabled = false;
-    }
-
-    function disable() {
-      isEnabled = false;
-    }
-
-    function enable() {
-      isEnabled = true;
-    }
-
-    placekeeper.mode = {
-      isPlacekeeperEnabled: isPlacekeeperEnabled,
-      isPlacekeeperFocusEnabled: isPlacekeeperFocusEnabled,
-      isPlacekeeperWatchingEnabled: isPlacekeeperWatchingEnabled,
-      hasWatchingDisabled: hasWatchingDisabled,
-      hasFocusDisabled: hasFocusDisabled,
-      enableFocus: enableFocus,
-      disableFocus: disableFocus,
-      enableWatching: enableWatching,
-      disableWatching: disableWatching,
-      disable: disable,
-      enable: enable
-    };
-
-  }());
-
-  (function() {
-
-    var utils = placekeeper.utils;
-
-    var supportedElementTypes = [
-        "text",
-        "search",
-        "url",
-        "tel",
-        "email",
-        "password",
-        "number",
-        "textarea"
-    ];
-
-    // The list of keycodes that are not allowed when the polyfill is configured
-    // to hide-on-input.
-    var badKeys = [
-
-      // The following keys all cause the caret to jump to the end of the input
-      // value.
-
-      27, // Escape
-      33, // Page up
-      34, // Page down
-      35, // End
-      36, // Home
-
-      // Arrow keys allow you to move the caret manually, which should be
-      // prevented when the placeholder is visible.
-
-      37, // Left
-      38, // Up
-      39, // Right
-      40, // Down
-
-      // The following keys allow you to modify the placeholder text by removing
-      // characters, which should be prevented when the placeholder is visible.
-
-      8, // Backspace
-      46 // Delete
-    ];
-
-    // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
-    var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
-
-    function isElementSupported(element) {
-      return "placeholder" in document.createElement(element) && !isOperaMini;
-    }
-
-    function isInputSupported() {
-      return isElementSupported("input");
-    }
-
-    function isTextareaSupported() {
-      return isElementSupported("textarea");
-    }
-
-    function hasNativePlaceholderSupport() {
-      return isInputSupported() || isTextareaSupported();
-    }
-
-    // Avoid IE9 activeElement of death when an iframe is used.
-    //
-    // More info:
-    // - http://bugs.jquery.com/ticket/13393
-    // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
-    function safeActiveElement() {
-      /*eslint-disable no-empty */
-      try {
-        return document.activeElement;
-      } catch (ex) {}
-      /*eslint-enable no-empty */
-    }
-
-    function isSupportedType(elementType) {
-      return utils.inArray(supportedElementTypes, elementType);
-    }
-
-    function isBadKey(keyCode) {
-      return utils.inArray(badKeys, keyCode);
-    }
-
-    function isIE9() {
-      return (/MSIE 9/i).test(window.navigator.userAgent);
-    }
-
-    function canChangeToType(elem, type) {
-      // IE9 can change type from password to text,
-      // but not back from text to password.
-      if (isIE9()) {
-        return false;
+    each(elem.attributes, function (attr) {
+      // old IEs will throw an error if you try to copy "type" attribute.
+      if (attr.specified && attr.name !== "type" && attr.name !== "id") {
+        copiedAttrs[attr.name] = attr.value;
       }
-      // Input type can not be changed in IE8 and below.
-      try {
-        var oldType = elem.type;
-        elem.type = type;
-        elem.type = oldType;
+    });
+
+    // value attribute does not get copied in IE7
+    // so copy it manually
+    if (copiedAttrs.value == null && elem.value !== "") {
+      copiedAttrs.value = elem.value;
+    }
+
+    return copiedAttrs;
+  }
+
+  function setAttributes(elem, attrs) {
+    for (var key in attrs) {
+      elem.setAttribute(key, attrs[key]);
+    }
+  }
+
+  function getElementType(element) {
+    if (element.type === "textarea") {
+      return element.type;
+    }
+    if (!element.getAttribute("type") && element.tagName.toLowerCase() === "input") {
+      return "text";
+    }
+    return element.getAttribute("type");
+  }
+
+  // wrap `document.getElementsByTagName`
+  // so that unit tests can correctly spy
+  // on it in all browsers
+  function getElementsByTagName(type) {
+    return document.getElementsByTagName(type);
+  }
+
+  function preventDefault(evt) {
+    evt.preventDefault();
+  }
+
+  // Check whether an item is in an array
+  // (we don't use Array.prototype.indexOf
+  // so we don't clobber any existing polyfills
+  // - this is a really simple alternative)
+  function inArray(arr, item) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === item) {
         return true;
-      } catch(ex) {
-        return false;
+      }
+    }
+    return false;
+  }
+
+  function moveCaret(elem, index) {
+    if (elem.createTextRange) {
+      var range = elem.createTextRange();
+      range.move("character", index);
+      range.select();
+    } else if (elem.selectionStart) {
+      elem.focus();
+      elem.setSelectionRange(index, index);
+    }
+  }
+
+  function getPlaceholderValue(element) {
+    return "placeholder" in element && element.placeholder ||
+    // IE10 emulating IE7 fails with getAttribute, hence the use of the attributes node
+    // IE returns an empty object instead of undefined if the attribute is not present
+    element.attributes.placeholder && element.attributes.placeholder.nodeValue;
+  }
+
+  function hasPlaceholderAttrSet(element) {
+    return Boolean(getPlaceholderValue(element));
+  }
+
+  function some(items, fn) {
+    for (var i = 0; i < items.length; i++) {
+      if (items[i] != null && fn(items[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  var supportedElementTypes = ["text", "search", "url", "tel", "email", "password", "number", "textarea"];
+
+  // The list of keycodes that are not allowed when the polyfill is configured
+  // to hide-on-input.
+  var badKeys = [
+
+  // The following keys all cause the caret to jump to the end of the input
+  // value.
+
+  27, // Escape
+  33, // Page up
+  34, // Page down
+  35, // End
+  36, // Home
+
+  // Arrow keys allow you to move the caret manually, which should be
+  // prevented when the placeholder is visible.
+
+  37, // Left
+  38, // Up
+  39, // Right
+  40, // Down
+
+  // The following keys allow you to modify the placeholder text by removing
+  // characters, which should be prevented when the placeholder is visible.
+
+  8, // Backspace
+  46 // Delete
+  ];
+
+  // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
+  var isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
+
+  function isElementSupported(element) {
+    return "placeholder" in document.createElement(element) && !isOperaMini;
+  }
+
+  function isInputSupported() {
+    return isElementSupported("input");
+  }
+
+  function isTextareaSupported() {
+    return isElementSupported("textarea");
+  }
+
+  function hasNativePlaceholderSupport() {
+    return isInputSupported() || isTextareaSupported();
+  }
+
+  // Avoid IE9 activeElement of death when an iframe is used.
+  //
+  // More info:
+  // - http://bugs.jquery.com/ticket/13393
+  // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
+  function safeActiveElement() {
+    /*eslint-disable no-empty */
+    try {
+      return document.activeElement;
+    } catch (ex) {}
+    /*eslint-enable no-empty */
+  }
+
+  function isSupportedType(elementType) {
+    return inArray(supportedElementTypes, elementType);
+  }
+
+  function isBadKey(keyCode) {
+    return inArray(badKeys, keyCode);
+  }
+
+  function isIE9() {
+    var ie9 = /MSIE 9/i;
+    return ie9.test(window.navigator.userAgent);
+  }
+
+  function canChangeToType(elem, type) {
+    // IE9 can change type from password to text,
+    // but not back from text to password.
+    if (isIE9()) {
+      return false;
+    }
+    // Input type can not be changed in IE8 and below.
+    try {
+      var oldType = elem.type;
+      elem.type = type;
+      elem.type = oldType;
+      return true;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  function needsToShowPlaceHolder(elem) {
+    return hasPlaceholderAttrSet(elem) && isSupportedType(getElementType(elem));
+  }
+
+  function hasWatchAttrSetToFalse(element) {
+    return element.getAttribute("data-placeholder-watch") === "false";
+  }
+
+  function hasModeAttrSetToInput(element) {
+    return element.getAttribute("data-placeholder-mode") === "input";
+  }
+
+  function hasEventsAttrSetToTrue(element) {
+    return element.getAttribute("data-placeholder-has-events") === "true";
+  }
+
+  function hasActiveAttrSetToTrue(element) {
+    return element.getAttribute("data-placeholder-active") === "true";
+  }
+
+  function hasSubmitAttrSetToTrue(element) {
+    return element.getAttribute("data-placeholder-submit") === "true";
+  }
+
+  function hasCloneAttrSetToTrue(element) {
+    return element.getAttribute("data-placeholder-clone") === "true";
+  }
+
+  function hasValueAttr(element) {
+    return element.getAttribute("data-placeholder-value") != null;
+  }
+
+  function hasTypeAttrSetToPassword(element) {
+    return element.getAttribute("data-placeholder-type") === "password";
+  }
+
+  function setSubmitAttr(element) {
+    element.setAttribute("data-placeholder-submit", "true");
+  }
+
+  function setCloneAttr(element) {
+    element.setAttribute("data-placeholder-clone", "true");
+  }
+
+  function setActiveAttr(element) {
+    element.setAttribute("data-placeholder-active", "true");
+  }
+
+  function setEventsAttr(element) {
+    element.setAttribute("data-placeholder-has-events", "true");
+  }
+
+  function setValueAttr(element, value) {
+    element.setAttribute("data-placeholder-value", value);
+  }
+
+  function setElementValueAttr(element, value) {
+    element.setAttribute("data-placeholder-element-value", value);
+  }
+
+  function getElementValueAttr(element) {
+    return element.getAttribute("data-placeholder-element-value");
+  }
+
+  function getValueAttr(element) {
+    return element.getAttribute("data-placeholder-value");
+  }
+
+  function getMaxLengthAttr(element) {
+    return element.getAttribute("data-placeholder-maxlength");
+  }
+
+  function setMaxLengthAttr(element) {
+    element.setAttribute("data-placeholder-maxlength", element.maxLength);
+  }
+
+  function getTypeAttr(element) {
+    return element.getAttribute("data-placeholder-type");
+  }
+
+  function setTypeAttr(element, type) {
+    element.setAttribute("data-placeholder-type", type);
+  }
+
+  function removeMaxLengthAttr(element) {
+    element.removeAttribute("data-placeholder-maxlength");
+  }
+
+  function removeActiveAttr(element) {
+    element.removeAttribute("data-placeholder-active");
+  }
+
+  function removeSubmitAttr(element) {
+    element.removeAttribute("data-placeholder-submit");
+  }
+
+  function removeDataAttrs(element) {
+    var attrs = ["value", "element-value", "has-events", "active", "maxlength", "type"];
+
+    each(attrs, function (attr) {
+      element.removeAttribute("data-placeholder-" + attr);
+    });
+  }
+
+  var inputElements = [];
+  var textareaElements = [];
+
+  function getInputElements() {
+    return inputElements;
+  }
+
+  function getTextareaElements() {
+    return textareaElements;
+  }
+
+  function getForm(element) {
+    var form = element.form;
+    if (typeof form === "string") {
+      form = document.getElementById(form);
+    }
+    return form;
+  }
+
+  function forEachForm(callback) {
+    var forms = document.getElementsByTagName("form");
+    each(forms, callback);
+  }
+
+  function forEachChildInput(element, callback) {
+    var inputs = element.getElementsByTagName("input");
+    var textareas = element.getElementsByTagName("textarea");
+    each(inputs, callback);
+    each(textareas, callback);
+  }
+
+  function forEachElement(callback) {
+    each(inputElements, function (element) {
+      callback(element);
+    });
+    each(textareaElements, function (element) {
+      callback(element);
+    });
+  }
+
+  function getElements() {
+    // Get references to all the input and textarea elements currently in the DOM
+    // (live NodeList objects to we only need to do this once)
+    if (!isInputSupported()) {
+      inputElements = getElementsByTagName("input");
+    }
+    if (!isTextareaSupported()) {
+      textareaElements = getElementsByTagName("textarea");
+    }
+  }
+
+  function swapId(from, to) {
+    var id = from.id;
+    if (id === "") {
+      return;
+    }
+    from.removeAttribute("id");
+    to.id = id;
+  }
+
+  function swapValue(from, to) {
+    to.value = from.value;
+    from.value = "";
+  }
+
+  function swapVisibility(from, to) {
+    from.style.display = "none";
+    to.style.display = "block";
+  }
+
+  function swapElements(from, to) {
+    swapId(from, to);
+    swapValue(from, to);
+    swapVisibility(from, to);
+  }
+
+  function isClonedPasswordInput(element) {
+    return element != null && element.nodeType === 1 && hasCloneAttrSetToTrue(element);
+  }
+
+  function getPasswordClone(element) {
+    return element.previousSibling;
+  }
+
+  function getPasswordOriginal(element) {
+    return element.nextSibling;
+  }
+
+  function hasPasswordClone(element) {
+    return isClonedPasswordInput(getPasswordClone(element));
+  }
+
+  function createCloneElement(element) {
+    var clone = document.createElement("input");
+    setAttributes(clone, getAttributes(element));
+    clone.type = "text";
+    clone.removeAttribute("name");
+    clone.style.display = "none";
+    setCloneAttr(clone);
+    return clone;
+  }
+
+  function createClone(element) {
+    var clone = createCloneElement(element);
+    element.parentNode.insertBefore(clone, element);
+  }
+
+  function removeClone(element) {
+    var clone = getPasswordClone(element);
+    swapElements(clone, element);
+    element.style.display = "";
+    clone.parentNode.removeChild(clone);
+  }
+
+  function isPasswordInputThatCanNotChange(elem) {
+    return elem.type === "password" && !canChangeToType(elem, "text");
+  }
+
+  function createPasswordCloneIfNeeded(element) {
+    if (isPasswordInputThatCanNotChange(element)) {
+      createClone(element);
+    }
+  }
+
+  function removePasswordCloneIfExists(element) {
+    if (!hasPasswordClone(element)) {
+      return;
+    }
+    removeClone(element);
+  }
+
+  var isEnabled$1 = false;
+  var isFocusEnabled$1 = true;
+  var isWatchingEnabled$1 = false;
+  var modeElements = [document.documentElement, document.body];
+
+  function isPlacekeeperEnabled() {
+    return isEnabled$1;
+  }
+
+  function isPlacekeeperFocusEnabled() {
+    return isFocusEnabled$1;
+  }
+
+  function isPlacekeeperWatchingEnabled() {
+    return isWatchingEnabled$1;
+  }
+
+  function hasWatchingDisabled() {
+    return some(modeElements, hasWatchAttrSetToFalse);
+  }
+
+  function hasFocusDisabled() {
+    return some(modeElements, hasModeAttrSetToInput);
+  }
+
+  function enableFocus() {
+    isFocusEnabled$1 = true;
+  }
+
+  function disableFocus() {
+    isFocusEnabled$1 = false;
+  }
+
+  function enableWatching() {
+    isWatchingEnabled$1 = true;
+  }
+
+  function disableWatching() {
+    isWatchingEnabled$1 = false;
+  }
+
+  function disable$1() {
+    isEnabled$1 = false;
+  }
+
+  function enable$1() {
+    isEnabled$1 = true;
+  }
+
+  function hasMaxLength(element) {
+    return element.attributes.maxLength && element.attributes.maxLength.specified;
+  }
+
+  function restoreMaxlength(element) {
+    var maxLength = getMaxLengthAttr(element);
+    if (!maxLength) {
+      return;
+    }
+    element.setAttribute("maxLength", maxLength);
+    removeMaxLengthAttr(element);
+  }
+
+  function storeMaxlength(element) {
+    if (!hasMaxLength(element)) {
+      return;
+    }
+    setMaxLengthAttr(element);
+    // Removing maxLength will not work in IE7,
+    // where a default value of 2147483647 is used instead.
+    element.removeAttribute("maxLength");
+  }
+
+  function showPlaceholder(element) {
+    var val = getValueAttr(element);
+
+    if (element.value !== "" || val == null) {
+      return;
+    }
+
+    if (element.type === "password") {
+      if (hasPasswordClone(element)) {
+        var clone = getPasswordClone(element);
+        swapElements(element, clone);
+        element = clone;
+      } else {
+        element.type = "text";
       }
     }
 
-    function needsToShowPlaceHolder(elem) {
-      return utils.hasPlaceholderAttrSet(elem) &&
-             isSupportedType(utils.getElementType(elem));
-    }
+    element.value = val;
+    setActiveAttr(element);
+    addClass(element, "placeholder");
+    storeMaxlength(element);
+  }
 
-    placekeeper.support = {
-      needsToShowPlaceHolder: needsToShowPlaceHolder,
-      isSupportedType: isSupportedType,
-      isBadKey: isBadKey,
-      safeActiveElement: safeActiveElement,
-      canChangeToType: canChangeToType,
-      isInputSupported: isInputSupported,
-      isTextareaSupported: isTextareaSupported,
-      hasNativePlaceholderSupport: hasNativePlaceholderSupport
-    };
+  function removePlaceholder(element, replace) {
+    element.value = replace ? element.value.replace(getValueAttr(element), "") : "";
+    removeActiveAttr(element);
+    removeClass(element, "placeholder");
+    restoreMaxlength(element);
+  }
 
-  }());
+  function hidePlaceholder$1(element) {
 
-  (function() {
-
-    var support = placekeeper.support;
-    var utils = placekeeper.utils;
-    var data = placekeeper.data;
-    var inputElements = [];
-    var textareaElements = [];
-
-    function getInputElements() {
-      return inputElements;
-    }
-
-    function getTextareaElements() {
-      return textareaElements;
-    }
-
-    function getForm(element) {
-      var form = element.form;
-      if (typeof form === "string") {
-        form = document.getElementById(form);
-      }
-      return form;
-    }
-
-    function forEachForm(callback) {
-      var forms = document.getElementsByTagName("form");
-      utils.each(forms, callback);
-    }
-
-    function forEachChildInput(element, callback) {
-      var inputs = element.getElementsByTagName("input");
-      var textareas = element.getElementsByTagName("textarea");
-      utils.each(inputs, callback);
-      utils.each(textareas, callback);
-    }
-
-    function forEachElement(callback) {
-      utils.each(inputElements, function(element) {
-        callback(element);
-      });
-      utils.each(textareaElements, function(element) {
-        callback(element);
-      });
-    }
-
-    function getElements() {
-      // Get references to all the input and textarea elements currently in the DOM
-      // (live NodeList objects to we only need to do this once)
-      if (!support.isInputSupported()) {
-        inputElements = utils.getElementsByTagName("input");
-      }
-      if (!support.isTextareaSupported()) {
-        textareaElements = utils.getElementsByTagName("textarea");
+    if (hasTypeAttrSetToPassword(element)) {
+      if (isClonedPasswordInput(element)) {
+        var original = getPasswordOriginal(element);
+        swapElements(element, original);
+        element = original;
+        element.focus();
+      } else {
+        element.type = "password";
       }
     }
 
-    function swapId(from, to) {
-      var id = from.id;
-      if (id === "") {
-        return;
-      }
-      from.removeAttribute("id");
-      to.id = id;
+    removePlaceholder(element, true);
+  }
+
+  var handlers = {};
+  var keydownVal = undefined;
+
+  function isActiveAndHasPlaceholderSet(element) {
+    return hasActiveAttrSetToTrue(element) && element.value === getValueAttr(element);
+  }
+
+  function hidePlaceholderOnSubmit(element) {
+    if (!isActiveAndHasPlaceholderSet(element)) {
+      return;
     }
+    hidePlaceholder$1(element);
+  }
 
-    function swapValue(from, to) {
-      to.value = from.value;
-      from.value = "";
+  function showPlaceholderAfterSubmit(element) {
+    if (needsToShowPlaceHolder(element)) {
+      showPlaceholder(element);
     }
+  }
 
-    function swapVisibility(from, to) {
-      from.style.display = "none";
-      to.style.display = "block";
-    }
+  function shouldNotHidePlaceholder(element) {
+    return !isPlacekeeperFocusEnabled() && isActiveAndHasPlaceholderSet(element);
+  }
 
-    function swapElements(from, to) {
-      swapId(from, to);
-      swapValue(from, to);
-      swapVisibility(from, to);
-    }
-
-    function isClonedPasswordInput(element) {
-      return element != null &&
-             element.nodeType === 1 &&
-             data.hasCloneAttrSetToTrue(element);
-    }
-
-    function getPasswordClone(element) {
-      return element.previousSibling;
-    }
-
-    function getPasswordOriginal(element) {
-      return element.nextSibling;
-    }
-
-    function hasPasswordClone(element) {
-      return isClonedPasswordInput(getPasswordClone(element));
-    }
-
-    function createCloneElement(element) {
-      var clone = document.createElement("input");
-      utils.setAttributes(clone, utils.getAttributes(element));
-      clone.type = "text";
-      clone.removeAttribute("name");
-      clone.style.display = "none";
-      data.setCloneAttr(clone);
-      return clone;
-    }
-
-    function createClone(element) {
-      var clone = createCloneElement(element);
-      element.parentNode.insertBefore(clone, element);
-    }
-
-    function removeClone(element) {
-      var clone = getPasswordClone(element);
-      swapElements(clone, element);
-      element.style.display = "";
-      clone.parentNode.removeChild(clone);
-    }
-
-    function isPasswordInputThatCanNotChange(elem) {
-      return elem.type === "password" && !support.canChangeToType(elem, "text");
-    }
-
-    function createPasswordCloneIfNeeded(element) {
-      if (isPasswordInputThatCanNotChange(element)) {
-        createClone(element);
-      }
-    }
-
-    function removePasswordCloneIfExists(element) {
-      if (!hasPasswordClone(element)) {
-        return;
-      }
-      removeClone(element);
-    }
-
-    placekeeper.elements = {
-      getForm: getForm,
-      getInputElements: getInputElements,
-      getTextareaElements: getTextareaElements,
-      getElements: getElements,
-      getPasswordClone: getPasswordClone,
-      getPasswordOriginal: getPasswordOriginal,
-      forEachForm: forEachForm,
-      forEachChildInput: forEachChildInput,
-      forEachElement: forEachElement,
-      createPasswordCloneIfNeeded: createPasswordCloneIfNeeded,
-      removePasswordCloneIfExists: removePasswordCloneIfExists,
-      isClonedPasswordInput: isClonedPasswordInput,
-      swapElements: swapElements,
-      hasPasswordClone: hasPasswordClone
-    };
-
-  }());
-
-  (function() {
-
-    var data = placekeeper.data;
-    var elems = placekeeper.elements;
-    var utils = placekeeper.utils;
-
-    function hasMaxLength(element) {
-      return element.attributes.maxLength && element.attributes.maxLength.specified;
-    }
-
-    function restoreMaxlength(element) {
-      var maxLength = data.getMaxLengthAttr(element);
-      if (!maxLength) {
-        return;
-      }
-      element.setAttribute("maxLength", maxLength);
-      data.removeMaxLengthAttr(element);
-    }
-
-    function storeMaxlength(element) {
-      if (!hasMaxLength(element)) {
-        return;
-      }
-      data.setMaxLengthAttr(element);
-      // Removing maxLength will not work in IE7,
-      // where a default value of 2147483647 is used instead.
-      element.removeAttribute("maxLength");
-    }
-
-    function showPlaceholder(element) {
-      var val = data.getValueAttr(element);
-
-      if (element.value !== "" || val == null) {
-        return;
-      }
-
-      if (element.type === "password") {
-        if (elems.hasPasswordClone(element)) {
-          var clone = elems.getPasswordClone(element);
-          elems.swapElements(element, clone);
-          element = clone;
-        } else {
-          element.type = "text";
-        }
-      }
-
-      element.value = val;
-      data.setActiveAttr(element);
-      utils.addClass(element, "placeholder");
-      storeMaxlength(element);
-    }
-
-    function removePlaceholder(element, replace) {
-      element.value = replace ? element.value.replace(data.getValueAttr(element), "") : "";
-      data.removeActiveAttr(element);
-      utils.removeClass(element, "placeholder");
-      restoreMaxlength(element);
-    }
-
-    function hidePlaceholder(element) {
-
-      if (data.hasTypeAttrSetToPassword(element)) {
-        if (elems.isClonedPasswordInput(element)) {
-          var original = elems.getPasswordOriginal(element);
-          elems.swapElements(element, original);
-          element = original;
-          element.focus();
-        } else {
-          element.type = "password";
-        }
-      }
-
-      removePlaceholder(element, true);
-    }
-
-    placekeeper.polyfill = {
-      storeMaxlength: storeMaxlength,
-      restoreMaxlength: restoreMaxlength,
-      removePlaceholder: removePlaceholder,
-      showPlaceholder: showPlaceholder,
-      hidePlaceholder: hidePlaceholder
-    };
-
-  }());
-
-  (function() {
-
-    var utils = placekeeper.utils;
-    var data = placekeeper.data;
-    var mode = placekeeper.mode;
-    var elems = placekeeper.elements;
-    var polyfill = placekeeper.polyfill;
-    var support = placekeeper.support;
-    var handlers = {};
-    var keydownVal;
-
-    function isActiveAndHasPlaceholderSet(element) {
-      return data.hasActiveAttrSetToTrue(element) &&
-             element.value === data.getValueAttr(element);
-    }
-
-    function hidePlaceholderOnSubmit(element) {
-      if (!isActiveAndHasPlaceholderSet(element)) {
-        return;
-      }
-      polyfill.hidePlaceholder(element);
-    }
-
-    function showPlaceholderAfterSubmit(element) {
-      if (support.needsToShowPlaceHolder(element)) {
-        polyfill.showPlaceholder(element);
-      }
-    }
-
-    function shouldNotHidePlaceholder(element) {
-      return !mode.isPlacekeeperFocusEnabled() &&
-             isActiveAndHasPlaceholderSet(element);
-    }
-
-    function createFocusHandler(element) {
-      return function() {
-        if (shouldNotHidePlaceholder(element)) {
-          utils.moveCaret(element, 0);
-        } else if (isActiveAndHasPlaceholderSet(element)) {
-          polyfill.hidePlaceholder(element);
-          if (element.value === "") {
-            utils.moveCaret(element, 0);
-          }
-        }
-      };
-    }
-
-    function createBlurHandler(element) {
-      return function() {
-        if (isActiveAndHasPlaceholderSet(element)) {
-          return;
-        }
-        polyfill.showPlaceholder(element);
-      };
-    }
-
-    function createSubmitHandler(form) {
-      return function() {
-        // Clear the placeholder values so they don't get submitted
-        elems.forEachChildInput(form, hidePlaceholderOnSubmit);
-        setTimeout(function() {
-          elems.forEachChildInput(form, showPlaceholderAfterSubmit);
-        }, 10);
-      };
-    }
-
-    function createKeydownHandler(element) {
-      return function(evt) {
-        keydownVal = element.value;
-
-        // Prevent the use of certain keys
-        // (try to keep the cursor before the placeholder).
-        if (isActiveAndHasPlaceholderSet(element) && support.isBadKey(evt.keyCode)) {
-          utils.preventDefault(evt);
-          return false;
-        }
-      };
-    }
-
-    function createKeyupHandler(element) {
-      return function() {
-        if (keydownVal != null && keydownVal !== element.value) {
-          polyfill.hidePlaceholder(element);
-        }
-
-        // If the element is now empty we need to show the placeholder
+  function createFocusHandler(element) {
+    return function () {
+      if (shouldNotHidePlaceholder(element)) {
+        moveCaret(element, 0);
+      } else if (isActiveAndHasPlaceholderSet(element)) {
+        hidePlaceholder$1(element);
         if (element.value === "") {
-          element.blur();
-          utils.moveCaret(element, 0);
+          moveCaret(element, 0);
         }
-      };
-    }
-
-    function createClickHandler(element) {
-      return function() {
-        if (element === support.safeActiveElement() &&
-            isActiveAndHasPlaceholderSet(element)) {
-          utils.moveCaret(element, 0);
-        }
-      };
-    }
-
-    var create = {
-      keydown: createKeydownHandler,
-      keyup: createKeyupHandler,
-      click: createClickHandler,
-      blur: createBlurHandler,
-      focus: createFocusHandler,
-      submit: createSubmitHandler
+      }
     };
+  }
 
-    var hideOnInputEvents = [
-      "keydown",
-      "keyup",
-      "click"
-    ];
-
-    function createEventListener(element, evt) {
-      handlers[evt] = create[evt](element);
-      utils.addEventListener(element, evt, handlers[evt]);
-    }
-
-    function destroyEventListener(element, evt) {
-      utils.removeEventListener(element, evt, handlers[evt]);
-      delete handlers[evt];
-    }
-
-    function addEventListeners(element) {
-      createEventListener(element, "blur");
-      if (elems.hasPasswordClone(element)) {
-        element = elems.getPasswordClone(element);
-      }
-      createEventListener(element, "focus");
-
-      // If the placeholder should hide on input rather than on focus we need
-      // additional event handlers
-      if (!mode.isPlacekeeperFocusEnabled()) {
-        utils.each(hideOnInputEvents, function(evt) {
-          createEventListener(element, evt);
-        });
-      }
-
-    }
-
-    function hasHideOnInputHandlers() {
-      return "keydown" in handlers &&
-             "keyup" in handlers &&
-             "click" in handlers;
-    }
-
-    function removeEventListeners(element) {
-      destroyEventListener(element, "blur");
-      if (elems.hasPasswordClone(element)) {
-        element = elems.getPasswordClone(element);
-      }
-      destroyEventListener(element, "focus");
-      if (hasHideOnInputHandlers()) {
-        utils.each(hideOnInputEvents, function(evt) {
-          destroyEventListener(element, evt);
-        });
-      }
-    }
-
-    function addSubmitListener(form) {
-      createEventListener(form, "submit");
-    }
-
-    function removeSubmitListener(form) {
-      destroyEventListener(form, "submit");
-    }
-
-    function hidePlaceholder(element) {
-      if (!isActiveAndHasPlaceholderSet(element)) {
+  function createBlurHandler(element) {
+    return function () {
+      if (isActiveAndHasPlaceholderSet(element)) {
         return;
       }
-      polyfill.removePlaceholder(element, false);
-    }
-
-    function clearPlaceholders() {
-      elems.forEachElement(hidePlaceholder);
-    }
-
-    function addSubmitEvent(form) {
-      if (form == null || data.hasSubmitAttrSetToTrue(form)) {
-        return;
-      }
-      addSubmitListener(form);
-      // Set a flag on the form so we know it's been handled
-      // (forms can contain multiple inputs).
-      data.setSubmitAttr(form);
-    }
-
-    function addUnloadListener() {
-      // Disabling placeholders before unloading the page
-      // ensures that placeholder values are not stored
-      // in browser's "form data" store.
-      utils.addEventListener(global, "beforeunload", clearPlaceholders);
-    }
-
-    function removeEvents(element) {
-      if (!data.hasEventsAttrSetToTrue(element)) {
-        return;
-      }
-      removeEventListeners(element);
-    }
-
-    function removeSubmitEvent(form) {
-      if (!data.hasSubmitAttrSetToTrue(form)) {
-        return;
-      }
-      removeSubmitListener(form);
-      data.removeSubmitAttr(form);
-    }
-
-    placekeeper.events = {
-      handlers: handlers,
-      addEventListeners: addEventListeners,
-      addSubmitEvent: addSubmitEvent,
-      addUnloadListener: addUnloadListener,
-      removeEvents: removeEvents,
-      removeSubmitEvent: removeSubmitEvent
+      showPlaceholder(element);
     };
+  }
 
-  }());
-
-  (function() {
-
-    var support = placekeeper.support;
-    var data = placekeeper.data;
-    var mode = placekeeper.mode;
-    var utils = placekeeper.utils;
-    var elems = placekeeper.elements;
-    var events = placekeeper.events;
-    var polyfill = placekeeper.polyfill;
-    var settings = {
-      defaultLoopDuration: 100
+  function createSubmitHandler(form) {
+    return function () {
+      // Clear the placeholder values so they don't get submitted
+      forEachChildInput(form, hidePlaceholderOnSubmit);
+      setTimeout(function () {
+        forEachChildInput(form, showPlaceholderAfterSubmit);
+      }, 10);
     };
-    var loopInterval = null;
+  }
 
-    function hasElementsThatNeedPlaceholder(elements) {
+  function createKeydownHandler(element) {
+    return function (evt) {
+      keydownVal = element.value;
 
-      if (!elements) {
+      // Prevent the use of certain keys
+      // (try to keep the cursor before the placeholder).
+      if (isActiveAndHasPlaceholderSet(element) && isBadKey(evt.keyCode)) {
+        preventDefault(evt);
         return false;
       }
+    };
+  }
 
-      for (var i = 0; i < elements.length; i++) {
-        if (support.needsToShowPlaceHolder(elements[i])) {
-          return true;
-        }
+  function createKeyupHandler(element) {
+    return function () {
+      if (keydownVal != null && keydownVal !== element.value) {
+        hidePlaceholder$1(element);
       }
 
+      // If the element is now empty we need to show the placeholder
+      if (element.value === "") {
+        element.blur();
+        moveCaret(element, 0);
+      }
+    };
+  }
+
+  function createClickHandler(element) {
+    return function () {
+      if (element === safeActiveElement() && isActiveAndHasPlaceholderSet(element)) {
+        moveCaret(element, 0);
+      }
+    };
+  }
+
+  var create = {
+    keydown: createKeydownHandler,
+    keyup: createKeyupHandler,
+    click: createClickHandler,
+    blur: createBlurHandler,
+    focus: createFocusHandler,
+    submit: createSubmitHandler
+  };
+
+  var hideOnInputEvents = ["keydown", "keyup", "click"];
+
+  function createEventListener(element, evt) {
+    handlers[evt] = create[evt](element);
+    addEventListener(element, evt, handlers[evt]);
+  }
+
+  function destroyEventListener(element, evt) {
+    removeEventListener(element, evt, handlers[evt]);
+    delete handlers[evt];
+  }
+
+  function addEventListeners(element) {
+    createEventListener(element, "blur");
+    if (hasPasswordClone(element)) {
+      element = getPasswordClone(element);
+    }
+    createEventListener(element, "focus");
+
+    // If the placeholder should hide on input rather than on focus we need
+    // additional event handlers
+    if (!isPlacekeeperFocusEnabled()) {
+      each(hideOnInputEvents, function (evt) {
+        createEventListener(element, evt);
+      });
+    }
+  }
+
+  function hasHideOnInputHandlers() {
+    return "keydown" in handlers && "keyup" in handlers && "click" in handlers;
+  }
+
+  function removeEventListeners(element) {
+    destroyEventListener(element, "blur");
+    if (hasPasswordClone(element)) {
+      element = getPasswordClone(element);
+    }
+    destroyEventListener(element, "focus");
+    if (hasHideOnInputHandlers()) {
+      each(hideOnInputEvents, function (evt) {
+        destroyEventListener(element, evt);
+      });
+    }
+  }
+
+  function addSubmitListener(form) {
+    createEventListener(form, "submit");
+  }
+
+  function removeSubmitListener(form) {
+    destroyEventListener(form, "submit");
+  }
+
+  function hidePlaceholder(element) {
+    if (!isActiveAndHasPlaceholderSet(element)) {
+      return;
+    }
+    removePlaceholder(element, false);
+  }
+
+  function clearPlaceholders() {
+    forEachElement(hidePlaceholder);
+  }
+
+  function addSubmitEvent(form) {
+    if (form == null || hasSubmitAttrSetToTrue(form)) {
+      return;
+    }
+    addSubmitListener(form);
+    // Set a flag on the form so we know it's been handled
+    // (forms can contain multiple inputs).
+    setSubmitAttr(form);
+  }
+
+  function addUnloadListener() {
+    // Disabling placeholders before unloading the page
+    // ensures that placeholder values are not stored
+    // in browser's "form data" store.
+    addEventListener(window, "beforeunload", clearPlaceholders);
+  }
+
+  function removeEvents(element) {
+    if (!hasEventsAttrSetToTrue(element)) {
+      return;
+    }
+    removeEventListeners(element);
+  }
+
+  function removeSubmitEvent(form) {
+    if (!hasSubmitAttrSetToTrue(form)) {
+      return;
+    }
+    removeSubmitListener(form);
+    removeSubmitAttr(form);
+  }
+
+  var settings = {
+    defaultLoopDuration: 100
+  };
+  var loopInterval = null;
+
+  function hasElementsThatNeedPlaceholder(elements) {
+
+    if (!elements) {
       return false;
     }
 
-    function needsToSetPlaceholder() {
-      var needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
-
-      if (needsPlaceholder === false) {
-        needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
-      }
-
-      return needsPlaceholder;
-    }
-
-    function setupElement(element, placeholderValue) {
-      data.setValueAttr(element, placeholderValue);
-      data.setTypeAttr(element, utils.getElementType(element));
-      data.setElementValueAttr(element, element.value);
-      data.setEventsAttr(element);
-      elems.createPasswordCloneIfNeeded(element);
-      events.addSubmitEvent(elems.getForm(element));
-      events.addEventListeners(element);
-    }
-
-    function restoreValue(element) {
-      if (data.getElementValueAttr(element) != null) {
-        element.value = data.getElementValueAttr(element);
+    for (var i = 0; i < elements.length; i++) {
+      if (needsToShowPlaceHolder(elements[i])) {
+        return true;
       }
     }
 
-    function cleanupElement(element, clone) {
-      if (element == null) {
-        return;
-      }
-      if (clone) {
-        element.removeAttribute("placeholder");
-        restoreValue(clone);
-      }
-      restoreValue(element);
-      events.removeEvents(element);
-      data.removeDataAttrs(element);
-      elems.removePasswordCloneIfExists(element);
-      utils.removeClass(element, "placeholder");
+    return false;
+  }
+
+  function needsToSetPlaceholder() {
+    var needsPlaceholder = hasElementsThatNeedPlaceholder(getInputElements());
+
+    if (needsPlaceholder === false) {
+      needsPlaceholder = hasElementsThatNeedPlaceholder(getTextareaElements());
     }
 
-    function needsSetup(element) {
-      return support.isSupportedType(utils.getElementType(element)) &&
-             !data.hasEventsAttrSetToTrue(element);
+    return needsPlaceholder;
+  }
+
+  function setupElement(element, placeholderValue) {
+    setValueAttr(element, placeholderValue);
+    setTypeAttr(element, getElementType(element));
+    setElementValueAttr(element, element.value);
+    setEventsAttr(element);
+    createPasswordCloneIfNeeded(element);
+    addSubmitEvent(getForm(element));
+    addEventListeners(element);
+  }
+
+  function restoreValue(element) {
+    if (getElementValueAttr(element) != null) {
+      element.value = getElementValueAttr(element);
+    }
+  }
+
+  function cleanupElement(element, clone) {
+    if (element == null) {
+      return;
+    }
+    if (clone) {
+      element.removeAttribute("placeholder");
+      restoreValue(clone);
+    }
+    restoreValue(element);
+    removeEvents(element);
+    removeDataAttrs(element);
+    removePasswordCloneIfExists(element);
+    removeClass(element, "placeholder");
+  }
+
+  function needsSetup(element) {
+    return isSupportedType(getElementType(element)) && !hasEventsAttrSetToTrue(element);
+  }
+
+  function hasPlaceholderValueChanged(element, placeholder) {
+    return hasValueAttr(element) && getValueAttr(element) !== placeholder;
+  }
+
+  function isActiveAndHasValueChanged(element, placeholder) {
+    return hasActiveAttrSetToTrue(element) && element.value !== "" && element.value !== placeholder;
+  }
+
+  function hasValueOrIsActive(element) {
+    return element.value !== "" || element === safeActiveElement();
+  }
+
+  function isClone(element) {
+    return hasCloneAttrSetToTrue(element) && getPasswordOriginal(element) != null;
+  }
+
+  function hasChangedType(element) {
+    var el = isClone(element) ? getPasswordOriginal(element) : element;
+    return getElementType(el) !== getTypeAttr(element);
+  }
+
+  function handleTypeChange(element) {
+
+    if (!hasChangedType(element)) {
+      return;
     }
 
-    function hasPlaceholderValueChanged(element, placeholder) {
-      return data.hasValueAttr(element) &&
-             data.getValueAttr(element) !== placeholder;
+    if (isClone(element)) {
+      var type = getTypeAttr(element);
+      element = getPasswordOriginal(element);
+      element.setAttribute("type", type);
     }
 
-    function isActiveAndHasValueChanged(element, placeholder) {
-       return data.hasActiveAttrSetToTrue(element) &&
-              element.value !== "" && element.value !== placeholder;
-     }
+    cleanupElement(element);
+  }
 
-    function hasValueOrIsActive(element) {
-      return element.value !== "" || element === support.safeActiveElement();
+  function checkForPlaceholder(element) {
+
+    if (!element) {
+      return;
     }
 
-    function isClone(element) {
-      return data.hasCloneAttrSetToTrue(element) && elems.getPasswordOriginal(element) != null;
+    var placeholder = getPlaceholderValue(element);
+    var clone = undefined;
+
+    if (hasPasswordClone(element)) {
+      clone = getPasswordClone(element);
     }
 
-    function hasChangedType(element) {
-      var el = isClone(element) ? elems.getPasswordOriginal(element) : element;
-      return utils.getElementType(el) !== data.getTypeAttr(element);
+    if (!placeholder || clone && !getPlaceholderValue(clone)) {
+      if (hasEventsAttrSetToTrue(element)) {
+        cleanupElement(element, clone);
+      }
+      return;
     }
 
-    function handleTypeChange(element) {
+    handleTypeChange(element);
 
-      if (!hasChangedType(element)) {
-        return;
-      }
-
-      if (isClone(element)) {
-        var type = data.getTypeAttr(element);
-        element = elems.getPasswordOriginal(element);
-        element.setAttribute("type", type);
-      }
-
-      cleanupElement(element);
-    }
-
-    function checkForPlaceholder(element) {
-
-      if (!element) {
-        return;
-      }
-
-      var placeholder = utils.getPlaceholderValue(element);
-      var clone;
-
-      if (elems.hasPasswordClone(element)) {
-        clone = elems.getPasswordClone(element);
-      }
-
-      if (!placeholder || clone && !utils.getPlaceholderValue(clone)) {
-        if (data.hasEventsAttrSetToTrue(element)) {
-          cleanupElement(element, clone);
-        }
-        return;
-      }
-
-      handleTypeChange(element);
-
-      if (needsSetup(element)) {
-        setupElement(element, placeholder);
-      } else {
-
-        if (clone) {
-          if (element.disabled !== clone.disabled) {
-            if (clone.style.display === "block") {
-              element.disabled = clone.disabled;
-            }
-            if (element.style.display === "block") {
-              clone.disabled = element.disabled;
-            }
-          }
-        }
-
-        if (hasPlaceholderValueChanged(element, placeholder)) {
-          data.setValueAttr(element, placeholder);
-          element.value = placeholder;
-          var original = elems.getPasswordOriginal(element);
-          if (original && original.nodeType === 1) {
-            original.setAttribute("placeholder", placeholder);
-            data.setValueAttr(original, placeholder);
-          }
-        }
-        if (data.getValueAttr(element) !== element.value) {
-          data.setElementValueAttr(element, element.value);
-        }
-        if (isActiveAndHasValueChanged(element, placeholder)) {
-          polyfill.hidePlaceholder(element);
-        }
-      }
-
-      if (!hasValueOrIsActive(element)) {
-        polyfill.showPlaceholder(element);
-      }
-
-    }
-
-    function setupPlaceholders() {
-      elems.forEachElement(checkForPlaceholder);
-    }
-
-    function placekeeperLoop() {
-      if (mode.hasFocusDisabled()) {
-        mode.disableFocus();
-      } else {
-        mode.enableFocus();
-      }
-
-      if (needsToSetPlaceholder()) {
-        mode.enable();
-      } else {
-        mode.disable();
-      }
-
-      if (support.hasNativePlaceholderSupport()) {
-        return;
-      }
-
-      setupPlaceholders();
-    }
-
-    function init() {
-      if (support.hasNativePlaceholderSupport()) {
-        return;
-      }
-      clearInterval(loopInterval);
-      placekeeperLoop();
-      if (!mode.hasWatchingDisabled()) {
-        mode.enableWatching();
-        // main loop
-        loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
-      } else {
-        mode.disableWatching();
-      }
-    }
-
-    function disablePlacekeeper() {
-      mode.disable();
-      clearInterval(loopInterval);
-      elems.forEachForm(events.removeSubmitEvent);
-      elems.forEachElement(cleanupElement);
-    }
-
-    elems.getElements();
-    events.addUnloadListener();
-    init();
-
-    // Expose public methods
-    placekeeper.isEnabled = mode.isPlacekeeperEnabled;
-    placekeeper.enable = init;
-    placekeeper.disable = disablePlacekeeper;
-    placekeeper.isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-    placekeeper.isWatchingEnabled = mode.isPlacekeeperWatchingEnabled;
-
-    // Exposed private methods
-    placekeeper.priv = {
-      __global: global,
-      __init: init,
-      __settings: settings,
-      __setupPlaceholders: setupPlaceholders,
-      __hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder
-    };
-
-  }());
-
-  (function() {
-    if (typeof define === "function" && define.amd) {
-      define("placekeeper", [], function() {
-        return placekeeper;
-      });
-    } else if (typeof exports === "object") {
-      module.exports = placekeeper;
+    if (needsSetup(element)) {
+      setupElement(element, placeholder);
     } else {
-      global.placekeeper = placekeeper;
+
+      if (clone) {
+        if (element.disabled !== clone.disabled) {
+          if (clone.style.display === "block") {
+            element.disabled = clone.disabled;
+          }
+          if (element.style.display === "block") {
+            clone.disabled = element.disabled;
+          }
+        }
+      }
+
+      if (hasPlaceholderValueChanged(element, placeholder)) {
+        setValueAttr(element, placeholder);
+        element.value = placeholder;
+        var original = getPasswordOriginal(element);
+        if (original && original.nodeType === 1) {
+          original.setAttribute("placeholder", placeholder);
+          setValueAttr(original, placeholder);
+        }
+      }
+      if (getValueAttr(element) !== element.value) {
+        setElementValueAttr(element, element.value);
+      }
+      if (isActiveAndHasValueChanged(element, placeholder)) {
+        hidePlaceholder$1(element);
+      }
     }
-  }());
 
-}(this));
+    if (!hasValueOrIsActive(element)) {
+      showPlaceholder(element);
+    }
+  }
 
-(function(YUI) {
-  "use strict";
+  function setupPlaceholders() {
+    forEachElement(checkForPlaceholder);
+  }
 
-  YUI.add("placekeeper", function(Y) {
+  function placekeeperLoop() {
+    if (hasFocusDisabled()) {
+      disableFocus();
+    } else {
+      enableFocus();
+    }
+
+    if (needsToSetPlaceholder()) {
+      enable$1();
+    } else {
+      disable$1();
+    }
+
+    if (hasNativePlaceholderSupport()) {
+      return;
+    }
+
+    setupPlaceholders();
+  }
+
+  function init() {
+    if (hasNativePlaceholderSupport()) {
+      return;
+    }
+    clearInterval(loopInterval);
+    placekeeperLoop();
+    if (!hasWatchingDisabled()) {
+      enableWatching();
+      // main loop
+      loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
+    } else {
+      disableWatching();
+    }
+  }
+
+  function disablePlacekeeper() {
+    disable$1();
+    clearInterval(loopInterval);
+    forEachForm(removeSubmitEvent);
+    forEachElement(cleanupElement);
+  }
+
+  getElements();
+  addUnloadListener();
+  init();
+
+  // Make sure that ES3 envs don't
+  // throw when Object.freeze is used.
+  if (!Object.freeze) {
+    Object.freeze = function (obj) {
+      return obj;
+    };
+  }
+
+  // Expose public methods
+  var isEnabled = isPlacekeeperEnabled;
+  var enable = init;
+  var disable = disablePlacekeeper;
+  var isFocusEnabled = isPlacekeeperFocusEnabled;
+  var isWatchingEnabled = isPlacekeeperWatchingEnabled;
+
+  var placekeeper = Object.freeze({
+    settings: settings,
+    hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder,
+    setupPlaceholders: setupPlaceholders,
+    init: init,
+    isEnabled: isEnabled,
+    enable: enable,
+    disable: disable,
+    isFocusEnabled: isFocusEnabled,
+    isWatchingEnabled: isWatchingEnabled
+  });
+
+  if (typeof define === "function" && define.amd) {
+    define("placekeeper", [], function () {
+      return placekeeper;
+    });
+  } else if ((typeof exports === "undefined" ? "undefined" : babelHelpers["typeof"](exports)) === "object") {
+    module.exports = placekeeper;
+  } else {
+    window.placekeeper = placekeeper;
+  }
+
+  YUI.add("placekeeper", function (Y) {
 
     var originalGetFn = Y.Node.prototype.get;
 
-    Y.Node.prototype.get = function(attr) {
+    Y.Node.prototype.get = function (attr) {
 
       if (attr === "value" && this.getAttribute("data-placeholder-active")) {
         return "";
@@ -1240,11 +1052,8 @@
 
       return originalGetFn.apply(this, arguments);
     };
-
   }, "3.0.0", {
-    requires: [
-      "node"
-    ]
+    requires: ["node"]
   });
 
-}(this.YUI));
+})();
