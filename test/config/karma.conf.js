@@ -9,7 +9,7 @@ module.exports = function(config) {
     preprocessors: {
       "src/*.js": ["browserify"],
       "test/utils/helpers.js": ["browserify"],
-      "test/unit/*.js": ["browserify"],
+      "test/unit/*.spec.js": ["browserify"],
       "src/**/!(support).js": ["coverage"]
     },
     coverageReporter: {
@@ -27,10 +27,7 @@ module.exports = function(config) {
     browserify: {
       transform: [
         [
-          "babelify",
-          {
-            presets: ["es2015"]
-          }
+          "babelify"
         ],
         [
           istanbul({

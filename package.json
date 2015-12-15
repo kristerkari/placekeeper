@@ -62,13 +62,13 @@
     "url": "https://github.com/kristerkari/placekeeper.git"
   },
   "scripts": {
-    "build": "BABEL_ENV=development ./node_modules/.bin/gulp build",
-    "codeclimate": "cat ./coverage/*/lcov.info | ./node_modules/.bin/codeclimate",
+    "build": "BABEL_ENV=development gulp build",
+    "codeclimate": "cat ./coverage/*/lcov.info | codeclimate",
     "coveralls": "cat ./coverage/*/lcov.info | COVERALLS_SERVICE_NAME=\"travis-ci\" ./node_modules/.bin/coveralls",
-    "lint": "./node_modules/.bin/gulp lint",
-    "sauce": "BABEL_ENV=test ./node_modules/karma/bin/karma start test/config/karma.sauce.conf.js",
-    "start": "./node_modules/.bin/gulp server",
-    "tdd": "BABEL_ENV=test ./node_modules/karma/bin/karma start test/config/karma.conf.js --no-single-run --auto-watch",
-    "test": "BABEL_ENV=test ./node_modules/karma/bin/karma start test/config/karma.conf.js"
+    "lint": "gulp lint",
+    "sauce": "BABEL_ENV=test karma start test/config/karma.sauce.conf.js",
+    "start": "gulp server",
+    "tdd": "BABEL_ENV=test karma start test/config/karma.conf.js --no-single-run --auto-watch",
+    "test": "BABEL_ENV=test karma start test/config/karma.conf.js"
   }
 }
