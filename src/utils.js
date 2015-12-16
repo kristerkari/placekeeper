@@ -3,7 +3,7 @@ export function addEventListener(elem, event, fn) {
     return elem.addEventListener(event, fn, false);
   }
   if (elem.attachEvent && fn != null) {
-    return elem.attachEvent("on" + event, (e) => {
+    return elem.attachEvent(`on${event}`, (e) => {
       e.preventDefault = () => {
         e.returnValue = false;
       };
@@ -20,7 +20,7 @@ export function removeEventListener(elem, event, fn) {
     return elem.removeEventListener(event, fn, false);
   }
   if (elem.detachEvent && fn != null) {
-    return elem.detachEvent("on" + event, fn);
+    return elem.detachEvent(`on${event}`, fn);
   }
 }
 
@@ -29,17 +29,17 @@ function trim(str) {
 }
 
 function hasClass(elem, className) {
-  return (" " + elem.className + " ").indexOf(" " + className + " ") !== -1;
+  return ` ${elem.className} `.indexOf(` ${className} `) !== -1;
 }
 
 export function addClass(elem, className) {
   if (!hasClass(elem, className)) {
-    elem.className = elem.className === "" ? className : elem.className + " " + className;
+    elem.className = elem.className === "" ? className : `${elem.className} ${className}`;
   }
 }
 
 export function removeClass(elem, className) {
-  elem.className = trim((" " + elem.className + " ").replace(" " + className + " ", " "));
+  elem.className = trim(` ${elem.className} `.replace(` ${className} `, " "));
 }
 
 export function each(collection, iter, ctx) {
