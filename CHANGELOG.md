@@ -1,3 +1,7 @@
+1.0.6
+
+- Use ES6 syntax and modules. Overall library file size went down a bit.
+
 1.0.5
 
 - Fixed clone password inputs to no clone id attribute #46
