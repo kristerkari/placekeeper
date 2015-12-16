@@ -103,6 +103,6 @@ export function removeDataAttrs(element) {
   ];
 
   utils.each(attrs, (attr) => {
-    element.removeAttribute("data-placeholder-" + attr);
+    element.removeAttribute(`data-placeholder-${attr}`);
   });
 }
