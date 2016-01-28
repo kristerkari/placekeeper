@@ -11,7 +11,7 @@
     "define",
     "triggerEvent"
   ],
-  "esnext": true,
+  "esversion": 6,
   "forin": false,
   "browser": true,
   "prototypejs": true,
@@ -19,7 +19,6 @@
   "yui": true,
   "node": true,
   "jasmine": true,
-  "es3": true,
   "maxlen": 140,
   "latedef": true,
   "bitwise": true,
