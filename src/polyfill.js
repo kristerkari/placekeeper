@@ -34,7 +34,7 @@ export function showPlaceholder(element) {
 
   if (element.type === "password") {
     if (elems.hasPasswordClone(element)) {
-      var clone = elems.getPasswordClone(element);
+      const clone = elems.getPasswordClone(element);
       elems.swapElements(element, clone);
       element = clone;
     } else {
@@ -59,7 +59,7 @@ export function hidePlaceholder(element) {
 
   if (data.hasTypeAttrSetToPassword(element)) {
     if (elems.isClonedPasswordInput(element)) {
-      var original = elems.getPasswordOriginal(element);
+      const original = elems.getPasswordOriginal(element);
       elems.swapElements(element, original);
       element = original;
       element.focus();

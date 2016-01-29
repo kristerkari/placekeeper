@@ -14,7 +14,7 @@ export function getTextareaElements() {
 }
 
 export function getForm(element) {
-  let form = element.form;
+  let { form } = element;
   if (typeof form === "string") {
     form = document.getElementById(form);
   }
@@ -54,7 +54,7 @@ export function getElements() {
 }
 
 function swapId(from, to) {
-  const id = from.id;
+  const { id } = from;
   if (id === "") {
     return;
   }

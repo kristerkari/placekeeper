@@ -42,6 +42,11 @@
     "requirePaddingNewLinesAfterUseStrict": true,
     "disallowSpaceBeforeComma": true,
     "requireObjectKeysOnNewLine": true,
+    "requireEarlyReturn": true,
+    "disallowVar": true,
+    "requireEnhancedObjectLiterals": true,
+    "requireObjectDestructuring": true,
+    "requireArrayDestructuring": true,
     "validateNewlineAfterArrayElements": {
       "maximum": 4
     },
