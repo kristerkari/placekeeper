@@ -7,7 +7,7 @@
     "url": "https://github.com/kristerkari/placekeeper/issues"
   },
   "devDependencies": {
-    "babel": "^6.3.26",
+    "babel-core": "^6.4.5",
     "babel-plugin-transform-es2015-arrow-functions": "^6.4.0",
     "babel-plugin-transform-es2015-block-scoping": "^6.4.0",
     "babel-plugin-transform-es2015-constants": "^6.1.4",
