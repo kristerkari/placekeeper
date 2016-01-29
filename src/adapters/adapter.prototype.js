@@ -1,31 +1,33 @@
-import * as support from "../support.js";
+import * as support from "../support.js"
 
-var originalGetValueMethod = Form.Element.Methods.getValue;
-var originalGetValueStatic = Form.Element.getValue;
-var originalGlobal = $F;
+const originalGetValueMethod = Form.Element.Methods.getValue
+const originalGetValueStatic = Form.Element.getValue
+const originalGlobal = $F
 
 function getValue(originalFn, elem) {
   if (elem.getAttribute("data-placeholder-active")) {
-    return "";
+    return ""
   }
-  /*jshint validthis: true */
-  return originalFn.call(this, elem);
+  /*eslint-disable no-invalid-this */
+  return originalFn.call(this, elem)
+  /*eslint-enable no-invalid-this */
 }
 
 if (!support.hasNativePlaceholderSupport()) {
 
-  /*global $F:true */
   $F = function(elem) {
-    return getValue.call(this, originalGlobal, elem);
-  };
+    /*eslint-disable no-invalid-this */
+    return getValue.call(this, originalGlobal, elem)
+    /*eslint-enable no-invalid-this */
+  }
 
   Form.Element.getValue = function(elem) {
-    return getValue.call(this, originalGetValueStatic, elem);
-  };
+    return getValue.call(this, originalGetValueStatic, elem)
+  }
 
   Element.addMethods(["INPUT", "TEXTAREA"], {
-    getValue: function(elem) {
-      return getValue.call(this, originalGetValueMethod, elem);
+    getValue(elem) {
+      return getValue.call(this, originalGetValueMethod, elem)
     }
-  });
+  })
 }

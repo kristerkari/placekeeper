@@ -2,6 +2,7 @@ var sharedKarmaConfig = {
   preprocessors: {
     "src/*.js": ["browserify"],
     "test/utils/helpers.js": ["browserify"],
+    "test/utils/matchers.js": ["browserify"],
     "test/unit/*.js": ["browserify"]
   },
   browserify: {

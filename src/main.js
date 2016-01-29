@@ -1,234 +1,234 @@
-import * as support from "./support.js";
-import * as data from "./data.js";
-import * as mode from "./mode.js";
-import * as utils from "./utils.js";
-import * as elems from "./elements.js";
-import * as events from "./events.js";
-import * as polyfill from "./polyfill.js";
+import * as support from "./support.js"
+import * as data from "./data.js"
+import * as mode from "./mode.js"
+import * as utils from "./utils.js"
+import * as elems from "./elements.js"
+import * as events from "./events.js"
+import * as polyfill from "./polyfill.js"
 
 export let settings = {
   defaultLoopDuration: 100
-};
-let loopInterval = null;
+}
+let loopInterval = null
 
 export function hasElementsThatNeedPlaceholder(elements) {
 
   if (!elements) {
-    return false;
+    return false
   }
 
   for (let i = 0; i < elements.length; i++) {
     if (support.needsToShowPlaceHolder(elements[i])) {
-      return true;
+      return true
     }
   }
 
-  return false;
+  return false
 }
 
 function needsToSetPlaceholder() {
-  let needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements());
+  let needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getInputElements())
 
   if (needsPlaceholder === false) {
-    needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements());
+    needsPlaceholder = hasElementsThatNeedPlaceholder(elems.getTextareaElements())
   }
 
-  return needsPlaceholder;
+  return needsPlaceholder
 }
 
 function setupElement(element, placeholderValue) {
-  data.setValueAttr(element, placeholderValue);
-  data.setTypeAttr(element, utils.getElementType(element));
-  data.setElementValueAttr(element, element.value);
-  data.setEventsAttr(element);
-  elems.createPasswordCloneIfNeeded(element);
-  events.addSubmitEvent(elems.getForm(element));
-  events.addEventListeners(element);
+  data.setValueAttr(element, placeholderValue)
+  data.setTypeAttr(element, utils.getElementType(element))
+  data.setElementValueAttr(element, element.value)
+  data.setEventsAttr(element)
+  elems.createPasswordCloneIfNeeded(element)
+  events.addSubmitEvent(elems.getForm(element))
+  events.addEventListeners(element)
 }
 
 function restoreValue(element) {
   if (data.getElementValueAttr(element) != null) {
-    element.value = data.getElementValueAttr(element);
+    element.value = data.getElementValueAttr(element)
   }
 }
 
 function cleanupElement(element, clone) {
   if (element == null) {
-    return;
+    return
   }
   if (clone) {
-    element.removeAttribute("placeholder");
-    restoreValue(clone);
+    element.removeAttribute("placeholder")
+    restoreValue(clone)
   }
-  restoreValue(element);
-  events.removeEvents(element);
-  data.removeDataAttrs(element);
-  elems.removePasswordCloneIfExists(element);
-  utils.removeClass(element, "placeholder");
+  restoreValue(element)
+  events.removeEvents(element)
+  data.removeDataAttrs(element)
+  elems.removePasswordCloneIfExists(element)
+  utils.removeClass(element, "placeholder")
 }
 
 function needsSetup(element) {
   return support.isSupportedType(utils.getElementType(element)) &&
-         !data.hasEventsAttrSetToTrue(element);
+         !data.hasEventsAttrSetToTrue(element)
 }
 
 function hasPlaceholderValueChanged(element, placeholder) {
   return data.hasValueAttr(element) &&
-         data.getValueAttr(element) !== placeholder;
+         data.getValueAttr(element) !== placeholder
 }
 
 function isActiveAndHasValueChanged(element, placeholder) {
   return data.hasActiveAttrSetToTrue(element) &&
-         element.value !== "" && element.value !== placeholder;
+         element.value !== "" && element.value !== placeholder
 }
 
 function hasValueOrIsActive(element) {
-  return element.value !== "" || element === support.safeActiveElement();
+  return element.value !== "" || element === support.safeActiveElement()
 }
 
 function isClone(element) {
-  return data.hasCloneAttrSetToTrue(element) && elems.getPasswordOriginal(element) != null;
+  return data.hasCloneAttrSetToTrue(element) && elems.getPasswordOriginal(element) != null
 }
 
 function hasChangedType(element) {
-  const el = isClone(element) ? elems.getPasswordOriginal(element) : element;
-  return utils.getElementType(el) !== data.getTypeAttr(element);
+  const el = isClone(element) ? elems.getPasswordOriginal(element) : element
+  return utils.getElementType(el) !== data.getTypeAttr(element)
 }
 
 function handleTypeChange(element) {
 
   if (!hasChangedType(element)) {
-    return;
+    return
   }
 
   if (isClone(element)) {
-    const type = data.getTypeAttr(element);
-    element = elems.getPasswordOriginal(element);
-    element.setAttribute("type", type);
+    const type = data.getTypeAttr(element)
+    element = elems.getPasswordOriginal(element)
+    element.setAttribute("type", type)
   }
 
-  cleanupElement(element);
+  cleanupElement(element)
 }
 
 function checkForPlaceholder(element) {
 
   if (!element) {
-    return;
+    return
   }
 
-  const placeholder = utils.getPlaceholderValue(element);
-  let clone;
+  const placeholder = utils.getPlaceholderValue(element)
+  let clone
 
   if (elems.hasPasswordClone(element)) {
-    clone = elems.getPasswordClone(element);
+    clone = elems.getPasswordClone(element)
   }
 
   if (!placeholder || clone && !utils.getPlaceholderValue(clone)) {
     if (data.hasEventsAttrSetToTrue(element)) {
-      cleanupElement(element, clone);
+      cleanupElement(element, clone)
     }
-    return;
+    return
   }
 
-  handleTypeChange(element);
+  handleTypeChange(element)
 
   if (needsSetup(element)) {
-    setupElement(element, placeholder);
+    setupElement(element, placeholder)
   } else {
 
     if (clone) {
       if (element.disabled !== clone.disabled) {
         if (clone.style.display === "block") {
-          element.disabled = clone.disabled;
+          element.disabled = clone.disabled
         }
         if (element.style.display === "block") {
-          clone.disabled = element.disabled;
+          clone.disabled = element.disabled
         }
       }
     }
 
     if (hasPlaceholderValueChanged(element, placeholder)) {
-      data.setValueAttr(element, placeholder);
-      element.value = placeholder;
-      const original = elems.getPasswordOriginal(element);
+      data.setValueAttr(element, placeholder)
+      element.value = placeholder
+      const original = elems.getPasswordOriginal(element)
       if (original && original.nodeType === 1) {
-        original.setAttribute("placeholder", placeholder);
-        data.setValueAttr(original, placeholder);
+        original.setAttribute("placeholder", placeholder)
+        data.setValueAttr(original, placeholder)
       }
     }
     if (data.getValueAttr(element) !== element.value) {
-      data.setElementValueAttr(element, element.value);
+      data.setElementValueAttr(element, element.value)
     }
     if (isActiveAndHasValueChanged(element, placeholder)) {
-      polyfill.hidePlaceholder(element);
+      polyfill.hidePlaceholder(element)
     }
   }
 
   if (!hasValueOrIsActive(element)) {
-    polyfill.showPlaceholder(element);
+    polyfill.showPlaceholder(element)
   }
 
 }
 
 export function setupPlaceholders() {
-  elems.forEachElement(checkForPlaceholder);
+  elems.forEachElement(checkForPlaceholder)
 }
 
 function placekeeperLoop() {
   if (mode.hasFocusDisabled()) {
-    mode.disableFocus();
+    mode.disableFocus()
   } else {
-    mode.enableFocus();
+    mode.enableFocus()
   }
 
   if (needsToSetPlaceholder()) {
-    mode.enable();
+    mode.enable()
   } else {
-    mode.disable();
+    mode.disable()
   }
 
   if (support.hasNativePlaceholderSupport()) {
-    return;
+    return
   }
 
-  setupPlaceholders();
+  setupPlaceholders()
 }
 
 export function init() {
   if (support.hasNativePlaceholderSupport()) {
-    return;
+    return
   }
-  clearInterval(loopInterval);
-  placekeeperLoop();
+  clearInterval(loopInterval)
+  placekeeperLoop()
   if (!mode.hasWatchingDisabled()) {
-    mode.enableWatching();
+    mode.enableWatching()
     // main loop
-    loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration);
+    loopInterval = setInterval(placekeeperLoop, settings.defaultLoopDuration)
   } else {
-    mode.disableWatching();
+    mode.disableWatching()
   }
 }
 
 function disablePlacekeeper() {
-  mode.disable();
-  clearInterval(loopInterval);
-  elems.forEachForm(events.removeSubmitEvent);
-  elems.forEachElement(cleanupElement);
+  mode.disable()
+  clearInterval(loopInterval)
+  elems.forEachForm(events.removeSubmitEvent)
+  elems.forEachElement(cleanupElement)
 }
 
-elems.getElements();
-events.addUnloadListener();
-init();
+elems.getElements()
+events.addUnloadListener()
+init()
 
 // Make sure that ES3 envs don't
 // throw when Object.freeze is used.
 if (!Object.freeze) {
-  Object.freeze = (obj) => obj;
+  Object.freeze = (obj) => obj
 }
 
 // Expose public methods
-export const isEnabled = mode.isPlacekeeperEnabled;
-export const enable = init;
-export const disable = disablePlacekeeper;
-export const isFocusEnabled = mode.isPlacekeeperFocusEnabled;
-export const isWatchingEnabled = mode.isPlacekeeperWatchingEnabled;
+export const isEnabled = mode.isPlacekeeperEnabled
+export const enable = init
+export const disable = disablePlacekeeper
+export const isFocusEnabled = mode.isPlacekeeperFocusEnabled
+export const isWatchingEnabled = mode.isPlacekeeperWatchingEnabled

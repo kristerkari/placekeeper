@@ -1,11 +1,11 @@
-import * as placekeeper from "./main.js";
+import * as placekeeper from "./main.js"
 
 if (typeof define === "function" && define.amd) {
-  define("placekeeper", [], function() {
-    return placekeeper;
-  });
+  define("placekeeper", [], () => {
+    return placekeeper
+  })
 } else if (typeof exports === "object") {
-  module.exports = placekeeper;
+  module.exports = placekeeper
 } else {
-  window.placekeeper = placekeeper;
+  window.placekeeper = placekeeper
 }

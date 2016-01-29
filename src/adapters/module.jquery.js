@@ -1,2 +1,2 @@
-import "../module.js";
-import "./adapter.jquery.js";
+import "../module.js"
+import "./adapter.jquery.js"

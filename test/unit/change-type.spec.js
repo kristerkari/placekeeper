@@ -1,79 +1,79 @@
-import * as helpers from "../utils/helpers.js";
-import * as placekeeper from "../../src/main.js";
+import * as helpers from "../utils/helpers.js"
+import * as placekeeper from "../../src/main.js"
 
-describe("changing element type", function() {
-  "use strict";
+describe("changing element type", () => {
+  "use strict"
 
-  beforeEach(helpers.initialSetup);
+  beforeEach(helpers.initialSetup)
 
   if (helpers.canActuallyChangeType) {
 
-    describe("when input type can be changed", function() {
+    describe("when input type can be changed", () => {
 
-      beforeEach(function() {
-        helpers.spyOnCanChangeToTypeAndReturn(true);
-        helpers.spyOnNativeSupportAndReturn(false);
-      });
+      beforeEach(() => {
+        helpers.spyOnCanChangeToTypeAndReturn(true)
+        helpers.spyOnNativeSupportAndReturn(false)
+      })
 
-      describe("when a password input with placeholder exists on the page", function() {
-        var element;
-
-        beforeEach((done) => {
-          element = helpers.createInputElement(true, "password");
-          setTimeout(done, helpers.loopDurationForTests);
-          placekeeper.init();
-        });
-
-        afterEach(function() {
-          element.parentNode.removeChild(element);
-        });
-
-        describe("and when its type is changed to text with a data attribute", function() {
-
-          beforeEach((done) => {
-            element.setAttribute("data-placeholder-type", "text");
-            setTimeout(done, helpers.loopDurationForTests);
-          });
-
-          it("should have one input on the page", function() {
-            expect(document.getElementsByTagName("input").length).toEqual(1);
-          });
-
-          it("should have element type set to text", function() {
-            expect(element.type).toEqual("text");
-          });
-
-        });
-
-      });
-
-      describe("when a text input with placeholder exists on the page", function() {
-        var element;
+      describe("when a password input with placeholder exists on the page", () => {
+        let element
 
         beforeEach((done) => {
-          element = helpers.createInputElement(true);
-          setTimeout(done, helpers.loopDurationForTests);
-          placekeeper.init();
-        });
+          element = helpers.createInputElement(true, "password")
+          setTimeout(done, helpers.loopDurationForTests)
+          placekeeper.init()
+        })
 
-        afterEach(function() {
-          element.parentNode.removeChild(element);
-        });
+        afterEach(() => {
+          element.parentNode.removeChild(element)
+        })
 
-        describe("and when its type is changed to password", function() {
+        describe("and when its type is changed to text with a data attribute", () => {
 
           beforeEach((done) => {
-            element.type = "password";
-            setTimeout(done, helpers.loopDurationForTests);
-          });
+            element.setAttribute("data-placeholder-type", "text")
+            setTimeout(done, helpers.loopDurationForTests)
+          })
 
-          it("should have one input on the page", function() {
-            expect(document.getElementsByTagName("input").length).toEqual(1);
-          });
+          it("should have one input on the page", () => {
+            expect(document.getElementsByTagName("input").length).toEqual(1)
+          })
 
-          it("should have element type set to text (so that placeholder is visible)", function() {
-            expect(element.type).toEqual("text");
-          });
+          it("should have element type set to text", () => {
+            expect(element.type).toEqual("text")
+          })
+
+        })
+
+      })
+
+      describe("when a text input with placeholder exists on the page", () => {
+        let element
+
+        beforeEach((done) => {
+          element = helpers.createInputElement(true)
+          setTimeout(done, helpers.loopDurationForTests)
+          placekeeper.init()
+        })
+
+        afterEach(() => {
+          element.parentNode.removeChild(element)
+        })
+
+        describe("and when its type is changed to password", () => {
+
+          beforeEach((done) => {
+            element.type = "password"
+            setTimeout(done, helpers.loopDurationForTests)
+          })
+
+          it("should have one input on the page", () => {
+            expect(document.getElementsByTagName("input").length).toEqual(1)
+          })
+
+          it("should have element type set to text (so that placeholder is visible)", () => {
+            expect(element.type).toEqual("text")
+          })
 
           /* This test is failing
              TODO: find out why
@@ -92,111 +92,111 @@ describe("changing element type", function() {
           });
           */
 
-        });
+        })
 
-      });
+      })
 
-    });
+    })
 
-    describe("when input type can not be changed", function() {
+    describe("when input type can not be changed", () => {
 
-      beforeEach(function() {
-        helpers.spyOnCanChangeToTypeAndReturn(false);
-        helpers.spyOnNativeSupportAndReturn(false);
-      });
+      beforeEach(() => {
+        helpers.spyOnCanChangeToTypeAndReturn(false)
+        helpers.spyOnNativeSupportAndReturn(false)
+      })
 
-      describe("when a password input with placeholder exists on the page", function() {
-        var element;
-
-        beforeEach((done) => {
-          element = helpers.createInputElement(true, "password");
-          setTimeout(function() {
-            element = document.getElementById("elem");
-            done();
-          }, helpers.loopDurationForTests);
-          placekeeper.init();
-        });
-
-        afterEach(function() {
-          element.parentNode.removeChild(element);
-        });
-
-        describe("and when its type is changed to text with a data attribute", function() {
-
-          beforeEach((done) => {
-            element.setAttribute("data-placeholder-type", "text");
-            setTimeout(function() {
-              element = document.getElementById("elem");
-              done();
-            }, helpers.loopDurationForTests);
-          });
-
-          it("should have one input on the page", function() {
-            expect(document.getElementsByTagName("input").length).toEqual(1);
-          });
-
-          it("should have element type set to text", function() {
-            expect(element.type).toEqual("text");
-          });
-
-        });
-
-      });
-
-      describe("when a text input with placeholder exists on the page", function() {
-        var element;
+      describe("when a password input with placeholder exists on the page", () => {
+        let element
 
         beforeEach((done) => {
-          element = helpers.createInputElement(true);
-          placekeeper.init();
-          setTimeout(done, helpers.loopDurationForTests);
-        });
+          element = helpers.createInputElement(true, "password")
+          setTimeout(() => {
+            element = document.getElementById("elem")
+            done()
+          }, helpers.loopDurationForTests)
+          placekeeper.init()
+        })
 
-        afterEach(function() {
-          element.parentNode.removeChild(element);
-        });
+        afterEach(() => {
+          element.parentNode.removeChild(element)
+        })
 
-        describe("and when its type is changed to password", function() {
+        describe("and when its type is changed to text with a data attribute", () => {
 
           beforeEach((done) => {
-            element.type = "password";
-            setTimeout(function() {
-              element = document.getElementById("elem");
-              done();
-            }, helpers.loopDurationForTests);
-          });
+            element.setAttribute("data-placeholder-type", "text")
+            setTimeout(() => {
+              element = document.getElementById("elem")
+              done()
+            }, helpers.loopDurationForTests)
+          })
 
-          it("should have two inputs on the page", function() {
-            expect(document.getElementsByTagName("input").length).toEqual(2);
-          });
+          it("should have one input on the page", () => {
+            expect(document.getElementsByTagName("input").length).toEqual(1)
+          })
 
-          it("should have element type set to text", function() {
-            expect(element.type).toEqual("text");
-          });
+          it("should have element type set to text", () => {
+            expect(element.type).toEqual("text")
+          })
 
-          describe("and when the element is focused", function() {
+        })
+
+      })
+
+      describe("when a text input with placeholder exists on the page", () => {
+        let element
+
+        beforeEach((done) => {
+          element = helpers.createInputElement(true)
+          placekeeper.init()
+          setTimeout(done, helpers.loopDurationForTests)
+        })
+
+        afterEach(() => {
+          element.parentNode.removeChild(element)
+        })
+
+        describe("and when its type is changed to password", () => {
+
+          beforeEach((done) => {
+            element.type = "password"
+            setTimeout(() => {
+              element = document.getElementById("elem")
+              done()
+            }, helpers.loopDurationForTests)
+          })
+
+          it("should have two inputs on the page", () => {
+            expect(document.getElementsByTagName("input").length).toEqual(2)
+          })
+
+          it("should have element type set to text", () => {
+            expect(element.type).toEqual("text")
+          })
+
+          describe("and when the element is focused", () => {
 
             beforeEach((done) => {
-              helpers.retryFocus(element, function() {
-                setTimeout(function() {
-                  element = document.getElementById("elem");
-                  done();
-                }, helpers.loopDurationForTests);
-              });
-            });
+              helpers.retryFocus(element, () => {
+                setTimeout(() => {
+                  element = document.getElementById("elem")
+                  done()
+                }, helpers.loopDurationForTests)
+              })
+            })
 
-            it("should have element type set to password", function() {
-              expect(element.type).toEqual("password");
-            });
+            it("should have element type set to password", () => {
+              expect(element.type).toEqual("password")
+            })
 
-          });
+          })
 
-        });
+        })
 
-      });
+      })
 
-    });
+    })
 
   }
 
-});
+})

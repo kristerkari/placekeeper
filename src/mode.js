@@ -1,54 +1,54 @@
-import * as data from "./data.js";
-import * as utils from "./utils.js";
+import * as data from "./data.js"
+import * as utils from "./utils.js"
 
-let isEnabled = false;
-let isFocusEnabled = true;
-let isWatchingEnabled = false;
+let isEnabled = false
+let isFocusEnabled = true
+let isWatchingEnabled = false
 const modeElements = [
   document.documentElement,
   document.body
-];
+]
 
 export function isPlacekeeperEnabled() {
-  return isEnabled;
+  return isEnabled
 }
 
 export function isPlacekeeperFocusEnabled() {
-  return isFocusEnabled;
+  return isFocusEnabled
 }
 
 export function isPlacekeeperWatchingEnabled() {
-  return isWatchingEnabled;
+  return isWatchingEnabled
 }
 
 export function hasWatchingDisabled() {
-  return utils.some(modeElements, data.hasWatchAttrSetToFalse);
+  return utils.some(modeElements, data.hasWatchAttrSetToFalse)
 }
 
 export function hasFocusDisabled() {
-  return utils.some(modeElements, data.hasModeAttrSetToInput);
+  return utils.some(modeElements, data.hasModeAttrSetToInput)
 }
 
 export function enableFocus() {
-  isFocusEnabled = true;
+  isFocusEnabled = true
 }
 
 export function disableFocus() {
-  isFocusEnabled = false;
+  isFocusEnabled = false
 }
 
 export function enableWatching() {
-  isWatchingEnabled = true;
+  isWatchingEnabled = true
 }
 
 export function disableWatching() {
-  isWatchingEnabled = false;
+  isWatchingEnabled = false
 }
 
 export function disable() {
-  isEnabled = false;
+  isEnabled = false
 }
 
 export function enable() {
-  isEnabled = true;
+  isEnabled = true
 }

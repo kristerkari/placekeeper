@@ -137,7 +137,7 @@ After installing IE VMs, use `npm run tdd` to start Karma, start any of the VMs 
 
 ### Linting
 
-Placekeeper uses a combination of [ESLint](http://eslint.org/), [JSHint](http://jshint.com/) and [JSCS](http://jscs.info/) to validate both code syntax and code style. Make sure that you use `npm run lint` to check that your code passes the validation.
+Placekeeper uses a combination of [ESLint](http://eslint.org/) and [JSCS](http://jscs.info/) to validate both code syntax and code style. Make sure that you use `npm run lint` to check that your code passes the validation.
 
 If you are using Sublime Text or Atom as your code editor, it is recommended to install [SublimeLinter](https://github.com/SublimeLinter/SublimeLinter3) or [Linter](https://atom.io/packages/linter) for Atom + plugins for ESLint, JSHint and JSCS to enable live linting.
 

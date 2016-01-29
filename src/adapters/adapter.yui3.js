@@ -1,18 +1,18 @@
-YUI.add("placekeeper", function(Y) {
+YUI.add("placekeeper", (Y) => {
 
-  var originalGetFn = Y.Node.prototype.get;
+  const originalGetFn = Y.Node.prototype.get
 
   Y.Node.prototype.get = function(attr) {
 
     if (attr === "value" && this.getAttribute("data-placeholder-active")) {
-      return "";
+      return ""
     }
 
-    return originalGetFn.apply(this, arguments);
-  };
+    return originalGetFn.apply(this, arguments)
+  }
 
 }, "3.0.0", {
   requires: [
     "node"
   ]
-});
+})
