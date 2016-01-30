@@ -1,10 +1,10 @@
-(function () {
-  'use strict';
+(function() {
+  "use strict";
 
   var babelHelpers = {};
-  babelHelpers["typeof"] = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  babelHelpers["typeof"] = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
     return typeof obj;
-  } : function (obj) {
+  } : function(obj) {
     return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
   };
   babelHelpers;
@@ -14,11 +14,11 @@
       return elem.addEventListener(event, fn, false);
     }
     if (elem.attachEvent && fn != null) {
-      return elem.attachEvent("on" + event, function (e) {
-        e.preventDefault = function () {
+      return elem.attachEvent("on" + event, function(e) {
+        e.preventDefault = function() {
           e.returnValue = false;
         };
-        e.stopPropagation = function () {
+        e.stopPropagation = function() {
           e.cancelBubble = true;
         };
         fn.call(elem, e);
@@ -67,7 +67,7 @@
   function getAttributes(elem) {
     var copiedAttrs = {};
 
-    each(elem.attributes, function (attr) {
+    each(elem.attributes, function(attr) {
       // old IEs will throw an error if you try to copy "type" attribute.
       if (attr.specified && attr.name !== "type" && attr.name !== "id") {
         copiedAttrs[attr.name] = attr.value;
@@ -154,7 +154,16 @@
     return false;
   }
 
-  var supportedElementTypes = ["text", "search", "url", "tel", "email", "password", "number", "textarea"];
+  var supportedElementTypes = [
+    "text",
+    "search",
+    "url",
+    "tel",
+    "email",
+    "password",
+    "number",
+    "textarea"
+  ];
 
   // The list of keycodes that are not allowed when the polyfill is configured
   // to hide-on-input.
@@ -163,25 +172,25 @@
   // The following keys all cause the caret to jump to the end of the input
   // value.
 
-  27, // Escape
-  33, // Page up
-  34, // Page down
-  35, // End
-  36, // Home
+    27, // Escape
+    33, // Page up
+    34, // Page down
+    35, // End
+    36, // Home
 
   // Arrow keys allow you to move the caret manually, which should be
   // prevented when the placeholder is visible.
 
-  37, // Left
-  38, // Up
-  39, // Right
-  40, // Down
+    37, // Left
+    38, // Up
+    39, // Right
+    40, // Down
 
   // The following keys allow you to modify the placeholder text by removing
   // characters, which should be prevented when the placeholder is visible.
 
-  8, // Backspace
-  46 // Delete
+    8, // Backspace
+    46 // Delete
   ];
 
   // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
@@ -343,9 +352,16 @@
   }
 
   function removeDataAttrs(element) {
-    var attrs = ["value", "element-value", "has-events", "active", "maxlength", "type"];
+    var attrs = [
+      "value",
+      "element-value",
+      "has-events",
+      "active",
+      "maxlength",
+      "type"
+    ];
 
-    each(attrs, function (attr) {
+    each(attrs, function(attr) {
       element.removeAttribute("data-placeholder-" + attr);
     });
   }
@@ -383,10 +399,10 @@
   }
 
   function forEachElement(callback) {
-    each(inputElements, function (element) {
+    each(inputElements, function(element) {
       callback(element);
     });
-    each(textareaElements, function (element) {
+    each(textareaElements, function(element) {
       callback(element);
     });
   }
@@ -626,7 +642,7 @@
   }
 
   function createFocusHandler(element) {
-    return function () {
+    return function() {
       if (shouldNotHidePlaceholder(element)) {
         moveCaret(element, 0);
       } else if (isActiveAndHasPlaceholderSet(element)) {
@@ -639,7 +655,7 @@
   }
 
   function createBlurHandler(element) {
-    return function () {
+    return function() {
       if (isActiveAndHasPlaceholderSet(element)) {
         return;
       }
@@ -648,17 +664,17 @@
   }
 
   function createSubmitHandler(form) {
-    return function () {
+    return function() {
       // Clear the placeholder values so they don't get submitted
       forEachChildInput(form, hidePlaceholderOnSubmit);
-      setTimeout(function () {
+      setTimeout(function() {
         forEachChildInput(form, showPlaceholderAfterSubmit);
       }, 10);
     };
   }
 
   function createKeydownHandler(element) {
-    return function (evt) {
+    return function(evt) {
       keydownVal = element.value;
 
       // Prevent the use of certain keys
@@ -671,7 +687,7 @@
   }
 
   function createKeyupHandler(element) {
-    return function () {
+    return function() {
       if (keydownVal != null && keydownVal !== element.value) {
         hidePlaceholder$1(element);
       }
@@ -685,7 +701,7 @@
   }
 
   function createClickHandler(element) {
-    return function () {
+    return function() {
       if (element === safeActiveElement() && isActiveAndHasPlaceholderSet(element)) {
         moveCaret(element, 0);
       }
@@ -723,7 +739,7 @@
     // If the placeholder should hide on input rather than on focus we need
     // additional event handlers
     if (!isPlacekeeperFocusEnabled()) {
-      each(hideOnInputEvents, function (evt) {
+      each(hideOnInputEvents, function(evt) {
         createEventListener(element, evt);
       });
     }
@@ -740,7 +756,7 @@
     }
     destroyEventListener(element, "focus");
     if (hasHideOnInputHandlers()) {
-      each(hideOnInputEvents, function (evt) {
+      each(hideOnInputEvents, function(evt) {
         destroyEventListener(element, evt);
       });
     }
@@ -1010,7 +1026,7 @@
   // Make sure that ES3 envs don't
   // throw when Object.freeze is used.
   if (!Object.freeze) {
-    Object.freeze = function (obj) {
+    Object.freeze = function(obj) {
       return obj;
     };
   }
@@ -1022,7 +1038,7 @@
   var isFocusEnabled = isPlacekeeperFocusEnabled;
   var isWatchingEnabled = isPlacekeeperWatchingEnabled;
 
-var placekeeper = Object.freeze({
+  var placekeeper = Object.freeze({
     settings: settings,
     hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder,
     setupPlaceholders: setupPlaceholders,
@@ -1035,7 +1051,7 @@ var placekeeper = Object.freeze({
   });
 
   if (typeof define === "function" && define.amd) {
-    define("placekeeper", [], function () {
+    define("placekeeper", [], function() {
       return placekeeper;
     });
   } else if ((typeof exports === "undefined" ? "undefined" : babelHelpers["typeof"](exports)) === "object") {
@@ -1065,7 +1081,7 @@ var placekeeper = Object.freeze({
       /*eslint-enable no-invalid-this */
     };
 
-    Form.Element.getValue = function (elem) {
+    Form.Element.getValue = function(elem) {
       return _getValue.call(this, originalGetValueStatic, elem);
     };
 
