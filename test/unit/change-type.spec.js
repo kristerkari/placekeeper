@@ -75,22 +75,51 @@ describe("changing element type", () => {
             expect(element.type).toEqual("text")
           })
 
-          /* This test is failing
-             TODO: find out why
-          describe("and when the element is focused", function() {
+          it("should changed data-placeholder-type attribute to password", () => {
+            expect(element.getAttribute("data-placeholder-type")).toEqual("password")
+          })
+
+          describe("and when the element is focused", () => {
 
             beforeEach((done) => {
-              helpers.retryFocus(element, function() {
-                setTimeout(done, helpers.loopDurationForTests);
-              });
-            });
+              helpers.retryFocus(element, () => {
+                setTimeout(done, helpers.loopDurationForTests)
+              })
+            })
 
-            it("should have element type set to password", function() {
-              expect(element.type).toEqual("password");
-            });
+            it("should have one input on the page", () => {
+              expect(document.getElementsByTagName("input").length).toEqual(1)
+            })
 
-          });
-          */
+            it("should have element type set to password", () => {
+              expect(element.type).toEqual("password")
+            })
+
+            it("should have data-placeholder-type attribute set to password", () => {
+              expect(element.getAttribute("data-placeholder-type")).toEqual("password")
+            })
+
+            describe("and when element is blurred after that", () => {
+
+              beforeEach(() => {
+                helpers.blur(element)
+              })
+
+              it("should have one input on the page", () => {
+                expect(document.getElementsByTagName("input").length).toEqual(1)
+              })
+
+              it("should have element type set to text", () => {
+                expect(element.type).toEqual("text")
+              })
+
+              it("should have data-placeholder-type attribute set to password", () => {
+                expect(element.getAttribute("data-placeholder-type")).toEqual("password")
+              })
+
+            })
+
+          })
 
         })
 

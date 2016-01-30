@@ -101,10 +101,16 @@ function handleTypeChange(element) {
     return
   }
 
+  const type = element.getAttribute("type")
+  const typeAttr = data.getTypeAttr(element)
+
+  if (type === "text" && typeAttr === "password") {
+    return
+  }
+
   if (isClone(element)) {
-    const type = data.getTypeAttr(element)
     element = elems.getPasswordOriginal(element)
-    element.setAttribute("type", type)
+    element.setAttribute("type", typeAttr)
   }
 
   cleanupElement(element)
