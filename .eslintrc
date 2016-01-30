@@ -20,6 +20,16 @@
       "triggerEvent": false
     },
     "rules": {
+        "semi": [2, "never"],
+        "no-unexpected-multiline": 2,
+        "no-empty-pattern": 2,
+        "no-native-reassign": 2,
+        "no-lonely-if": 2,
+        "no-arrow-condition": 2,
+        "no-inner-declarations": 2,
+        "prefer-arrow-callback": 2,
+        "prefer-spread": 2,
+        "arrow-spacing": [2, { "before": true, "after": true }],
         "comma-dangle": 2,
         "no-cond-assign": 2,
         "no-control-regex": 2,

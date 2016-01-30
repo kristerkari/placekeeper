@@ -37,7 +37,7 @@
     "disallowSpacesInsideBrackets": true,
     "disallowSpacesInsideParentheses": true,
     "maximumLineLength": 140,
-    "requireSemicolons": true,
+    "disallowSemicolons": true,
     "disallowMultipleSpaces": true,
     "requirePaddingNewLinesAfterUseStrict": true,
     "disallowSpaceBeforeComma": true,

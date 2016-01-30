@@ -1,99 +1,99 @@
-import * as helpers from "../utils/helpers.js";
-import * as placekeeper from "../../src/main.js";
-import * as jq from "../../src/adapters/adapter.jquery.js";
+import * as helpers from "../utils/helpers.js"
+import * as placekeeper from "../../src/main.js"
+import * as jq from "../../src/adapters/adapter.jquery.js"
 
 describe("jQuery adapter", () => {
-  "use strict";
+  "use strict"
 
-  beforeEach(helpers.initialSetup);
+  beforeEach(helpers.initialSetup)
   beforeEach(() => {
-    helpers.spyOnNativeSupportAndReturn(false);
-    jq.setup();
-  });
+    helpers.spyOnNativeSupportAndReturn(false)
+    jq.setup()
+  })
 
   describe("when there is an input with a placeholder on the page", () => {
-    var element;
+    let element
 
     beforeEach((done) => {
-      element = helpers.createInputElement(true);
-      placekeeper.setupPlaceholders();
-      setTimeout(done, helpers.loopDurationForTests);
-    });
+      element = helpers.createInputElement(true)
+      placekeeper.setupPlaceholders()
+      setTimeout(done, helpers.loopDurationForTests)
+    })
 
     afterEach(() => {
-      element.parentNode.removeChild(element);
-    });
+      element.parentNode.removeChild(element)
+    })
 
     it("should return empty value with .val()", () => {
-      expect($("#elem").val()).toEqual("");
-    });
+      expect($("#elem").val()).toEqual("")
+    })
 
     it("should return empty value with .prop('value')", () => {
-      expect($("#elem").prop("value")).toEqual("");
-    });
+      expect($("#elem").prop("value")).toEqual("")
+    })
 
-  });
+  })
 
   describe("When there is an input with a placeholder and existing value on the page", () => {
-    var element;
+    let element
 
     beforeEach((done) => {
-      element = helpers.createInputElementWithValue(true);
-      placekeeper.setupPlaceholders();
-      setTimeout(done, helpers.loopDurationForTests);
-    });
+      element = helpers.createInputElementWithValue(true)
+      placekeeper.setupPlaceholders()
+      setTimeout(done, helpers.loopDurationForTests)
+    })
 
     afterEach(() => {
-      element.parentNode.removeChild(element);
-    });
+      element.parentNode.removeChild(element)
+    })
 
     it("should return value with .val()", () => {
-      expect($("#elem").val()).toEqual("MyVal");
-    });
+      expect($("#elem").val()).toEqual("MyVal")
+    })
 
     it("should return value with .prop('value')", () => {
-      expect($("#elem").prop("value")).toEqual("MyVal");
-    });
+      expect($("#elem").prop("value")).toEqual("MyVal")
+    })
 
     describe("and when the value is removed", () => {
 
       beforeEach(() => {
-        $("#elem").val("");
-      });
+        $("#elem").val("")
+      })
 
       it("should return empty value with .val()", () => {
-        expect($("#elem").val()).toEqual("");
-      });
+        expect($("#elem").val()).toEqual("")
+      })
 
       it("should return empty value with .prop('value')", () => {
-        expect($("#elem").prop("value")).toEqual("");
-      });
+        expect($("#elem").prop("value")).toEqual("")
+      })
 
-    });
+    })
 
-  });
+  })
 
   describe("when there is an input with a placeholder that has numeric value on the page", () => {
-    var element;
+    let element
 
     beforeEach((done) => {
-      element = helpers.createInputElementWithNumericPlaceholder(true);
-      placekeeper.setupPlaceholders();
-      setTimeout(done, helpers.loopDurationForTests);
-    });
+      element = helpers.createInputElementWithNumericPlaceholder(true)
+      placekeeper.setupPlaceholders()
+      setTimeout(done, helpers.loopDurationForTests)
+    })
 
     afterEach(() => {
-      element.parentNode.removeChild(element);
-    });
+      element.parentNode.removeChild(element)
+    })
 
     it("should return empty value with .val()", () => {
-      expect($("#elem").val()).toEqual("");
-    });
+      expect($("#elem").val()).toEqual("")
+    })
 
     it("should return empty value with .prop('value')", () => {
-      expect($("#elem").prop("value")).toEqual("");
-    });
+      expect($("#elem").prop("value")).toEqual("")
+    })
 
-  });
+  })
 
-});
+})

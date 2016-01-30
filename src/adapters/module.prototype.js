@@ -1,2 +1,2 @@
-import "../module.js";
-import "./adapter.prototype.js";
+import "../module.js"
+import "./adapter.prototype.js"

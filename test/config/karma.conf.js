@@ -9,6 +9,7 @@ module.exports = function(config) {
     preprocessors: {
       "src/*.js": ["browserify"],
       "test/utils/helpers.js": ["browserify"],
+      "test/utils/matchers.js": ["browserify"],
       "test/unit/*.spec.js": ["browserify"],
       "src/**/!(support).js": ["coverage"]
     },

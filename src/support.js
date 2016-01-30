@@ -1,4 +1,4 @@
-import * as utils from "./utils.js";
+import * as utils from "./utils.js"
 
 const supportedElementTypes = [
   "text",
@@ -9,7 +9,7 @@ const supportedElementTypes = [
   "password",
   "number",
   "textarea"
-];
+]
 
 // The list of keycodes that are not allowed when the polyfill is configured
 // to hide-on-input.
@@ -37,25 +37,25 @@ const badKeys = [
 
   8, // Backspace
   46 // Delete
-];
+]
 
 // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
-const isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
+const isOperaMini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]"
 
 function isElementSupported(element) {
-  return "placeholder" in document.createElement(element) && !isOperaMini;
+  return "placeholder" in document.createElement(element) && !isOperaMini
 }
 
 export function isInputSupported() {
-  return isElementSupported("input");
+  return isElementSupported("input")
 }
 
 export function isTextareaSupported() {
-  return isElementSupported("textarea");
+  return isElementSupported("textarea")
 }
 
 export function hasNativePlaceholderSupport() {
-  return isInputSupported() || isTextareaSupported();
+  return isInputSupported() || isTextareaSupported()
 }
 
 // Avoid IE9 activeElement of death when an iframe is used.
@@ -66,41 +66,41 @@ export function hasNativePlaceholderSupport() {
 export function safeActiveElement() {
   /*eslint-disable no-empty */
   try {
-    return document.activeElement;
+    return document.activeElement
   } catch (ex) {}
   /*eslint-enable no-empty */
 }
 
 export function isSupportedType(elementType) {
-  return utils.inArray(supportedElementTypes, elementType);
+  return utils.inArray(supportedElementTypes, elementType)
 }
 
 export function isBadKey(keyCode) {
-  return utils.inArray(badKeys, keyCode);
+  return utils.inArray(badKeys, keyCode)
 }
 
 function isIE9() {
-  const ie9 = /MSIE 9/i;
-  return ie9.test(window.navigator.userAgent);
+  const ie9 = /MSIE 9/i
+  return ie9.test(window.navigator.userAgent)
 }
 
 export function canChangeToType(elem, type) {
   // IE9 can change type from password to text,
   // but not back from text to password.
   if (isIE9()) {
-    return false;
+    return false
   }
   // Input type can not be changed in IE8 and below.
   try {
-    const oldType = elem.type;
-    elem.type = type;
-    elem.type = oldType;
-    return true;
+    const oldType = elem.type
+    elem.type = type
+    elem.type = oldType
+    return true
   } catch(ex) {
-    return false;
+    return false
   }
 }
 
 export function needsToShowPlaceHolder(elem) {
-  return utils.hasPlaceholderAttrSet(elem) && isSupportedType(utils.getElementType(elem));
+  return utils.hasPlaceholderAttrSet(elem) && isSupportedType(utils.getElementType(elem))
 }

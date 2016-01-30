@@ -1,23 +1,23 @@
-import * as support from "../support.js";
+import * as support from "../support.js"
 
-var originalValFn = $.fn.val;
-var originalPropFn = $.fn.prop;
+const originalValFn = $.fn.val
+const originalPropFn = $.fn.prop
 
 export function setup() {
   if (!support.hasNativePlaceholderSupport()) {
 
     $.fn.val = function(val) {
-      var originalValue = originalValFn.apply(this, arguments);
-      var placeholder = this.eq(0).data("placeholder-value");
+      const originalValue = originalValFn.apply(this, arguments)
+      const placeholder = this.eq(0).data("placeholder-value")
       if (
         val === undefined &&
         this.eq(0).data("placeholder-active") &&
         originalValue === String(placeholder)
       ) {
-        return "";
+        return ""
       }
-      return originalValue;
-    };
+      return originalValue
+    }
 
     $.fn.prop = function(name, val) {
       if (
@@ -25,12 +25,12 @@ export function setup() {
         this.eq(0).data("placeholder-active") &&
         name === "value"
       ) {
-        return "";
+        return ""
       }
-      return originalPropFn.apply(this, arguments);
-    };
+      return originalPropFn.apply(this, arguments)
+    }
 
   }
 }
 
-setup();
+setup()
