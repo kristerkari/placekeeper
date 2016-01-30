@@ -1,3 +1,7 @@
+1.0.7
+
+- Fix placeholder handling when input type gets changed to "password" after page load.
+
 1.0.6
 
 - Use ES6 syntax and modules. Overall library file size went down a bit.
