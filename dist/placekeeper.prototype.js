@@ -905,10 +905,16 @@
       return;
     }
 
+    var type = element.getAttribute("type");
+    var typeAttr = getTypeAttr(element);
+
+    if (type === "text" && typeAttr === "password") {
+      return;
+    }
+
     if (isClone(element)) {
-      var type = getTypeAttr(element);
       element = getPasswordOriginal(element);
-      element.setAttribute("type", type);
+      element.setAttribute("type", typeAttr);
     }
 
     cleanupElement(element);
