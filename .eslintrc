@@ -20,6 +20,7 @@
       "triggerEvent": false
     },
     "rules": {
+        "indent": [2, 2],
         "semi": [2, "never"],
         "no-unexpected-multiline": 2,
         "no-empty-pattern": 2,

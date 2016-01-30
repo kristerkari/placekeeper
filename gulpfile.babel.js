@@ -39,6 +39,16 @@
       sourceMap: false
     }))
     .pipe(dereserve())
+    .pipe(jscs({
+      fix: true
+    }))
+    .pipe(eslint({
+      useEslintrc: true,
+      fix: true,
+      rules: {
+        semi: [2, "always"]
+      }
+    }))
     .pipe(rename({
       basename: "placekeeper"
     }))
@@ -64,6 +74,16 @@
       sourceMap: false
     }))
     .pipe(dereserve())
+    .pipe(jscs({
+      fix: true
+    }))
+    .pipe(eslint({
+      useEslintrc: true,
+      fix: true,
+      rules: {
+        semi: [2, "always"]
+      }
+    }))
     .pipe(rename({
       basename: "placekeeper." + adapter
     }))
@@ -119,9 +139,9 @@
 
   gulp.task("size", () => {
     return gulp.src("./dist/*")
-               .pipe(sizereport({
-                  gzip: true
-                }))
+              .pipe(sizereport({
+                gzip: true
+              }))
   })
 
 }())
