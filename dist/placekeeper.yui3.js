@@ -1,12 +1,14 @@
-(function () { 'use strict';
+(function () {
+  'use strict';
 
   var babelHelpers = {};
-
-  babelHelpers["typeof"] = function (obj) {
-    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  babelHelpers["typeof"] = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
   };
-
   babelHelpers;
+
   function addEventListener(elem, event, fn) {
     if (elem.addEventListener) {
       return elem.addEventListener(event, fn, false);
@@ -361,6 +363,7 @@
 
   function getForm(element) {
     var form = element.form;
+
     if (typeof form === "string") {
       form = document.getElementById(form);
     }
@@ -401,6 +404,7 @@
 
   function swapId(from, to) {
     var id = from.id;
+
     if (id === "") {
       return;
     }
@@ -1018,7 +1022,7 @@
   var isFocusEnabled = isPlacekeeperFocusEnabled;
   var isWatchingEnabled = isPlacekeeperWatchingEnabled;
 
-  var placekeeper = Object.freeze({
+var placekeeper = Object.freeze({
     settings: settings,
     hasElementsThatNeedPlaceholder: hasElementsThatNeedPlaceholder,
     setupPlaceholders: setupPlaceholders,
@@ -1056,4 +1060,4 @@
     requires: ["node"]
   });
 
-})();
+}());
