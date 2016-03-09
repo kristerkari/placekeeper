@@ -1,3 +1,4 @@
+/*eslint-disable consistent-return */
 export function addEventListener(elem, event, fn) {
   if (elem.addEventListener) {
     return elem.addEventListener(event, fn, false)
@@ -14,7 +15,9 @@ export function addEventListener(elem, event, fn) {
     })
   }
 }
+/*eslint-enable consistent-return */
 
+/*eslint-disable consistent-return */
 export function removeEventListener(elem, event, fn) {
   if (elem.removeEventListener) {
     return elem.removeEventListener(event, fn, false)
@@ -23,6 +26,7 @@ export function removeEventListener(elem, event, fn) {
     return elem.detachEvent(`on${event}`, fn)
   }
 }
+/*eslint-enable consistent-return */
 
 function trim(str) {
   return str.replace(/^\s+|\s+$/g, "")
