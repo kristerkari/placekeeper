@@ -63,6 +63,7 @@ export function hasNativePlaceholderSupport() {
 // More info:
 // - http://bugs.jquery.com/ticket/13393
 // - https://github.com/jquery/jquery/commit/85fc5878b3c6af73f42d61eedf73013e7faae408
+/*eslint-disable consistent-return */
 export function safeActiveElement() {
   /*eslint-disable no-empty */
   try {
@@ -70,6 +71,7 @@ export function safeActiveElement() {
   } catch (ex) {}
   /*eslint-enable no-empty */
 }
+/*eslint-enable consistent-return */
 
 export function isSupportedType(elementType) {
   return utils.inArray(supportedElementTypes, elementType)

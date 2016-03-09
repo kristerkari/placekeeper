@@ -63,6 +63,7 @@ function createSubmitHandler(form) {
   }
 }
 
+/*eslint-disable consistent-return */
 function createKeydownHandler(element) {
   return (evt) => {
     keydownVal = element.value
@@ -75,6 +76,7 @@ function createKeydownHandler(element) {
     }
   }
 }
+/*eslint-enable consistent-return */
 
 function createKeyupHandler(element) {
   return () => {

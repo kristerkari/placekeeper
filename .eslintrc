@@ -4,11 +4,11 @@
       "jquery": true,
       "node": true,
       "amd": true,
-      "es6": true,
       "jasmine": true
     },
-    "ecmaFeatures": {
-      "modules": true
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
     },
     "globals": {
       "YUI": false,
@@ -26,7 +26,7 @@
         "no-empty-pattern": 2,
         "no-native-reassign": 2,
         "no-lonely-if": 2,
-        "no-arrow-condition": 2,
+        "no-confusing-arrow": 2,
         "no-inner-declarations": 2,
         "prefer-arrow-callback": 2,
         "prefer-spread": 2,
@@ -58,12 +58,11 @@
         "no-alert": 2,
         "no-div-regex": 2,
         "no-else-return": 2,
-        "no-empty-label": 2,
+        "no-labels": 2,
         "no-eval": 2,
         "no-extra-bind": 2,
         "no-floating-decimal": 2,
         "no-implied-eval": 2,
-        "no-iterator": 2,
         "no-lone-blocks": 2,
         "no-loop-func": 2,
         "no-multi-spaces": 2,
